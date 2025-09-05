@@ -56,16 +56,10 @@ The combination of good food and training gave me the body transformation I was 
   },
 ];
 
-
-
 const BlogPage = () => {
-
-
-
-
   return (
     <div className="max-w-7xl mx-auto p-4 space-y-6">
-      { data.map((story) => (
+      {data.map((story) => (
         <div
           key={story._id}
           className="bg-white rounded-2xl shadow-md p-5 border border-gray-200"
@@ -82,7 +76,9 @@ const BlogPage = () => {
             </div>
           </div>
           <div className="mb-4">
-            <h2 className="text-xl font-semibold pb-4">{story.title}</h2>
+            <h2 className="text-xl font-semibold pb-4">
+              {story.title}
+            </h2>
             {story.imageUrls && (
               <img
                 src={story.imageUrls[0]}
