@@ -13,7 +13,7 @@ export default function Navbar() {
             <div className="p-2 bg-primary/10 rounded-lg animate-glow">
               <Dumbbell className="h-6 w-6 text-primary" />
             </div>
-            <span className="text-xl font-bold text-primary">FitPro Gym</span>
+            <span className="text-xl font-bold text-primary">FitSphere</span>
           </div>
           <div className="hidden md:flex items-center space-x-8">
             <a

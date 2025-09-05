@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="p-2 bg-primary/10 rounded-lg">
                 <Dumbbell className="h-5 w-5 text-primary" />
               </div>
-              <span className="text-lg font-bold text-primary">FitPro Gym</span>
+              <span className="text-lg font-bold text-primary">FitSphere</span>
             </div>
             <p className="text-muted-foreground text-sm sm:text-base">
               Transform your fitness journey with our comprehensive gym management system.
@@ -74,12 +74,12 @@ export default function Footer() {
               <li>123 Fitness Street</li>
               <li>Gym City, GC 12345</li>
               <li>Phone: (555) 123-4567</li>
-              <li>Email: info@fitprogym.com</li>
+              <li>Email: info@fitsphere.com</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border/50 mt-8 pt-8 text-center text-muted-foreground text-sm sm:text-base">
-          <p>&copy; 2024 FitPro Gym. All rights reserved.</p>
+          <p>&copy; 2024 FitSphere. All rights reserved.</p>
         </div>
       </div>
     </footer>
