@@ -9,8 +9,8 @@ Consistency was the key. I slowly increased weights every week and tracked my pr
 Within 3 months, my bench press improved by 20kg and I felt more energetic in my daily life.`,
     createdAt: new Date().toISOString(),
     imageUrls: [
-      "https://images.unsplash.com/photo-1599058917212-d750089bc07c?q=80&w=800&auto=format",
-      "https://images.unsplash.com/photo-1571731956672-bd63e19dfe32?q=80&w=800&auto=format",
+      "https://i.ibb.co.com/gbCkSmWN/istockphoto-1183038884-612x612.jpg",
+      "https://i.ibb.co.com/gbCkSmWN/istockphoto-1183038884-612x612.jpg",
     ],
   },
   {
@@ -22,8 +22,8 @@ Within 3 months, my bench press improved by 20kg and I felt more energetic in my
 It improved my flexibility and gave me a calm start to the day. My favorite poses are downward dog, child’s pose, and tree pose.`,
     createdAt: new Date().toISOString(),
     imageUrls: [
-      "https://images.unsplash.com/photo-1594737625785-cf54f7fcbf39?q=80&w=800&auto=format",
-      "https://images.unsplash.com/photo-1583454110553-21d8cf1a1c9c?q=80&w=800&auto=format",
+      "https://i.ibb.co.com/gbCkSmWN/istockphoto-1183038884-612x612.jpg",
+      "https://i.ibb.co.com/gbCkSmWN/istockphoto-1183038884-612x612.jpg",
     ],
   },
   {
