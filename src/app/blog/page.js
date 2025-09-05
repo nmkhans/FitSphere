@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const data = [
   {
     _id: "1",
@@ -76,9 +78,7 @@ const BlogPage = () => {
             </div>
           </div>
           <div className="mb-4">
-            <h2 className="text-xl font-semibold pb-4">
-              {story.title}
-            </h2>
+            <h2 className="text-xl font-semibold pb-4">{story.title}</h2>
             {story.imageUrls && (
               <img
                 src={story.imageUrls[0]}
@@ -97,6 +97,12 @@ const BlogPage = () => {
               />
             )}
           </div>
+          <Link
+            href={`/blog/${story._id}`}
+            className="inline-flex items-center rounded-full bg-green-600 px-5 py-2 text-sm font-medium text-white shadow hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 active:bg-green-800 transition"
+          >
+            Read More <span className="ml-1">→</span>
+          </Link>
         </div>
       ))}
     </div>
