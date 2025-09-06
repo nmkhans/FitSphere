@@ -1,13 +1,25 @@
-import clientPromise from "@/lib/mongodb";
+import dbConnect from "@/lib/dbConnect";
 
+export async function GET(req) {
+    try {
+        const usersCollection = await dbConnect("users");
+        const users = await usersCollection.find({}).toArray();
+        return new Response(JSON.stringify(users), { status: 200 });
+    } catch (err) {
+        console.error(err);
+        return new Response(
+            JSON.stringify({ success: false, message: "Server error" }),
+            { status: 500 }
+        );
+    }
+}
 export async function PATCH(req) {
   try {
     const data = await req.json(); // { email, height, weight, ... }
 
-    const client = await clientPromise;
-    const db = client.db("FitSphere");
+    const usersCollection = await dbConnect("users");
 
-    const result = await db.collection("users").updateOne(
+    const result = await usersCollection.updateOne(
       { email: data.email },
       { $set: { membership: data } } // store under "membership" field
     );
