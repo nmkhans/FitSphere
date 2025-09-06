@@ -35,7 +35,7 @@ export default function Register() {
       if (response?.success) {
         router.push("/login");
         Swal.fire({
-          position: "top-end",
+          position: "top-center",
           icon: "success",
           title: "You successfully registered",
           showConfirmButton: false,
