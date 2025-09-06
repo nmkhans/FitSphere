@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Dumbbell } from "lucide-react"
+import { Dumbbell } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -12,76 +12,109 @@ export default function Footer() {
               <div className="p-2 bg-primary/10 rounded-lg">
                 <Dumbbell className="h-5 w-5 text-primary" />
               </div>
-              <span className="text-lg font-bold text-primary">FitPro Gym</span>
+              <span className="text-lg font-bold text-primary">
+                FitSphere
+              </span>
             </div>
             <p className="text-muted-foreground text-sm sm:text-base">
-              Transform your fitness journey with our comprehensive gym management system.
+              Transform your fitness journey with our comprehensive
+              gym management system.
             </p>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Quick Links</h3>
+            <h3 className="font-semibold mb-4 text-foreground">
+              Quick Links
+            </h3>
             <ul className="space-y-2 text-muted-foreground text-sm sm:text-base">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Services
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Trainers
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Contact
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Support</h3>
+            <h3 className="font-semibold mb-4 text-foreground">
+              Support
+            </h3>
             <ul className="space-y-2 text-muted-foreground text-sm sm:text-base">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   Terms of Service
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="hover:text-primary transition-colors"
+                >
                   FAQ
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Contact Info</h3>
+            <h3 className="font-semibold mb-4 text-foreground">
+              Contact Info
+            </h3>
             <ul className="space-y-2 text-muted-foreground text-sm sm:text-base">
               <li>123 Fitness Street</li>
               <li>Gym City, GC 12345</li>
               <li>Phone: (555) 123-4567</li>
-              <li>Email: info@fitprogym.com</li>
+              <li>Email: info@fitsphere.com</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-border/50 mt-8 pt-8 text-center text-muted-foreground text-sm sm:text-base">
-          <p>&copy; 2024 FitPro Gym. All rights reserved.</p>
+          <p>&copy; 2024 FitSphere. All rights reserved.</p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
