@@ -155,3 +155,48 @@ body {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+.glow-green{
+  animation: glow2 2s ease-in-out infinite;
+}
+@keyframes glow2 {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(147, 234, 51, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(147, 234, 51, 0.8);
+  }
+}
+/* @property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.rotatingBorder{
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+.rotatingBorder::after,
+.rotatingBorder::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--angle), transparent 80%, #93EA33);
+  z-index: -2;
+  animation: rotate 4s linear infinite;
+}
+.rotatingBorder::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+  z-index: -3;
+}
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+} */
