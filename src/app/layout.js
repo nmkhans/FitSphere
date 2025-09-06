@@ -27,8 +27,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${outfitSans.variable} ${latoSans.variable} antialiased`}
       >
-        <Navbar />
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          <Navbar />
+          {children}
+        </NextAuthProvider>
         <Footer />
       </body>
     </html>
