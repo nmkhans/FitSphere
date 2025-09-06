@@ -18,25 +18,29 @@ import { Separator } from "@/components/ui/separator";
 import SocialLogin from "@/components/sections/SocialLogin";
 import { useRouter } from "next/navigation";
 
-export default function register() {
+export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
-    const router = useRouter();
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     try {
-      registerUser({ name, email, password });
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "You successfully registered",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      const response = await registerUser({ name, email, password });
+
+      if (response?.success) {
+        router.push("/login");
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "You successfully registered",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     } catch (error) {
       console.log(error);
     }

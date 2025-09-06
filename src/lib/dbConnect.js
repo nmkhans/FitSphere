@@ -1,8 +1,14 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = process.env.MONGODB_URI;
+export const collectionNameObj = {
+  usersCollection: "users",
+};
 
 export default async function dbConnect(collectionName) {
+  const uri = process.env.DB_URI;
+  if (!uri) {
+    console.log("DB_URI is not defined in environment variables");
+  }
   const client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -10,8 +16,6 @@ export default async function dbConnect(collectionName) {
       deprecationErrors: true,
     },
   });
-
   await client.connect();
-
   return client.db(process.env.DB_NAME).collection(collectionName);
 }

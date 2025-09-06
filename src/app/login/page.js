@@ -28,37 +28,6 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    // try {
-    //   const response = await signIn("credentials", {
-    //     email,
-    //     password,
-    //     redirect: false,
-    //   });
-    //   if (response.ok) {
-    //     router.push("/");
-    //     form.reset();
-    //     Swal.fire({
-    //       position: "top-end",
-    //       icon: "success",
-    //       title: "You Successfully Logged In",
-    //       showConfirmButton: false,
-    //       timer: 1500,
-    //     });
-    //   } else {
-    //     Swal.fire({
-    //       icon: "error",
-    //       title: "Oops...",
-    //       text: "Something went wrong!",
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Oops...",
-    //     text: "Something went wrong!",
-    //   });
-    // }
     try {
       const response = await signIn("credentials", {
         email,
