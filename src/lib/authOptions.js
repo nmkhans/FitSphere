@@ -1,8 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import dbConnect from "./dbConnect";
 
 export const authOptions = {
   providers: [
@@ -13,9 +13,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const usersCollection = await dbConnect(
-          collectionNameObj.usersCollection
-        );
+        const usersCollection = await dbConnect("users");
         const user = await usersCollection.findOne({
           email: credentials.email,
         });
@@ -48,9 +46,7 @@ export const authOptions = {
   callbacks: {
     async signIn({ user, account }) {
       // Connect to DB
-      const usersCollection = await dbConnect(
-        collectionNameObj.usersCollection
-      );
+      const usersCollection = await dbConnect("users");
 
       // Check if user already exists
       const existingUser = await usersCollection.findOne({ email: user.email });

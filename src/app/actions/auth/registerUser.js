@@ -1,11 +1,11 @@
 "use server";
 
-import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
 
 const registerUser = async (payload) => {
   try {
-    const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+    const usersCollection = await dbConnect("users");
     const { email, password } = payload;
 
     if (!email || !password) {
