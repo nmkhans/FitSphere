@@ -55,7 +55,7 @@ const Login = () => {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
           <h2 className="text-2xl font-semibold text-center">
-            Login to fitPro
+            Login to FitSphere
           </h2>
         </CardHeader>
 
@@ -84,11 +84,18 @@ const Login = () => {
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-2 top-7.5 text-muted-foreground"
               >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPassword ? (
+                  <EyeOff size={20} />
+                ) : (
+                  <Eye size={20} />
+                )}
               </button>
             </div>
 
-            <Button className="w-full mt-4 cursor-pointer" type="submit">
+            <Button
+              className="w-full mt-4 cursor-pointer"
+              type="submit"
+            >
               Login
             </Button>
             <Separator />
@@ -98,7 +105,10 @@ const Login = () => {
 
         <CardFooter className="text-sm text-muted-foreground text-center">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary underline ml-1">
+          <Link
+            href="/register"
+            className="text-primary underline ml-1"
+          >
             Sign up
           </Link>
         </CardFooter>
