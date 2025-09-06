@@ -14,41 +14,31 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import registerUser from "../actions/auth/registerUser";
+import { Separator } from "@/components/ui/separator";
+import SocialLogin from "@/components/sections/SocialLogin";
+import { useRouter } from "next/navigation";
 
 export default function register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
+    const router = useRouter();
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     try {
-      const response = await registerUser({ name, email, password });
-
-      if (response?.success) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "You successfully registered",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Registration Failed",
-          text: response?.message || "User already exists or invalid input",
-        });
-      }
+      registerUser({ name, email, password });
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "You successfully registered",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
     }
   };
   return (
@@ -87,6 +77,7 @@ export default function register() {
               <Input
                 id="password"
                 name="password"
+                minLength={6}
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter Your Password"
               />
@@ -100,6 +91,8 @@ export default function register() {
             </div>
 
             <Button className="w-full mt-4 cursor-pointer">Register</Button>
+            <Separator />
+            <SocialLogin />
           </CardContent>
         </form>
 

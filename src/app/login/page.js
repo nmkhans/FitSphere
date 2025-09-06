@@ -16,6 +16,8 @@ import { signIn } from "next-auth/react";
 import { EyeOff } from "lucide-react";
 import { Eye } from "lucide-react";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import SocialLogin from "@/components/sections/SocialLogin";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,13 +28,45 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
+    // try {
+    //   const response = await signIn("credentials", {
+    //     email,
+    //     password,
+    //     redirect: false,
+    //   });
+    //   if (response.ok) {
+    //     router.push("/");
+    //     form.reset();
+    //     Swal.fire({
+    //       position: "top-end",
+    //       icon: "success",
+    //       title: "You Successfully Logged In",
+    //       showConfirmButton: false,
+    //       timer: 1500,
+    //     });
+    //   } else {
+    //     Swal.fire({
+    //       icon: "error",
+    //       title: "Oops...",
+    //       text: "Something went wrong!",
+    //     });
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Oops...",
+    //     text: "Something went wrong!",
+    //   });
+    // }
     try {
       const response = await signIn("credentials", {
         email,
         password,
+        callbackUrl: "/",
         redirect: false,
       });
-      if (response.ok) {
+      if (response?.ok) {
         router.push("/");
         form.reset();
         Swal.fire({
@@ -42,20 +76,9 @@ const Login = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
       }
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
     }
   };
   return (
@@ -99,6 +122,8 @@ const Login = () => {
             <Button className="w-full mt-4 cursor-pointer" type="submit">
               Login
             </Button>
+            <Separator />
+            <SocialLogin />
           </CardContent>
         </form>
 
