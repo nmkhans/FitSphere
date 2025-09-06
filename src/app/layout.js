@@ -1,5 +1,6 @@
 import { Outfit, Lato } from "next/font/google";
 import "./globals.css";
+import NextAuthProvider from "./provider/NextAuthProvider";
 
 const outfitSans = Outfit({
   variable: "--font-outfit-sans",
@@ -23,7 +24,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${outfitSans.variable} ${latoSans.variable} antialiased`}
       >
-        {children}
+        <NextAuthProvider>{children}</NextAuthProvider>
       </body>
     </html>
   );
