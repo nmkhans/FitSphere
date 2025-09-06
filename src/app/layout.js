@@ -1,5 +1,7 @@
 import { Outfit, Lato } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const outfitSans = Outfit({
   variable: "--font-outfit-sans",
@@ -14,7 +16,8 @@ const latoSans = Lato({
 
 export const metadata = {
   title: "FitSphere",
-  description: "FitSphere is a Gym Management Website to manage gym activities.",
+  description:
+    "FitSphere is a Gym Management Website to manage gym activities.",
 };
 
 export default function RootLayout({ children }) {
@@ -23,7 +26,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${outfitSans.variable} ${latoSans.variable} antialiased`}
       >
-        {children}
+        <Navbar />
+          {children}
+        <Footer />
       </body>
     </html>
   );
