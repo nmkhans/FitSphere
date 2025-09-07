@@ -19,3 +19,7 @@ export default async function dbConnect(collectionName) {
   await client.connect();
   return client.db(process.env.DB_NAME).collection(collectionName);
 }
+
+export const collectionNameObj = {
+    usersCollection: "users",
+};
