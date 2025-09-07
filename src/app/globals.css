@@ -93,6 +93,8 @@ body {
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+
+  --primary-rgb: 147 234 51;
 }
 
 .dark {
@@ -127,6 +129,8 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --primary-rgb: 147 234 51;
 }
 
 /* Custom animations */
@@ -161,10 +165,10 @@ body {
 }
 @keyframes glow2 {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(147, 234, 51, 0.5);
+    box-shadow: 0 0 5px rgba(127, 234, 51, 0.5);
   }
   50% {
-    box-shadow: 0 0 20px rgba(147, 234, 51, 0.8);
+    box-shadow: 0 0 20px rgba(127, 234, 51, 0.8);
   }
 }
 /* @property --angle {
