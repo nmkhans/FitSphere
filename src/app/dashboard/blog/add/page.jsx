@@ -10,13 +10,37 @@ import { useSession } from "next-auth/react";
 
 export default function AddBlogForm() {
   const { data: session } = useSession();
+  // console.log(session);
+  
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+ const onSubmit = async (data) => {
+    const blogData = { ...data, imageUrls };
+
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(blogData),
+      });
+
+      const result = await res.json();
+      console.log(result);
+
+      if (result.success) {
+        alert("Blog created!");
+        reset();          // clear form
+        setImageUrls([]); // clear images
+      } else {
+        alert("Error creating blog");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong.");
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -45,23 +69,22 @@ export default function AddBlogForm() {
           <div className="space-y-2">
             <Label>name</Label>
             <Input
-              {...register("email", { required: true })}
+              {...register("name", { required: false })}
               type="text"
-              value={session?.user?.name || ""}
+              defaultValue={session?.user?.name || ""}
               readOnly
               className="bg-muted"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Email</Label>
-            <Input
-              {...register("email", { required: true })}
-              type="text"
-              value={session?.user?.email || ""}
-              readOnly
-              className="bg-muted"
-            />
-          </div>
+      <div className="space-y-2">
+        <Label>Email</Label>
+        <Input
+          type="text"
+          defaultValue={session?.user?.email || ""} 
+          readOnly
+          {...register("email", { required: false })}
+        />
+      </div>
 
           <div className="space-y-2">
             <Label>Blog Title</Label>
