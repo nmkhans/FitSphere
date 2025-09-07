@@ -1,5 +1,6 @@
 import { Outfit, Lato } from "next/font/google";
 import "./globals.css";
+import NextAuthProvider from "./provider/NextAuthProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -27,7 +28,7 @@ export default function RootLayout({ children }) {
         className={`${outfitSans.variable} ${latoSans.variable} antialiased`}
       >
         <Navbar />
-          {children}
+        <NextAuthProvider>{children}</NextAuthProvider>
         <Footer />
       </body>
     </html>

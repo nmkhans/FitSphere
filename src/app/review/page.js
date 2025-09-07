@@ -1,21 +1,30 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Star, ThumbsUp, Filter, Search } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import { Star, ThumbsUp, Filter, Search } from "lucide-react";
 
 export default function ReviewsPage() {
-  const [rating, setRating] = useState(0)
-  const [hoveredRating, setHoveredRating] = useState(0)
-  const [reviewText, setReviewText] = useState("")
-  const [reviewTitle, setReviewTitle] = useState("")
-  const [filterRating, setFilterRating] = useState("all")
-  const [searchTerm, setSearchTerm] = useState("")
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [reviewTitle, setReviewTitle] = useState("");
+  const [filterRating, setFilterRating] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mock reviews data
   const reviews = [
@@ -67,28 +76,36 @@ export default function ReviewsPage() {
       likes: 22,
       verified: true,
     },
-  ]
+  ];
 
   const handleSubmitReview = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // Handle review submission logic here
-    console.log("Review submitted:", { rating, reviewTitle, reviewText })
+    console.log("Review submitted:", {
+      rating,
+      reviewTitle,
+      reviewText,
+    });
     // Reset form
-    setRating(0)
-    setReviewTitle("")
-    setReviewText("")
-  }
+    setRating(0);
+    setReviewTitle("");
+    setReviewText("");
+  };
 
   const filteredReviews = reviews.filter((review) => {
-    const matchesRating = filterRating === "all" || review.rating.toString() === filterRating
+    const matchesRating =
+      filterRating === "all" ||
+      review.rating.toString() === filterRating;
     const matchesSearch =
       review.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      review.review.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesRating && matchesSearch
-  })
+      review.review.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesRating && matchesSearch;
+  });
 
-  const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+  const averageRating =
+    reviews.reduce((sum, review) => sum + review.rating, 0) /
+    reviews.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,18 +116,25 @@ export default function ReviewsPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Member Reviews
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">See what our members say about their FitPro experience</p>
+            <p className="text-xl text-muted-foreground mb-8">
+              See what our members say about their FitSphere
+              experience
+            </p>
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Star
                     key={star}
                     className={`w-6 h-6 ${
-                      star <= Math.floor(averageRating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      star <= Math.floor(averageRating)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
                     }`}
                   />
                 ))}
-                <span className="text-2xl font-bold ml-2">{averageRating.toFixed(1)}</span>
+                <span className="text-2xl font-bold ml-2">
+                  {averageRating.toFixed(1)}
+                </span>
               </div>
               <Badge variant="secondary" className="text-sm">
                 {reviews.length} Reviews
@@ -126,13 +150,20 @@ export default function ReviewsPage() {
           <div className="lg:col-span-1">
             <Card className="sticky top-8">
               <CardHeader>
-                <CardTitle className="text-xl">Write a Review</CardTitle>
+                <CardTitle className="text-xl">
+                  Write a Review
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmitReview} className="space-y-4">
+                <form
+                  onSubmit={handleSubmitReview}
+                  className="space-y-4"
+                >
                   {/* Rating Stars */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Rating</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Rating
+                    </label>
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -157,7 +188,9 @@ export default function ReviewsPage() {
 
                   {/* Review Title */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Review Title</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Review Title
+                    </label>
                     <Input
                       placeholder="Summarize your experience..."
                       value={reviewTitle}
@@ -168,9 +201,11 @@ export default function ReviewsPage() {
 
                   {/* Review Text */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Your Review</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Your Review
+                    </label>
                     <Textarea
-                      placeholder="Tell us about your experience at FitPro..."
+                      placeholder="Tell us about your experience at FitSphere..."
                       rows={4}
                       value={reviewText}
                       onChange={(e) => setReviewText(e.target.value)}
@@ -178,7 +213,11 @@ export default function ReviewsPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={!rating || !reviewTitle || !reviewText}>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={!rating || !reviewTitle || !reviewText}
+                  >
                     Submit Review
                   </Button>
                 </form>
@@ -219,11 +258,17 @@ export default function ReviewsPage() {
             {/* Reviews */}
             <div className="space-y-6">
               {filteredReviews.map((review) => (
-                <Card key={review.id} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={review.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <Avatar className="w-12 h-12">
-                        <AvatarImage src={review.avatar || "/placeholder.svg"} alt={review.name} />
+                        <AvatarImage
+                          src={review.avatar || "/placeholder.svg"}
+                          alt={review.name}
+                        />
                         <AvatarFallback>
                           {review.name
                             .split(" ")
@@ -234,9 +279,14 @@ export default function ReviewsPage() {
 
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold">{review.name}</h3>
+                          <h3 className="font-semibold">
+                            {review.name}
+                          </h3>
                           {review.verified && (
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge
+                              variant="secondary"
+                              className="text-xs"
+                            >
                               Verified Member
                             </Badge>
                           )}
@@ -248,21 +298,33 @@ export default function ReviewsPage() {
                               <Star
                                 key={star}
                                 className={`w-4 h-4 ${
-                                  star <= review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                  star <= review.rating
+                                    ? "fill-yellow-400 text-yellow-400"
+                                    : "text-gray-300"
                                 }`}
                               />
                             ))}
                           </div>
                           <span className="text-sm text-muted-foreground">
-                            {new Date(review.date).toLocaleDateString()}
+                            {new Date(
+                              review.date
+                            ).toLocaleDateString()}
                           </span>
                         </div>
 
-                        <h4 className="font-medium mb-2">{review.title}</h4>
-                        <p className="text-muted-foreground mb-4">{review.review}</p>
+                        <h4 className="font-medium mb-2">
+                          {review.title}
+                        </h4>
+                        <p className="text-muted-foreground mb-4">
+                          {review.review}
+                        </p>
 
                         <div className="flex items-center gap-4">
-                          <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-muted-foreground hover:text-primary"
+                          >
                             <ThumbsUp className="w-4 h-4 mr-1" />
                             Helpful ({review.likes})
                           </Button>
@@ -276,12 +338,14 @@ export default function ReviewsPage() {
 
             {filteredReviews.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">No reviews found matching your criteria.</p>
+                <p className="text-muted-foreground">
+                  No reviews found matching your criteria.
+                </p>
               </div>
             )}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
