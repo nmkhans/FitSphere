@@ -4,13 +4,21 @@ import { Button } from "@/components/ui/button";
 
 export default function CTASection() {
     return (
-        <section className="py-20 bg-accent text-accent-foreground relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-            <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 font-outfit">
+        <section className="py-24 md:py-28 bg-accent text-accent-foreground relative overflow-hidden min-h-[500px]">
+            {/* Background Image */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                    backgroundImage: "url('/Images/people-exercising-gym.jpg')",
+                }}></div>
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20"></div>
+            <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 font-outfit text-white">
                     Ready to Start Your Fitness Journey?
                 </h2>
-                <p className="text-lg sm:text-xl mb-8 opacity-90 max-w-2xl mx-auto font-lato">
+                <p className="text-lg sm:text-xl mb-8 opacity-90 max-w-2xl mx-auto font-lato text-gray-100">
                     Get the latest fitness tips, workout routines, and exclusive offers delivered to your inbox
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">

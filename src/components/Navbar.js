@@ -58,7 +58,7 @@ export default function Navbar() {
                         {/* Desktop Navigation */}
                         <div className="hidden md:flex items-center space-x-8 **:font-lato">
                             <Link
-                                href="#home"
+                                href="/"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
                                 Home
                             </Link>
@@ -73,7 +73,7 @@ export default function Navbar() {
                                 Special Care
                             </Link>
                             <Link
-                                href="#pricing"
+                                href="/membership"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
                                 Pricing
                             </Link>
@@ -94,6 +94,11 @@ export default function Navbar() {
                             {/* Login & Logout Button */}
                             {status === "authenticated" ? (
                                 <>
+                                    <Link href={"/dashboard"}>
+                                        <Button variant="outline" className="hidden md:flex">
+                                            Dashboard
+                                        </Button>
+                                    </Link>
                                     <Button onClick={() => signOut()}>Logout</Button>
                                 </>
                             ) : (
@@ -162,11 +167,19 @@ export default function Navbar() {
                     <div className="flex-1 px-6 py-8">
                         <nav className="space-y-6">
                             <Link
-                                href="#home"
+                                href="/"
                                 onClick={closeMobileMenu}
                                 className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                 Home
                             </Link>
+                            {status === "authenticated" && (
+                                <Link
+                                    href="/dashboard"
+                                    onClick={closeMobileMenu}
+                                    className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
+                                    Dashboard
+                                </Link>
+                            )}
                             <Link
                                 href="#features"
                                 onClick={closeMobileMenu}
@@ -180,7 +193,7 @@ export default function Navbar() {
                                 Special Care
                             </Link>
                             <Link
-                                href="#pricing"
+                                href="/membership"
                                 onClick={closeMobileMenu}
                                 className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                 Pricing
