@@ -30,6 +30,18 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
             id: "specialized-members",
             icon: Heart,
             current: activeSection === "specialized-members"
+          },
+          {
+            name: "Users",
+            id: "all-users",
+            icon: Heart,
+            current: activeSection === "all-users"
+          },
+          {
+            name: "Trainers",
+            id: "trainers",
+            icon: Heart,
+            current: activeSection === "trainers"
           }
         ];
       case "member":
