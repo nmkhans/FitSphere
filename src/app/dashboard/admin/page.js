@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import SpecializedMembersSection from "@/components/dashboard/admin/SpecializedMembersSection";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import AllUsers from "@/components/dashboard/admin/AllUsers";
+import Trainers from "@/components/dashboard/admin/Trainers";
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -45,6 +47,10 @@ const AdminDashboard = () => {
     switch (activeSection) {
       case "specialized-members":
         return <SpecializedMembersSection />;
+      case "all-users":
+        return <AllUsers />;
+      case "trainers":
+        return <Trainers/>;
       default:
         return <SpecializedMembersSection />;
     }
