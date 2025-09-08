@@ -60,6 +60,7 @@ export const authOptions = {
         await usersCollection.insertOne({
           name: user.name,
           email: user.email,
+          role: "user",
           image: user.image || null,
           provider: account.provider,
           createdAt: new Date(),

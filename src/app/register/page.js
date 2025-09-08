@@ -28,9 +28,16 @@ export default function Register() {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
+    const role = "user";
     const createdAt = new Date();
     try {
-      const response = await registerUser({ name, email, password, createdAt });
+      const response = await registerUser({
+        name,
+        email,
+        password,
+        role,
+        createdAt,
+      });
 
       if (response?.success) {
         router.push("/login");
