@@ -18,10 +18,10 @@ export async function PATCH(req) {
     const data = await req.json(); // { email, height, weight, ... }
 
     const usersCollection = await dbConnect("users");
-
+    console.log(usersCollection);
     const result = await usersCollection.updateOne(
       { email: data.email },
-      { $set: { membership: data } } // store under "membership" field
+      { $set: data } 
     );
 
     if (result.matchedCount === 0) {

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
 import {
   Dialog,
@@ -30,9 +30,11 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
 
 function ModalContent({ open, setOpen, selectedPlan }) {
   const { data: session } = useSession();
+  const [loading, setLoading] =useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
     data.plan = selectedPlan.name;
@@ -51,7 +53,7 @@ function ModalContent({ open, setOpen, selectedPlan }) {
       console.error(err);
       alert("Something went wrong.");
     }
-
+    setLoading(false);
     setOpen(false);
   };
 
@@ -59,7 +61,7 @@ function ModalContent({ open, setOpen, selectedPlan }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="min-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold">
+          <DialogTitle className="text-2xl font-semibold text-foreground">
             Join {selectedPlan?.name} Plan
           </DialogTitle>
         </DialogHeader>
@@ -164,8 +166,12 @@ function ModalContent({ open, setOpen, selectedPlan }) {
           )}
 
           <DialogFooter className="col-span-1 md:col-span-2 mx-auto">
-            <Button type="submit" className="bg-[#93EA33] hover:bg-[#77b036]">
-              Submit
+            <Button
+              disabled={loading}
+              type="submit"
+              className="bg-primary hover:bg-primary/80 text-primary-foreground"
+            >
+              {loading ? "Updating..." : "Update Membership"}
             </Button>
           </DialogFooter>
         </form>
