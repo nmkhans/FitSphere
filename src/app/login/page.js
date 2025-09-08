@@ -32,11 +32,11 @@ const Login = () => {
       const response = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/",
+        callbackUrl: "/dashboard",
         redirect: false,
       });
       if (response?.ok) {
-        router.push("/");
+        router.push("/dashboard");
         form.reset();
         Swal.fire({
           position: "top-end",
