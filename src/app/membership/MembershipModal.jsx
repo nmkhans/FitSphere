@@ -30,7 +30,7 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
 
 function ModalContent({ open, setOpen, selectedPlan }) {
   const { data: session } = useSession();
-  const [loading, setLoading] =useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

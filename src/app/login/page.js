@@ -32,11 +32,11 @@ const Login = () => {
       const response = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/dashboard",
+        callbackUrl: "/",
         redirect: false,
       });
       if (response?.ok) {
-        router.push("/dashboard");
+        router.push("/");
         form.reset();
         Swal.fire({
           position: "top-end",
@@ -84,18 +84,11 @@ const Login = () => {
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-2 top-7.5 text-muted-foreground"
               >
-                {showPassword ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
 
-            <Button
-              className="w-full mt-4 cursor-pointer"
-              type="submit"
-            >
+            <Button className="w-full mt-4 cursor-pointer" type="submit">
               Login
             </Button>
             <Separator />
@@ -105,10 +98,7 @@ const Login = () => {
 
         <CardFooter className="text-sm text-muted-foreground text-center">
           Don&apos;t have an account?{" "}
-          <Link
-            href="/register"
-            className="text-primary underline ml-1"
-          >
+          <Link href="/register" className="text-primary underline ml-1">
             Sign up
           </Link>
         </CardFooter>
