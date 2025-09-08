@@ -1,8 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import dbConnect, { collectionNameObj } from "./dbConnect";
 
 export const authOptions = {
   providers: [
