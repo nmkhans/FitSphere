@@ -113,6 +113,8 @@ body {
   --green-prim: #93EA33;
   --green-drk: #7ED51D;
 
+  --primary-rgb: 147 234 51;
+
   /* Liquid Glass Variables */
   --liquid-glass-bg: rgba(255, 255, 255, 0.1);
   --liquid-glass-border: rgba(255, 255, 255, 0.2);

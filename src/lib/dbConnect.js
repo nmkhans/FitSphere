@@ -2,7 +2,6 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 export const collectionNameObj = {
     usersCollection: "users",
-    specializedMembersCollection: "specializedMembers",
 };
 
 export default async function dbConnect(collectionName) {

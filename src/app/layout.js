@@ -21,15 +21,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="en">
-            <body className={`${outfitSans.variable} ${latoSans.variable} antialiased`}>
-                <NextAuthProvider>
-                    <Navbar />
-                    {children}
-                    <Footer />
-                </NextAuthProvider>
-            </body>
-        </html>
-    );
+  return (
+    <html lang="en">
+      <body
+        className={`${outfitSans.variable} ${latoSans.variable} antialiased`}
+      >
+        <NextAuthProvider>
+          <Navbar />
+          <NextAuthProvider>{children}</NextAuthProvider>
+          <Footer />
+        </NextAuthProvider>
+      </body>
+    </html>
+  );
 }

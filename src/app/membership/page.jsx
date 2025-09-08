@@ -85,6 +85,7 @@ export default function MembershipCards() {
         setOpen(true);
     };
 
+<<<<<<< HEAD
     return (
         <section id="pricing" className="py-20 relative">
             <div className="main-container mx-auto px-4 sm:px-6 lg:px-8">
@@ -161,4 +162,74 @@ export default function MembershipCards() {
             {selectedPlan && <MembershipModal open={open} setOpen={setOpen} selectedPlan={selectedPlan} />}
         </section>
     );
+=======
+  return (
+    <section className="py-16 px-6 md:px-12 bg-background text-foreground">
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4">
+          Fuel Your Fitness Journey
+        </h1>
+        <p className="text-muted-foreground text-lg md:text-xl">
+          Choose the perfect membership plan and take the next step toward your
+          health goals.
+        </p>
+      </div>
+
+      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {data.map((plan) => (
+          <motion.div
+            key={plan.id}
+            className={`bg-card text-card-foreground shadow-lg rounded-xl p-6 flex flex-col justify-between hover:shadow-2xl transition-shadow duration-300 relative h-fit ${
+              plan.id === 3 ? "glow-green" : ""
+            }`}
+            whileHover={{ scale: 1.05 }}
+          >
+            {plan.badge && (
+              <span className="absolute top-4 right-4 bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+                {plan.badge}
+              </span>
+            )}
+
+            <h2 className="text-2xl font-bold mb-4">{plan.name}</h2>
+
+            <p className="text-3xl font-extrabold mb-4">
+              ${plan.price}{" "}
+              <span className="text-base font-medium text-muted-foreground">
+                /{plan.duration}
+              </span>
+            </p>
+
+            <ul className="mb-6 space-y-2 text-muted-foreground flex-1">
+              {plan.features.map((feature, index) => (
+                <li key={index} className="flex gap-2">
+                  <FaCheckCircle
+                    className="text-primary mt-1 flex-shrink-0"
+                    size={14}
+                  />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <Button
+              onClick={() => handleOpen(plan)}
+              className="mt-auto bg-primary hover:bg-primary/80 text-primary-foreground font-semibold py-3 rounded-lg"
+            >
+              {plan.purchaseButton}
+            </Button>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Modal */}
+      {selectedPlan && (
+        <MembershipModal
+          open={open}
+          setOpen={setOpen}
+          selectedPlan={selectedPlan}
+        />
+      )}
+    </section>
+  );
+>>>>>>> e414c1bc8e5eb022abec1e9931d960ad6506ec14
 }
