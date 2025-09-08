@@ -34,6 +34,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 const ManageStory = () => {
   const { data: session } = useSession();
@@ -44,38 +45,36 @@ const ManageStory = () => {
 
   const email = session?.user?.email;
 
-  // Fetch 
+  // Fetch
 
-const fetchBlogs = async ({ queryKey }) => {
-  const [_key, email] = queryKey;
+  const fetchBlogs = async ({ queryKey }) => {
+    const [_key, email] = queryKey;
 
-  try {
-    const res = await fetch(`/api/blogs?email=${email}`);
-    const data = await res.json();
-    console.log(data);
-    
+    try {
+      const res = await fetch(`/api/blogs?email=${email}`);
+      const data = await res.json();
+      console.log(data);
 
-    if (data.success) {
-      return data.blogs; 
-    } else {
-      throw new Error(data.message || "Failed to fetch blogs");
+      if (data.success) {
+        return data.blogs;
+      } else {
+        throw new Error(data.message || "Failed to fetch blogs");
+      }
+    } catch (err) {
+      console.error("Fetch Blogs Error:", err);
+      throw err;
     }
-  } catch (err) {
-    console.error("Fetch Blogs Error:", err);
-    throw err;
-  }
-};
+  };
 
-const {
-  data: stories = [],
-  isLoading,
-  isError,
-} = useQuery({
-  queryKey: ["storiesByEmail", email], // email depend kore
-  queryFn: fetchBlogs,
-  enabled: !!email, // only run when email thake
-});
-
+  const {
+    data: stories = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["storiesByEmail", email], // email depend kore
+    queryFn: fetchBlogs,
+    enabled: !!email, // only run when email thake
+  });
 
   // Pagination calculation
   const totalPages = Math.ceil(stories.length / cardPerPage);
@@ -85,17 +84,36 @@ const {
     [stories, startIdx, cardPerPage]
   );
 
-  // Delete mutation
-  const deleteStory = async (id) => {
-    return await axiosSecure.delete(`/api/stories/${id}`);
-  };
+  // Delete blog
+const deleteBlog = async (id) => {
+  try {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this story!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
 
-  const mutation = useMutation({
-    mutationFn: deleteStory,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["storiesByEmail", email]);
-    },
-  });
+    if (result.isConfirmed) {
+      const res = await fetch(`/api/blogs?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Deleted!", "Story has been deleted.", "success");
+      } else {
+        Swal.fire("Error!", data.message || "Failed to delete.", "error");
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error!", "Something went wrong!", "error");
+  }
+};
+
 
   if (isLoading) {
     return (
@@ -142,39 +160,16 @@ const {
                 </CardHeader>
                 <CardFooter className="flex justify-end gap-2">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/dashboard/edit-story/${story._id}`}>Edit</Link>
+                    <Link href={`/dashboard/edit-story/${story._id}`}>
+                      Edit
+                    </Link>
                   </Button>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        disabled={mutation.isLoading}
-                      >
-                        {mutation.isLoading ? "Deleting..." : "Delete"}
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you sure you want to delete?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your story.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => mutation.mutate(story._id)}
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <Button
+                    onClick={() => deleteBlog(story._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </Button>
                 </CardFooter>
               </Card>
             ))}
