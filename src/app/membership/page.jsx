@@ -101,7 +101,7 @@ export default function MembershipCards() {
                     {pricingPlans.map((plan, index) => (
                         <Card
                             key={index}
-                            className={`relative transition-all duration-500 transform hover:scale-105 flex flex-col h-full ${
+                            className={`relative transition-all duration-500 transform hover:scale-105 flex flex-col h-fit ${
                                 plan.colorScheme === "basic"
                                     ? "border-gray-300 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl hover:shadow-primary/10"
                                     : plan.colorScheme === "premium"

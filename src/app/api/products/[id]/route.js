@@ -6,7 +6,7 @@ export async function GET(req, { params }) {
     const awaitedParams = await params;
     const { id } =  awaitedParams;
 
-    const collection = await dbConnect("products");
+    const { collection } = await dbConnect("products");
     const product = await collection.findOne({ _id: new ObjectId(id) });
 
     if (!product) {
@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
         status: 404,
       });
     }
-
+   console.log(product);
     return Response.json(product);
   } catch (err) {
     console.error(err);

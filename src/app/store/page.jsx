@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import StoreFilter from "./StoreFilter";
 import AddToCartButton from "./AddToCartButton";
 import Image from "next/image";
+import CartButton from "./CartButton";
 
 export default async function StorePage({ searchParams }) {
   const params = await searchParams;
@@ -28,11 +29,23 @@ export default async function StorePage({ searchParams }) {
       </div>
 
       {/* Filters */}
-      <StoreFilter
+      {/* <StoreFilter
         initialSearch={search}
         initialCategory={category}
         initialSort={sort}
-      />
+      /> */}
+      <div className="flex justify-between flex-col-reverse md:flex-row gap-6 items-center">
+        <div className="w-full">
+          <StoreFilter
+            initialSearch={search}
+            initialCategory={category}
+            initialSort={sort}
+          />
+        </div>
+        <div className="-mt-6">
+          <CartButton />
+        </div>
+      </div>
 
       {/* Products Grid */}
       <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
