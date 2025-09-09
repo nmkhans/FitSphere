@@ -4,7 +4,7 @@ import React from "react";
 
 export default function BackButton() {
   return (
-    <Button variant="outline" onClick={() => history.back()}>
+    <Button className={'cursor-pointer'} variant="outline" onClick={() => history.back()}>
       &larr; Back
     </Button>
   );
