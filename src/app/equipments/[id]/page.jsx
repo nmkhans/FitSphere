@@ -93,7 +93,7 @@ export default async function EquipmentDetailsPage({ params, searchParams }) {
 
             {/* CTA */}
             <div className="pt-4">
-              <Button className="w-full md:w-auto mr-8">
+              <Button className="w-full md:w-auto mr-8 cursor-pointer">
                 Add to Workout Plan
               </Button>
               {/* Back button */}
