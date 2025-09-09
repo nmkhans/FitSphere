@@ -108,6 +108,7 @@ body {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
 
+
   --title: #042618;
   --prim-text: #042618;
   --blk-prim: #042618;
@@ -157,6 +158,7 @@ body {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 
+  --primary-rgb: 147 234 51;
   /* Dark theme liquid glass variables */
   --liquid-glass-bg: rgba(255, 255, 255, 0.08);
   --liquid-glass-border: rgba(255, 255, 255, 0.15);
@@ -369,6 +371,7 @@ body {
   }
 }
 
+
 @keyframes liquidGlow {
   0%,
   100% {
@@ -376,6 +379,7 @@ body {
   }
 
   50% {
+
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
   }
 }
