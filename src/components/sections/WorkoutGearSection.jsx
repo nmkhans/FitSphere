@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const categories = ["Accessories", "Shoes", "Bags", "Fitness Powder", "Tracking Watches"];
 
@@ -140,13 +141,20 @@ export default function WorkoutGearSection() {
                     ))}
                 </div>
 
-                {/* Check All Products Button */}
-                <div className="text-center">
+                {/* Action Buttons */}
+                <div className="text-center space-y-4 sm:space-y-0 sm:flex sm:justify-center sm:gap-6">
                     <Button
                         size="lg"
-                        className="text-lg px-8 py-4 bg-transparent hover:bg-green-primary/10 text-title-text border-2 border-title-text hover:border-green-primary hover:text-primary transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                        className="text-lg px-8 py-4 bg-transparent hover:bg-green-primary/10 text-title-text border-2 border-title-text hover:border-green-primary hover:text-primary transition-all duration-300 transform hover:scale-105 cursor-pointer w-full sm:w-auto">
                         Check All Products
                     </Button>
+                    <Link href="/equipments">
+                        <Button
+                            size="lg"
+                            className="text-lg px-8 py-4 bg-green-primary hover:bg-green-dark text-black-primary border-2 border-green-primary transition-all duration-300 transform hover:scale-105 cursor-pointer w-full sm:w-auto">
+                            View Gym Equipment
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </section>

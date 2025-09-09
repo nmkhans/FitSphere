@@ -3,6 +3,7 @@ import "./globals.css";
 import NextAuthProvider from "./provider/NextAuthProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
 
 const outfitSans = Outfit({
     variable: "--font-outfit-sans",
@@ -30,6 +31,28 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
           <Footer />
+          <Toaster 
+            position="top-center"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#363636',
+                color: '#fff',
+              },
+              success: {
+                duration: 3000,
+                theme: {
+                  primary: '#4ade80',
+                },
+              },
+              error: {
+                duration: 4000,
+                theme: {
+                  primary: '#ef4444',
+                },
+              },
+            }}
+          />
         </NextAuthProvider>
       </body>
     </html>
