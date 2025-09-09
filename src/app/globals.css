@@ -165,7 +165,7 @@ body {
 }
 @keyframes glow2 {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(127, 234, 51, 0.5);
+    box-shadow: 0 0 5px rgba(127, 234, 51, 0.5);PPAG
   }
   50% {
     box-shadow: 0 0 20px rgba(127, 234, 51, 0.8);
