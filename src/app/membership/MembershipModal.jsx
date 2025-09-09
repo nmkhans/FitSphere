@@ -29,6 +29,14 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    
+    // Prevent trainers from purchasing memberships
+    if (session?.user?.role === 'trainer') {
+      toast.error("Trainers cannot purchase membership plans.");
+      setOpen(false);
+      return;
+    }
+    
     setLoading(true);
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
@@ -40,6 +48,11 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const result = await res.json();
       console.log(result);
 
@@ -80,7 +93,7 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
       case 'premium-member':
       case 'basic-member':
       default:
-        return '/dashboard/member';
+        return '/dashboard';
     }
   };
 

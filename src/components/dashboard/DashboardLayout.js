@@ -12,7 +12,9 @@ import {
   LogOut,
   Home,
   ChevronLeft,
-  Heart
+  Heart,
+  User,
+  CreditCard
 } from "lucide-react";
 
 const DashboardLayout = ({ children, activeSection, setActiveSection, user, userRole = "member" }) => {
@@ -20,8 +22,11 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const router = useRouter();
 
-  // Navigation items based on user role
+  // Navigation items based on user role and membership
   const getNavigationItems = () => {
+    const userRole = user?.role;
+    const membershipType = user?.membershipType;
+    
     switch (userRole) {
       case "admin":
         return [
@@ -42,9 +47,106 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
             id: "trainers",
             icon: Heart,
             current: activeSection === "trainers"
+          },
+          {
+            name: "Trainer Applications",
+            id: "trainer-applications",
+            icon: Users,
+            current: activeSection === "trainer-applications"
           }
         ];
-      case "member":
+      
+      case "trainer":
+        return [
+          {
+            name: "Overview",
+            id: "overview", 
+            icon: Home,
+            current: activeSection === "overview"
+          },
+          {
+            name: "My Clients",
+            id: "clients",
+            icon: Users,
+            current: activeSection === "clients"
+          }
+        ];
+      
+      case "special-need":
+        return [
+          {
+            name: "Overview",
+            id: "overview", 
+            icon: Home,
+            current: activeSection === "overview"
+          },
+          {
+            name: "Workout Plans",
+            id: "workout-plans",
+            icon: Heart,
+            current: activeSection === "workout-plans"
+          },
+          {
+            name: "Nutrition Plans",
+            id: "nutrition-plans",
+            icon: Heart,
+            current: activeSection === "nutrition-plans"
+          },
+          {
+            name: "AI Exercise Recommender",
+            id: "ai-recommender",
+            icon: Heart,
+            current: activeSection === "ai-recommender"
+          },
+          {
+            name: "Personal Training",
+            id: "personal-training",
+            icon: Heart,
+            current: activeSection === "personal-training"
+          },
+          {
+            name: "Special Programs",
+            id: "special-programs",
+            icon: Heart,
+            current: activeSection === "special-programs"
+          }
+        ];
+      
+      case "premium-member":
+        return [
+          {
+            name: "Overview",
+            id: "overview", 
+            icon: Home,
+            current: activeSection === "overview"
+          },
+          {
+            name: "Workout Plans",
+            id: "workout-plans",
+            icon: Heart,
+            current: activeSection === "workout-plans"
+          },
+          {
+            name: "Nutrition Plans",
+            id: "nutrition-plans",
+            icon: Heart,
+            current: activeSection === "nutrition-plans"
+          },
+          {
+            name: "AI Exercise Recommender",
+            id: "ai-recommender",
+            icon: Heart,
+            current: activeSection === "ai-recommender"
+          },
+          {
+            name: "Personal Training",
+            id: "personal-training",
+            icon: Heart,
+            current: activeSection === "personal-training"
+          }
+        ];
+      
+      case "basic-member":
       default:
         return [
           {
@@ -52,6 +154,18 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
             id: "overview", 
             icon: Home,
             current: activeSection === "overview"
+          },
+          {
+            name: "Basic Workouts",
+            id: "basic-workouts",
+            icon: Heart,
+            current: activeSection === "basic-workouts"
+          },
+          {
+            name: "Equipment Guide",
+            id: "equipment-guide",
+            icon: Heart,
+            current: activeSection === "equipment-guide"
           }
         ];
     }
@@ -74,7 +188,11 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
         <div className="flex items-center space-x-3">
           {(!sidebarCollapsed || mobile) && (
             <h1 className={`text-xl font-bold ${mobile ? 'text-gray-900' : 'text-white'}`}>
-              {userRole === "admin" ? "Admin Panel" : "FitSphere"}
+              {user?.role === "admin" ? "Admin Panel" : 
+               user?.role === "trainer" ? "Trainer Dashboard" :
+               user?.role === "special-need" ? "Special Care Dashboard" :
+               user?.role === "premium-member" ? "Premium Dashboard" :
+               "FitSphere Dashboard"}
             </h1>
           )}
           {!mobile && (
@@ -116,14 +234,80 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
               <p className={`text-sm truncate ${mobile ? 'text-gray-500' : 'text-gray-300'}`}>
                 {user?.email}
               </p>
-              {userRole === "admin" && (
+              {user?.role === "admin" && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mt-1">
                   Admin
+                </span>
+              )}
+              {user?.role === "trainer" && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                  Trainer
+                </span>
+              )}
+              {user?.role === "special-need" && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-1">
+                  Special Care
+                </span>
+              )}
+              {user?.role === "premium-member" && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
+                  Premium
+                </span>
+              )}
+              {user?.role === "basic-member" && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-1">
+                  Basic
                 </span>
               )}
             </div>
           )}
         </div>
+      </div>
+
+      {/* Profile Actions */}
+      <div className={`px-4 pb-2 space-y-2 ${mobile ? 'border-b' : 'border-b border-gray-700'}`}>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            setActiveSection("update-profile");
+            setSidebarOpen(false);
+          }}
+          className={`w-full justify-start ${
+            activeSection === "update-profile"
+              ? mobile 
+                ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
+                : 'bg-gray-800 text-white'
+              : mobile
+                ? 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+          }`}
+        >
+          <User className="h-4 w-4 mr-3" />
+          {(!sidebarCollapsed || mobile) && "Update Profile"}
+        </Button>
+        {user?.role !== "admin" && user?.role !== "trainer" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setActiveSection("update-membership");
+              setSidebarOpen(false);
+            }}
+            className={`w-full justify-start ${
+              activeSection === "update-membership"
+                ? mobile 
+                  ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
+                  : 'bg-gray-800 text-white'
+                : mobile
+                  ? 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            <CreditCard className="h-4 w-4 mr-3" />
+            {(!sidebarCollapsed || mobile) && "Update Membership"}
+          </Button>
+        )}
       </div>
 
       {/* Navigation */}

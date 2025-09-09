@@ -6,6 +6,13 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import MemberOverview from "@/components/dashboard/member/MemberOverview";
+import WorkoutPlansContent from "@/components/dashboard/special-member/WorkoutPlansContent";
+import NutritionPlansContent from "@/components/dashboard/special-member/NutritionPlansContent";
+import AIRecommenderContent from "@/components/dashboard/special-member/AIRecommenderContent";
+import PersonalTrainingContent from "@/components/dashboard/special-member/PersonalTrainingContent";
+import SpecialProgramsContent from "@/components/dashboard/special-member/SpecialProgramsContent";
+import UpdateProfile from "@/components/dashboard/UpdateProfile";
+import UpdateMembership from "@/components/dashboard/UpdateMembership";
 
 const SpecialMemberDashboard = () => {
   const { data: session, status } = useSession();
@@ -60,6 +67,20 @@ const SpecialMemberDashboard = () => {
     switch (activeSection) {
       case "overview":
         return <MemberOverview userType="special-need" />;
+      case "workout-plans":
+        return <WorkoutPlansContent />;
+      case "nutrition-plans":
+        return <NutritionPlansContent />;
+      case "ai-recommender":
+        return <AIRecommenderContent />;
+      case "personal-training":
+        return <PersonalTrainingContent />;
+      case "special-programs":
+        return <SpecialProgramsContent />;
+      case "update-profile":
+        return <UpdateProfile user={session?.user} />;
+      case "update-membership":
+        return <UpdateMembership user={session?.user} />;
       default:
         return <MemberOverview userType="special-need" />;
     }

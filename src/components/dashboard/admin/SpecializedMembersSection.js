@@ -59,16 +59,21 @@ const SpecializedMembersSection = () => {
     try {
       setLoading(true);
       const response = await fetch('/api/specialized-members');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.success) {
         setMembers(data.data);
       } else {
-        toast.error('Failed to fetch members');
+        toast.error('Failed to fetch members: ' + (data.message || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error fetching members:', error);
-      toast.error('Failed to fetch members');
+      toast.error('Network error: Unable to fetch members');
     } finally {
       setLoading(false);
     }
@@ -90,6 +95,10 @@ const SpecializedMembersSection = () => {
         },
         body: JSON.stringify(newMember),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
 
@@ -116,7 +125,7 @@ const SpecializedMembersSection = () => {
       }
     } catch (error) {
       console.error('Error adding member:', error);
-      toast.error('Failed to add member');
+      toast.error('Network error: Failed to add member');
     } finally {
       setSubmitting(false);
     }

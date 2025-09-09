@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import axios from "axios";
-import ReactMarkdown from "react-markdown";
+import WorkoutPlan from "@/components/workout/WorkoutPlan";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import Link from "next/link";
 
 const useTypingEffect = (text, speed = 50, delay = 1000) => {
   const [displayedText, setDisplayedText] = useState("");
@@ -59,8 +60,29 @@ export default function ExerciseForm() {
     control,
     formState: { errors },
   } = useForm();
-  const [recommendation, setRecommendation] = useState("");
+  const [recommendation, setRecommendation] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Load saved workout plan from localStorage on component mount
+  useEffect(() => {
+    const savedPlan = localStorage.getItem('fitness-ai-plan');
+    if (savedPlan) {
+      try {
+        const parsedPlan = JSON.parse(savedPlan);
+        setRecommendation(parsedPlan);
+      } catch (error) {
+        console.error('Error loading saved plan:', error);
+        localStorage.removeItem('fitness-ai-plan');
+      }
+    }
+  }, []);
+
+  // Save workout plan to localStorage whenever recommendation changes
+  useEffect(() => {
+    if (recommendation) {
+      localStorage.setItem('fitness-ai-plan', JSON.stringify(recommendation));
+    }
+  }, [recommendation]);
 
   const paragraphText =
     "Get a personalized exercise plan tailored just for you. Our AI-powered recommender considers your goals, experience, and available equipment to generate a routine that fits your lifestyle. Say goodbye to generic workouts and hello to a smarter, more effective fitness journey.";
@@ -68,33 +90,62 @@ export default function ExerciseForm() {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    setRecommendation("");
+    setRecommendation(null);
+    // Clear any existing saved plan when generating new one
+    localStorage.removeItem('fitness-ai-plan');
+    
     try {
       const response = await axios.post("/api/exercise-recommender-api", {
         formData: data,
       });
-      const aiResponseText = response.data;
-      setRecommendation(aiResponseText);
+      const workoutData = response.data;
+      setRecommendation(workoutData);
     } catch (error) {
       console.error("Error fetching AI recommendation:", error);
-      setRecommendation(
-        "Sorry, an error occurred while generating your plan. Please try again."
-      );
+      setRecommendation({
+        title: "Error Generating Plan",
+        introduction: "Sorry, an error occurred while generating your plan. Please try again.",
+        duration: "N/A",
+        frequency: "N/A",
+        exercises: [],
+        conclusion: "Please try again later."
+      });
     } finally {
       setLoading(false);
     }
   };
 
+  const clearPlan = () => {
+    setRecommendation(null);
+    localStorage.removeItem('fitness-ai-plan');
+    localStorage.removeItem('fitness-ai-progress');
+  };
+
   return (
     <div className="flex items-center flex-col gap-10 bg-background min-h-screen text-foreground p-4">
-      <motion.p
-        className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-primary leading-tight p-10 text-center"
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        Exercise Recommender
-      </motion.p>
+      <div className="text-center max-w-4xl mx-auto pt-8">
+        <Link href="/" className="inline-block mb-6">
+          <Button variant="outline" size="sm">
+            ← Back to Home
+          </Button>
+        </Link>
+        <motion.h1
+          className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-primary leading-tight mb-4"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          AI Personal Trainer
+        </motion.h1>
+        <motion.p
+          className="text-lg text-muted-foreground mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+        >
+          Powered by advanced AI technology to create personalized workout plans just for you
+        </motion.p>
+      </div>
 
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center max-w-7xl">
         <div className="flex flex-col items-start justify-center text-left p-6 space-y-4">
@@ -297,17 +348,37 @@ export default function ExerciseForm() {
 
       {!loading && recommendation && (
         <motion.div
-          className="container mx-auto p-6 rounded-xl border-border bg-card shadow-inner shadow-primary/20 max-w-7xl mt-5 mb-10"
+          className="container mx-auto p-6 max-w-7xl mt-5 mb-10"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-xl sm:text-2xl font-semibold text-primary mb-4">
-            Your AI-Generated Plan:
-          </h2>
-          <div className="prose prose-invert prose-p:text-foreground prose-ul:text-foreground prose-strong:text-primary-foreground prose-li:marker:text-primary">
-            <ReactMarkdown>{recommendation}</ReactMarkdown>
+          {/* Plan Action Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-primary">Your AI-Generated Plan</h2>
+              <p className="text-muted-foreground">Your plan is automatically saved. It will persist until you create a new one.</p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                variant="outline"
+                size="sm"
+              >
+                Generate New Plan
+              </Button>
+              <Button
+                onClick={clearPlan}
+                variant="outline"
+                size="sm"
+                className="text-red-600 border-red-300 hover:bg-red-50"
+              >
+                Clear Plan
+              </Button>
+            </div>
           </div>
+          
+          <WorkoutPlan workoutData={recommendation} />
         </motion.div>
       )}
     </div>
