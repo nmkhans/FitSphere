@@ -61,12 +61,17 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-primary transition-colors">
+                                <a href="/page/privacypolicy" className="hover:text-primary transition-colors">
                                     Privacy Policy
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-primary transition-colors">
+                                <a href="/page/cookiepolicy" className="hover:text-primary transition-colors">
+                                   Cookie Policy
+                                </a>
+                            </li>
+                                  <li>
+                                <a href="/page/termsofuse" className="hover:text-primary transition-colors">
                                     Terms of Service
                                 </a>
                             </li>
