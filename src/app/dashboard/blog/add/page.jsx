@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 export default function AddBlogForm() {
   const { data: session } = useSession();
@@ -20,6 +21,9 @@ export default function AddBlogForm() {
  const onSubmit = async (data) => {
     const blogData = { ...data, imageUrls };
 
+    console.log(blogData);
+    
+
     try {
       const res = await fetch("/api/blogs", {
         method: "POST",
@@ -31,36 +35,58 @@ export default function AddBlogForm() {
       console.log(result);
 
       if (result.success) {
-        alert("Blog created!");
+       Swal.fire("Created!", "Blog has been created.", "success");
         reset();          // clear form
         setImageUrls([]); // clear images
       } else {
-        alert("Error creating blog");
+          Swal.fire("Error!", "error in blog creation!", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+       Swal.fire("Error!", "Something went wrong!", "error");
     }
   };
 
-  const handleImageUpload = (e) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files);
-    setUploading(true);
-    // mock upload
-    setTimeout(() => {
-      const urls = files.map((f) => URL.createObjectURL(f));
-      setImageUrls((prev) => [...prev, ...urls]);
-      setUploading(false);
-    }, 1000);
-  };
+const handleImageUpload = async (e) => {
+  if (!e.target.files) return;
+  const files = Array.from(e.target.files);
+
+  setUploading(true);
+
+  const uploadedUrls = [];
+
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_KEY}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+      if (data.success) {
+        uploadedUrls.push(data.data.url);
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+    }
+  }
+
+  setImageUrls((prev) => [...prev, ...uploadedUrls]);
+  setUploading(false);
+};
 
   const handleRemoveImage = (url) => {
     setImageUrls((prev) => prev.filter((u) => u !== url));
   };
 
   return (
-    <Card className="max-w-3xl mx-auto">
+    <Card className="max-w-3xl mx-auto my-4">
       <CardHeader>
         <CardTitle className="text-2xl">Add a Blog</CardTitle>
       </CardHeader>
