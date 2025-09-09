@@ -8,8 +8,25 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
-    const { status } = useSession();
+    const { data: session, status } = useSession();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const getDashboardLink = () => {
+        if (!session?.user?.role) return "/dashboard";
+        
+        switch (session.user.role) {
+            case 'admin':
+                return '/dashboard/admin';
+            case 'trainer':
+                return '/dashboard/trainer';
+            case 'special-need':
+                return '/dashboard/special-member';
+            case 'premium-member':
+            case 'basic-member':
+            default:
+                return '/dashboard';
+        }
+    };
 
     // Close mobile menu when clicking outside or on escape
     useEffect(() => {
@@ -63,16 +80,6 @@ export default function Navbar() {
                                 Home
                             </Link>
                             <Link
-                                href="#features"
-                                className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
-                                Features
-                            </Link>
-                            <Link
-                                href="#special-services"
-                                className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
-                                Special Care
-                            </Link>
-                            <Link
                                 href="/membership"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
                                 Pricing
@@ -94,7 +101,7 @@ export default function Navbar() {
                             {/* Login & Logout Button */}
                             {status === "authenticated" ? (
                                 <>
-                                    <Link href={"/dashboard"}>
+                                    <Link href={getDashboardLink()}>
                                         <Button variant="outline" className="hidden md:flex">
                                             Dashboard
                                         </Button>
@@ -174,24 +181,12 @@ export default function Navbar() {
                             </Link>
                             {status === "authenticated" && (
                                 <Link
-                                    href="/dashboard"
+                                    href={getDashboardLink()}
                                     onClick={closeMobileMenu}
                                     className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                     Dashboard
                                 </Link>
                             )}
-                            <Link
-                                href="#features"
-                                onClick={closeMobileMenu}
-                                className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
-                                Features
-                            </Link>
-                            <Link
-                                href="#special-services"
-                                onClick={closeMobileMenu}
-                                className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
-                                Special Care
-                            </Link>
                             <Link
                                 href="/membership"
                                 onClick={closeMobileMenu}

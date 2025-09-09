@@ -63,17 +63,25 @@ export const authOptions = {
 
             return true; // allow login
         },
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
             if (user) {
                 token.id = user.id;
                 token.role = user.role || "user";
             }
+            
+            // Handle session update trigger (when membership is purchased)
+            if (trigger === "update" && session) {
+                token.role = session.role;
+                token.membershipType = session.membershipType;
+            }
+            
             return token;
         },
         async session({ session, token }) {
             if (token) {
                 session.user.id = token.id;
                 session.user.role = token.role;
+                session.user.membershipType = token.membershipType;
             }
             return session;
         },

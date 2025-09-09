@@ -4,10 +4,10 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import MemberOverview from "@/components/dashboard/member/MemberOverview";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import MemberOverview from "@/components/dashboard/member/MemberOverview";
 
-const MemberDashboard = () => {
+const SpecialMemberDashboard = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [activeSection, setActiveSection] = useState("overview");
@@ -20,27 +20,13 @@ const MemberDashboard = () => {
       router.push("/login");
       return;
     }
-
-    // Redirect based on user role
-    const userRole = session.user.role;
     
-    if (userRole === 'admin') {
-      router.push('/dashboard/admin');
+    // Check if user has special-need role
+    if (session.user.role !== 'special-need') {
+      router.push("/dashboard");
       return;
     }
     
-    if (userRole === 'trainer') {
-      router.push('/dashboard/trainer');
-      return;
-    }
-    
-    if (userRole === 'special-need') {
-      router.push('/dashboard/special-member');
-      return;
-    }
-    
-    // For basic-member and premium-member, stay on current page
-    // Default case for users without specific roles
     setIsLoading(false);
   }, [session, status, router]);
 
@@ -64,20 +50,18 @@ const MemberDashboard = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Spinner className="mx-auto mb-4" />
-          <p className="text-gray-600">Loading dashboard...</p>
+          <p className="text-gray-600">Loading special member dashboard...</p>
         </div>
       </div>
     );
   }
 
   const renderContent = () => {
-    const userRole = session?.user?.role || 'basic-member';
-    
     switch (activeSection) {
       case "overview":
-        return <MemberOverview user={session?.user} userType={userRole} />;
+        return <MemberOverview userType="special-need" />;
       default:
-        return <MemberOverview user={session?.user} userType={userRole} />;
+        return <MemberOverview userType="special-need" />;
     }
   };
 
@@ -86,17 +70,15 @@ const MemberDashboard = () => {
       activeSection={activeSection} 
       setActiveSection={setActiveSection}
       user={session?.user}
-      userRole={session?.user?.role === 'premium-member' ? 'premium-member' : 'member'} // Dynamic role
+      userRole="special-member" // This identifies it as special member dashboard
     >
       <div className="p-4 md:p-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-foreground">
-            Welcome back, {session?.user?.name}!
+            Welcome to Wellness Plus Dashboard, {session?.user?.name}!
           </h1>
           <p className="text-muted-foreground">
-            {session?.user?.membershipType && `${session.user.membershipType} Member`} 
-            {session?.user?.role === 'premium-member' && ' - Premium Features Enabled'}
-            {session?.user?.role === 'basic-member' && ' - Basic Membership'}
+            Your specialized dashboard for wellness and health management.
           </p>
         </div>
         {renderContent()}
@@ -105,4 +87,4 @@ const MemberDashboard = () => {
   );
 };
 
-export default MemberDashboard;
+export default SpecialMemberDashboard;

@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
+import { update } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +32,8 @@ export default function MembershipModal({ open, setOpen, selectedPlan }) {
 
 function ModalContent({ open, setOpen, selectedPlan }) {
   const { data: session } = useSession();
-  const [loading, setLoading] =useState(false);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -48,13 +51,42 @@ function ModalContent({ open, setOpen, selectedPlan }) {
       const result = await res.json();
       console.log(result);
 
-      alert(result.success ? "Membership updated!" : "Error updating");
+      if (result.success) {
+        // Update the session with new role and membership type
+        await update({
+          role: result.user.role,
+          membershipType: result.user.membershipType
+        });
+        
+        alert("Membership updated successfully! You have been assigned the role: " + result.user.role);
+        
+        // Redirect to appropriate dashboard based on role
+        const dashboardRoute = getDashboardRoute(result.user.role);
+        router.push(dashboardRoute);
+      } else {
+        alert("Error updating membership: " + result.message);
+      }
     } catch (err) {
       console.error(err);
       alert("Something went wrong.");
     }
     setLoading(false);
     setOpen(false);
+  };
+
+  const getDashboardRoute = (role) => {
+    switch (role) {
+      case 'admin':
+        return '/dashboard/admin';
+      case 'trainer':
+        return '/dashboard/trainer';
+      case 'special-need':
+        return '/dashboard/special-member';
+      case 'premium-member':
+      case 'basic-member':
+      default:
+        return '/dashboard/member';
+    }
   };
 
   return (
