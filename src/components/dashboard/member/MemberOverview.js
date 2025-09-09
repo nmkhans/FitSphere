@@ -20,7 +20,7 @@ import {
   AlertCircle
 } from "lucide-react";
 
-const MemberOverview = ({ user }) => {
+const MemberOverview = ({ user, userType }) => {
   const [memberData, setMemberData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,48 +28,108 @@ const MemberOverview = ({ user }) => {
   useEffect(() => {
     // Simulate API call
     setTimeout(() => {
-      setMemberData({
+      const baseData = {
         id: "member_123",
         name: user?.name || "Member Name",
         email: user?.email || "member@example.com",
-        category: "pregnant", // or "disabled" 
-        membershipPlan: "Wellness Plus",
         joinDate: "2024-01-15",
         status: "active",
         profileComplete: 75,
-        upcomingSessions: [
-          {
-            id: 1,
-            type: "Personal Training",
-            trainer: "Sarah Johnson",
-            date: "2025-09-08",
-            time: "10:00 AM",
-            status: "confirmed"
-          },
-          {
-            id: 2,
-            type: "Prenatal Yoga", 
-            trainer: "Emma Davis",
-            date: "2025-09-10",
-            time: "2:00 PM",
-            status: "pending"
+      };
+
+      // Customize data based on user type/membership
+      if (userType === 'special-need') {
+        setMemberData({
+          ...baseData,
+          category: user?.disabilities ? "disabled" : "pregnant",
+          membershipPlan: "Wellness Plus",
+          upcomingSessions: [
+            {
+              id: 1,
+              type: "Personal Training",
+              trainer: "Sarah Johnson", 
+              date: "2025-09-08",
+              time: "10:00 AM",
+              status: "confirmed"
+            },
+            {
+              id: 2,
+              type: "Prenatal Yoga",
+              trainer: "Emma Davis",
+              date: "2025-09-10", 
+              time: "2:00 PM",
+              status: "pending"
+            }
+          ],
+          recentActivity: [
+            { date: "2025-09-05", activity: "Completed low-impact cardio session", duration: "30 min" },
+            { date: "2025-09-03", activity: "Attended prenatal yoga class", duration: "45 min" },
+            { date: "2025-09-01", activity: "Nutrition consultation", duration: "60 min" }
+          ],
+          healthMetrics: {
+            lastCheckup: "2025-08-15",
+            medicalClearance: "approved",
+            restrictions: ["No high-impact exercises", "Monitor heart rate"],
+            emergencyContact: "John Doe - (555) 123-4567"
           }
-        ],
-        recentActivity: [
-          { date: "2025-09-05", activity: "Completed low-impact cardio session", duration: "30 min" },
-          { date: "2025-09-03", activity: "Attended prenatal yoga class", duration: "45 min" },
-          { date: "2025-09-01", activity: "Nutrition consultation", duration: "60 min" }
-        ],
-        healthMetrics: {
-          lastCheckup: "2025-08-15",
-          medicalClearance: "approved",
-          restrictions: ["No high-impact exercises", "Monitor heart rate"],
-          emergencyContact: "John Doe - (555) 123-4567"
-        }
-      });
+        });
+      } else if (userType === 'premium-member') {
+        setMemberData({
+          ...baseData,
+          category: "premium",
+          membershipPlan: "Elite Performance",
+          upcomingSessions: [
+            {
+              id: 1,
+              type: "Personal Training",
+              trainer: "Mike Wilson",
+              date: "2025-09-08",
+              time: "10:00 AM", 
+              status: "confirmed"
+            },
+            {
+              id: 2,
+              type: "Advanced Strength Training",
+              trainer: "Alex Rodriguez",
+              date: "2025-09-10",
+              time: "2:00 PM",
+              status: "confirmed"
+            }
+          ],
+          recentActivity: [
+            { date: "2025-09-05", activity: "Completed HIIT training", duration: "45 min" },
+            { date: "2025-09-03", activity: "Personal training session", duration: "60 min" },
+            { date: "2025-09-01", activity: "Advanced workout plan", duration: "90 min" }
+          ],
+          healthMetrics: null // Premium members don't need special health tracking
+        });
+      } else {
+        // Basic member
+        setMemberData({
+          ...baseData,
+          category: "basic",
+          membershipPlan: "Pro Active",
+          upcomingSessions: [
+            {
+              id: 1,
+              type: "Group Fitness Class",
+              trainer: "Lisa Chen",
+              date: "2025-09-08",
+              time: "10:00 AM",
+              status: "confirmed"
+            }
+          ],
+          recentActivity: [
+            { date: "2025-09-05", activity: "Completed basic cardio", duration: "30 min" },
+            { date: "2025-09-03", activity: "Used weight machines", duration: "45 min" },
+            { date: "2025-09-01", activity: "Gym orientation", duration: "30 min" }
+          ],
+          healthMetrics: null // Basic members don't need special health tracking
+        });
+      }
       setLoading(false);
     }, 1000);
-  }, [user]);
+  }, [user, userType]);
 
   const getCategoryInfo = (category) => {
     switch (category) {
@@ -86,6 +146,20 @@ const MemberOverview = ({ user }) => {
           icon: Accessibility, 
           color: "bg-purple-100 text-purple-800",
           description: "Customized programs for different abilities" 
+        };
+      case "premium":
+        return { 
+          label: "Elite Performance Member", 
+          icon: Target, 
+          color: "bg-yellow-100 text-yellow-800",
+          description: "Premium membership with advanced features"
+        };
+      case "basic":
+        return { 
+          label: "Pro Active Member", 
+          icon: User, 
+          color: "bg-green-100 text-green-800",
+          description: "Standard membership program"
         };
       default:
         return { 
@@ -178,20 +252,39 @@ const MemberOverview = ({ user }) => {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Medical Status</p>
-                <div className="flex items-center mt-1">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
-                  <p className="text-sm font-medium text-green-600">Cleared</p>
+        {memberData.healthMetrics ? (
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Medical Status</p>
+                  <div className="flex items-center mt-1">
+                    <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
+                    <p className="text-sm font-medium text-green-600">Cleared</p>
+                  </div>
                 </div>
+                <Heart className="h-8 w-8 text-red-500" />
               </div>
-              <Heart className="h-8 w-8 text-red-500" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Membership</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {userType === 'premium-member' ? '★★★' : '★'}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userType === 'premium-member' ? 'Premium' : 'Basic'}
+                  </p>
+                </div>
+                <Target className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -260,53 +353,55 @@ const MemberOverview = ({ user }) => {
         </Card>
       </div>
 
-      {/* Health Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-red-500" />
-            Health & Safety Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-medium text-gray-900 mb-3">Medical Status</h4>
-              <div className="space-y-2">
-                <div className="flex items-center text-sm">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  <span>Medical clearance: {memberData.healthMetrics.medicalClearance}</span>
-                </div>
-                <div className="flex items-center text-sm">
-                  <Calendar className="h-4 w-4 text-blue-500 mr-2" />
-                  <span>Last checkup: {memberData.healthMetrics.lastCheckup}</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-900 mb-3">Exercise Restrictions</h4>
-              <div className="space-y-1">
-                {memberData.healthMetrics.restrictions.map((restriction, index) => (
-                  <div key={index} className="flex items-center text-sm">
-                    <AlertCircle className="h-4 w-4 text-orange-500 mr-2 flex-shrink-0" />
-                    <span>{restriction}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <div className="flex items-start">
-              <AlertCircle className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
+      {/* Health Information - Only for special-need members */}
+      {memberData.healthMetrics && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Heart className="h-5 w-5 text-red-500" />
+              Health & Safety Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h5 className="font-medium text-blue-800">Emergency Contact</h5>
-                <p className="text-sm text-blue-700">{memberData.healthMetrics.emergencyContact}</p>
+                <h4 className="font-medium text-gray-900 mb-3">Medical Status</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                    <span>Medical clearance: {memberData.healthMetrics.medicalClearance}</span>
+                  </div>
+                  <div className="flex items-center text-sm">
+                    <Calendar className="h-4 w-4 text-blue-500 mr-2" />
+                    <span>Last checkup: {memberData.healthMetrics.lastCheckup}</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 mb-3">Exercise Restrictions</h4>
+                <div className="space-y-1">
+                  {memberData.healthMetrics.restrictions.map((restriction, index) => (
+                    <div key={index} className="flex items-center text-sm">
+                      <AlertCircle className="h-4 w-4 text-orange-500 mr-2 flex-shrink-0" />
+                      <span>{restriction}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <div className="flex items-start">
+                <AlertCircle className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h5 className="font-medium text-blue-800">Emergency Contact</h5>
+                  <p className="text-sm text-blue-700">{memberData.healthMetrics.emergencyContact}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Quick Actions */}
       <Card>
@@ -323,10 +418,18 @@ const MemberOverview = ({ user }) => {
               <FileText className="h-6 w-6 mb-2" />
               <span>View Plans</span>
             </Button>
-            <Button variant="outline" className="flex flex-col items-center p-4 h-auto">
-              <Heart className="h-6 w-6 mb-2" />
-              <span>Health Records</span>
-            </Button>
+            {memberData.healthMetrics && (
+              <Button variant="outline" className="flex flex-col items-center p-4 h-auto">
+                <Heart className="h-6 w-6 mb-2" />
+                <span>Health Records</span>
+              </Button>
+            )}
+            {userType === 'premium-member' && (
+              <Button variant="outline" className="flex flex-col items-center p-4 h-auto">
+                <Target className="h-6 w-6 mb-2" />
+                <span>Premium Features</span>
+              </Button>
+            )}
             <Button variant="outline" className="flex flex-col items-center p-4 h-auto">
               <User className="h-6 w-6 mb-2" />
               <span>Update Profile</span>

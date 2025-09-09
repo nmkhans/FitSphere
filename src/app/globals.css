@@ -10,6 +10,23 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Line clamp utilities for text truncation */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
@@ -370,7 +387,6 @@ body {
     transform: translateY(1px) scaleY(1.02);
   }
 }
-
 
 @keyframes liquidGlow {
   0%,

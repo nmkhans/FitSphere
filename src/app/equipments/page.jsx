@@ -15,15 +15,25 @@ export default async function EquipmentsPage({ searchParams }) {
      { cache: 'no-store' }
    );
 
+   if (!res.ok) {
+     throw new Error(`Failed to fetch equipments: ${res.status}`);
+   }
+
    const { equipments, totalPages } = await res.json();
 
   return (
     <section className="py-16 px-6 md:px-12 space-y-8">
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <h1 className="text-3xl md:text-5xl font-bold mb-4">Gym Equipments</h1>
-        <p className="text-gray-600 text-lg md:text-xl">
-          Explore all gym equipments and find the perfect one for your training.
+      <div className="text-center max-w-3xl mx-auto mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4 text-primary">Gym Equipment Collection</h1>
+        <p className="text-gray-600 text-lg md:text-xl mb-6">
+          Discover our comprehensive collection of professional-grade gym equipment. 
+          Each piece is carefully selected to help you achieve your fitness goals safely and effectively.
         </p>
+        <Link href="/">
+          <Button variant="outline" className="mb-8">
+            ← Back to Home
+          </Button>
+        </Link>
       </div>
       <EquipmentFilter
         initialSearch={search}
