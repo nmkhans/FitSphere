@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import registerUser from "../actions/auth/registerUser";
@@ -34,16 +35,14 @@ export default function Register() {
 
       if (response?.success) {
         router.push("/login");
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: "You successfully registered",
-          showConfirmButton: false,
-          timer: 1500,
+        toast.success("Successfully registered! Please login to continue.", {
+          icon: '🎉',
+          duration: 3000,
         });
       }
     } catch (error) {
       console.log(error);
+      toast.error("Registration failed. Please try again.");
     }
   };
   return (

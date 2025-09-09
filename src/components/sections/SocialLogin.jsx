@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 export default function SocialLogin() {
   const session = useSession();
@@ -14,12 +15,9 @@ export default function SocialLogin() {
   useEffect(() => {
     if (session?.status === "authenticated") {
       router.push("/");
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "You successfully Logged In",
-        showConfirmButton: false,
-        timer: 1500,
+      toast.success("You successfully logged in!", {
+        icon: '🎉',
+        duration: 3000,
       });
     }
   }, [session?.status]);

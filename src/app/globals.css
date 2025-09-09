@@ -7,6 +7,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-lato);
+  scroll-behavior: smooth;
 }
 
 @media (prefers-color-scheme: light) {
@@ -17,7 +18,7 @@ body {
 }
 
 .main-container {
-  @apply max-w-11/12 md:max-w-10/12 xl:max-w-9/12
+  @apply max-w-11/12 md:max-w-10/12 xl:max-w-9/12;
 }
 
 @theme inline {
@@ -32,7 +33,6 @@ body {
   --color-black-primary: var(--blk-prim);
   --color-green-dark: var(--green-drk);
 
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -41,7 +41,9 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary-foreground: var(
+    --sidebar-primary-foreground
+  );
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
@@ -110,8 +112,8 @@ body {
   --prim-text: #042618;
   --blk-prim: #042618;
   --sub-text: #2a2b2a;
-  --green-prim: #93EA33;
-  --green-drk: #7ED51D;
+  --green-prim: #93ea33;
+  --green-drk: #7ed51d;
 
   --primary-rgb: 147 234 51;
 
@@ -163,7 +165,6 @@ body {
 
 /* Custom animations */
 @keyframes glow {
-
   0%,
   100% {
     box-shadow: 0 0 5px rgba(var(--primary), 0.5);
@@ -175,7 +176,6 @@ body {
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -204,11 +204,13 @@ body {
   background: var(--liquid-glass-bg);
   backdrop-filter: blur(5px);
   border: 1px solid var(--liquid-glass-border);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
-  transition: all var(--liquid-flow-duration) cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(255, 255, 255, 0.1);
+  transition: all var(--liquid-flow-duration)
+    cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   transform-origin: center center;
 }
@@ -221,10 +223,12 @@ body {
   right: 0;
   bottom: 0;
   border-radius: inherit;
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
@@ -237,10 +241,12 @@ body {
   right: 2px;
   bottom: 2px;
   border-radius: inherit;
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.02) 50%,
-      rgba(0, 0, 0, 0.05) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -302,7 +308,6 @@ body {
 }
 
 @keyframes liquidJiggle {
-
   0%,
   100% {
     transform: rotate(0deg) scale(1) skewX(0deg);
@@ -346,7 +351,6 @@ body {
 }
 
 @keyframes liquidWave {
-
   0%,
   100% {
     transform: translateY(0px) scaleY(1);
@@ -366,7 +370,6 @@ body {
 }
 
 @keyframes liquidGlow {
-
   0%,
   100% {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
@@ -378,7 +381,8 @@ body {
 }
 
 .liquid-flow {
-  animation: liquidFlow var(--liquid-flow-duration) cubic-bezier(0.23, 1, 0.32, 1);
+  animation: liquidFlow var(--liquid-flow-duration)
+    cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .liquid-jiggle {
@@ -415,10 +419,11 @@ body {
 .liquid-glass:hover {
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .liquid-glass:active {
@@ -441,7 +446,6 @@ body {
 }
 
 @keyframes liquidFloat {
-
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -461,7 +465,6 @@ body {
 }
 
 @keyframes liquidPulse {
-
   0%,
   100% {
     transform: scale(1);
@@ -479,7 +482,6 @@ body {
 }
 
 @keyframes liquidBreathe {
-
   0%,
   100% {
     transform: scale(1) rotate(0deg);
@@ -496,55 +498,68 @@ body {
   }
 
   8% {
-    transform: translateX(-6px) translateY(-4px) scale(1.02) rotate(-1deg);
+    transform: translateX(-6px) translateY(-4px) scale(1.02)
+      rotate(-1deg);
   }
 
   16% {
-    transform: translateX(-12px) translateY(-8px) scale(1.05) rotate(-2deg);
+    transform: translateX(-12px) translateY(-8px) scale(1.05)
+      rotate(-2deg);
   }
 
   22% {
-    transform: translateX(-8px) translateY(-2px) scale(1.03) rotate(-1.2deg);
+    transform: translateX(-8px) translateY(-2px) scale(1.03)
+      rotate(-1.2deg);
   }
 
   30% {
-    transform: translateX(8px) translateY(5px) scale(0.95) rotate(1.5deg);
+    transform: translateX(8px) translateY(5px) scale(0.95)
+      rotate(1.5deg);
   }
 
   36% {
-    transform: translateX(6px) translateY(3px) scale(0.97) rotate(1deg);
+    transform: translateX(6px) translateY(3px) scale(0.97)
+      rotate(1deg);
   }
 
   45% {
-    transform: translateX(-5px) translateY(-3px) scale(1.02) rotate(-1deg);
+    transform: translateX(-5px) translateY(-3px) scale(1.02)
+      rotate(-1deg);
   }
 
   52% {
-    transform: translateX(-3px) translateY(-1px) scale(1.01) rotate(-0.6deg);
+    transform: translateX(-3px) translateY(-1px) scale(1.01)
+      rotate(-0.6deg);
   }
 
   60% {
-    transform: translateX(3px) translateY(2px) scale(0.98) rotate(0.5deg);
+    transform: translateX(3px) translateY(2px) scale(0.98)
+      rotate(0.5deg);
   }
 
   67% {
-    transform: translateX(2px) translateY(1px) scale(0.99) rotate(0.3deg);
+    transform: translateX(2px) translateY(1px) scale(0.99)
+      rotate(0.3deg);
   }
 
   75% {
-    transform: translateX(-1px) translateY(-1px) scale(1.01) rotate(-0.2deg);
+    transform: translateX(-1px) translateY(-1px) scale(1.01)
+      rotate(-0.2deg);
   }
 
   82% {
-    transform: translateX(-0.5px) translateY(-0.5px) scale(1.005) rotate(-0.1deg);
+    transform: translateX(-0.5px) translateY(-0.5px) scale(1.005)
+      rotate(-0.1deg);
   }
 
   90% {
-    transform: translateX(0.5px) translateY(0.5px) scale(0.995) rotate(0.05deg);
+    transform: translateX(0.5px) translateY(0.5px) scale(0.995)
+      rotate(0.05deg);
   }
 
   95% {
-    transform: translateX(0.2px) translateY(0.2px) scale(0.998) rotate(0.02deg);
+    transform: translateX(0.2px) translateY(0.2px) scale(0.998)
+      rotate(0.02deg);
   }
 
   100% {
@@ -566,69 +581,85 @@ body {
   }
 
   30% {
-    transform: scale(0.92) rotate(1.5deg) translateY(2px) translateX(1px);
+    transform: scale(0.92) rotate(1.5deg) translateY(2px)
+      translateX(1px);
   }
 
   60% {
-    transform: scale(0.94) rotate(-0.8deg) translateY(1.5px) translateX(-0.5px);
+    transform: scale(0.94) rotate(-0.8deg) translateY(1.5px)
+      translateX(-0.5px);
   }
 
   100% {
-    transform: scale(0.96) rotate(0.5deg) translateY(1px) translateX(0);
+    transform: scale(0.96) rotate(0.5deg) translateY(1px)
+      translateX(0);
   }
 }
 
 @keyframes liquidRelease {
   0% {
-    transform: scale(0.96) rotate(0.5deg) translateY(1px) translateX(0);
+    transform: scale(0.96) rotate(0.5deg) translateY(1px)
+      translateX(0);
   }
 
   8% {
-    transform: scale(1.12) rotate(-2deg) translateY(-4px) translateX(-3px);
+    transform: scale(1.12) rotate(-2deg) translateY(-4px)
+      translateX(-3px);
   }
 
   16% {
-    transform: scale(0.92) rotate(2.5deg) translateY(2px) translateX(4px);
+    transform: scale(0.92) rotate(2.5deg) translateY(2px)
+      translateX(4px);
   }
 
   24% {
-    transform: scale(1.06) rotate(-1.8deg) translateY(-2px) translateX(-3px);
+    transform: scale(1.06) rotate(-1.8deg) translateY(-2px)
+      translateX(-3px);
   }
 
   32% {
-    transform: scale(0.95) rotate(1.5deg) translateY(1px) translateX(2px);
+    transform: scale(0.95) rotate(1.5deg) translateY(1px)
+      translateX(2px);
   }
 
   40% {
-    transform: scale(1.04) rotate(-1deg) translateY(-1px) translateX(-2px);
+    transform: scale(1.04) rotate(-1deg) translateY(-1px)
+      translateX(-2px);
   }
 
   48% {
-    transform: scale(0.97) rotate(0.8deg) translateY(0.5px) translateX(1.5px);
+    transform: scale(0.97) rotate(0.8deg) translateY(0.5px)
+      translateX(1.5px);
   }
 
   56% {
-    transform: scale(1.02) rotate(-0.6deg) translateY(-0.5px) translateX(-1px);
+    transform: scale(1.02) rotate(-0.6deg) translateY(-0.5px)
+      translateX(-1px);
   }
 
   64% {
-    transform: scale(0.99) rotate(0.4deg) translateY(0.3px) translateX(0.8px);
+    transform: scale(0.99) rotate(0.4deg) translateY(0.3px)
+      translateX(0.8px);
   }
 
   72% {
-    transform: scale(1.01) rotate(-0.3deg) translateY(-0.2px) translateX(-0.6px);
+    transform: scale(1.01) rotate(-0.3deg) translateY(-0.2px)
+      translateX(-0.6px);
   }
 
   80% {
-    transform: scale(0.995) rotate(0.2deg) translateY(0.1px) translateX(0.4px);
+    transform: scale(0.995) rotate(0.2deg) translateY(0.1px)
+      translateX(0.4px);
   }
 
   88% {
-    transform: scale(1.005) rotate(-0.1deg) translateY(-0.1px) translateX(-0.2px);
+    transform: scale(1.005) rotate(-0.1deg) translateY(-0.1px)
+      translateX(-0.2px);
   }
 
   96% {
-    transform: scale(0.998) rotate(0.05deg) translateY(0.05px) translateX(0.1px);
+    transform: scale(0.998) rotate(0.05deg) translateY(0.05px)
+      translateX(0.1px);
   }
 
   100% {
@@ -659,11 +690,13 @@ body {
 }
 
 .liquid-press {
-  animation: liquidPress 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: liquidPress 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
 }
 
 .liquid-release {
-  animation: liquidRelease 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: liquidRelease 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    forwards;
 }
 
 .liquid-squish {
@@ -671,11 +704,13 @@ body {
 }
 
 .liquid-button:active {
-  animation: liquidWobbleClick 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: liquidWobbleClick 1.8s
+    cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .liquid-glass.liquid-wobble-active {
-  animation: liquidWobbleClick 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: liquidWobbleClick 1.8s
+    cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform-origin: 50% 50% !important;
 }
 
@@ -684,115 +719,221 @@ body {
 }
 
 .liquid-pressed::before {
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(0, 0, 0, 0.05) 100%) !important;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  ) !important;
 }
 
 @keyframes liquidWobbleClick {
   0% {
-    transform: scale(1) rotate(0deg) translate(var(--wobble-start-x, 0px), var(--wobble-start-y, 0px));
+    transform: scale(1) rotate(0deg)
+      translate(
+        var(--wobble-start-x, 0px),
+        var(--wobble-start-y, 0px)
+      );
   }
 
   4% {
-    transform: scale(1.06) rotate(-1deg) translate(calc(var(--wobble-start-x, 0px) * -0.6), calc(var(--wobble-start-y, 0px) * -0.6));
+    transform: scale(1.06) rotate(-1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.6),
+        calc(var(--wobble-start-y, 0px) * -0.6)
+      );
   }
 
   8% {
-    transform: scale(1.12) rotate(-2deg) translate(calc(var(--wobble-start-x, 0px) * -1.2), calc(var(--wobble-start-y, 0px) * -1.2));
+    transform: scale(1.12) rotate(-2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -1.2),
+        calc(var(--wobble-start-y, 0px) * -1.2)
+      );
   }
 
   12% {
-    transform: scale(1.04) rotate(-1.2deg) translate(calc(var(--wobble-start-x, 0px) * -0.9), calc(var(--wobble-start-y, 0px) * -0.9));
+    transform: scale(1.04) rotate(-1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.9),
+        calc(var(--wobble-start-y, 0px) * -0.9)
+      );
   }
 
   16% {
-    transform: scale(0.92) rotate(2.5deg) translate(calc(var(--wobble-start-x, 0px) * 0.8), calc(var(--wobble-start-y, 0px) * 0.8));
+    transform: scale(0.92) rotate(2.5deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.8),
+        calc(var(--wobble-start-y, 0px) * 0.8)
+      );
   }
 
   20% {
-    transform: scale(0.98) rotate(2deg) translate(calc(var(--wobble-start-x, 0px) * 0.65), calc(var(--wobble-start-y, 0px) * 0.65));
+    transform: scale(0.98) rotate(2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.65),
+        calc(var(--wobble-start-y, 0px) * 0.65)
+      );
   }
 
   24% {
-    transform: scale(1.06) rotate(-1.8deg) translate(calc(var(--wobble-start-x, 0px) * -0.5), calc(var(--wobble-start-y, 0px) * -0.5));
+    transform: scale(1.06) rotate(-1.8deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.5),
+        calc(var(--wobble-start-y, 0px) * -0.5)
+      );
   }
 
   28% {
-    transform: scale(1.02) rotate(-1.2deg) translate(calc(var(--wobble-start-x, 0px) * -0.4), calc(var(--wobble-start-y, 0px) * -0.4));
+    transform: scale(1.02) rotate(-1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.4),
+        calc(var(--wobble-start-y, 0px) * -0.4)
+      );
   }
 
   32% {
-    transform: scale(0.95) rotate(1.5deg) translate(calc(var(--wobble-start-x, 0px) * 0.3), calc(var(--wobble-start-y, 0px) * 0.3));
+    transform: scale(0.95) rotate(1.5deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.3),
+        calc(var(--wobble-start-y, 0px) * 0.3)
+      );
   }
 
   36% {
-    transform: scale(0.99) rotate(1.2deg) translate(calc(var(--wobble-start-x, 0px) * 0.25), calc(var(--wobble-start-y, 0px) * 0.25));
+    transform: scale(0.99) rotate(1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.25),
+        calc(var(--wobble-start-y, 0px) * 0.25)
+      );
   }
 
   40% {
-    transform: scale(1.04) rotate(-1deg) translate(calc(var(--wobble-start-x, 0px) * -0.2), calc(var(--wobble-start-y, 0px) * -0.2));
+    transform: scale(1.04) rotate(-1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.2),
+        calc(var(--wobble-start-y, 0px) * -0.2)
+      );
   }
 
   44% {
-    transform: scale(1.01) rotate(-0.7deg) translate(calc(var(--wobble-start-x, 0px) * -0.175), calc(var(--wobble-start-y, 0px) * -0.175));
+    transform: scale(1.01) rotate(-0.7deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.175),
+        calc(var(--wobble-start-y, 0px) * -0.175)
+      );
   }
 
   48% {
-    transform: scale(0.97) rotate(0.8deg) translate(calc(var(--wobble-start-x, 0px) * 0.15), calc(var(--wobble-start-y, 0px) * 0.15));
+    transform: scale(0.97) rotate(0.8deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.15),
+        calc(var(--wobble-start-y, 0px) * 0.15)
+      );
   }
 
   52% {
-    transform: scale(0.995) rotate(0.65deg) translate(calc(var(--wobble-start-x, 0px) * 0.125), calc(var(--wobble-start-y, 0px) * 0.125));
+    transform: scale(0.995) rotate(0.65deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.125),
+        calc(var(--wobble-start-y, 0px) * 0.125)
+      );
   }
 
   56% {
-    transform: scale(1.02) rotate(-0.6deg) translate(calc(var(--wobble-start-x, 0px) * -0.1), calc(var(--wobble-start-y, 0px) * -0.1));
+    transform: scale(1.02) rotate(-0.6deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.1),
+        calc(var(--wobble-start-y, 0px) * -0.1)
+      );
   }
 
   60% {
-    transform: scale(1.008) rotate(-0.45deg) translate(calc(var(--wobble-start-x, 0px) * -0.09), calc(var(--wobble-start-y, 0px) * -0.09));
+    transform: scale(1.008) rotate(-0.45deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.09),
+        calc(var(--wobble-start-y, 0px) * -0.09)
+      );
   }
 
   64% {
-    transform: scale(0.99) rotate(0.4deg) translate(calc(var(--wobble-start-x, 0px) * 0.08), calc(var(--wobble-start-y, 0px) * 0.08));
+    transform: scale(0.99) rotate(0.4deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.08),
+        calc(var(--wobble-start-y, 0px) * 0.08)
+      );
   }
 
   68% {
-    transform: scale(0.996) rotate(0.35deg) translate(calc(var(--wobble-start-x, 0px) * 0.065), calc(var(--wobble-start-y, 0px) * 0.065));
+    transform: scale(0.996) rotate(0.35deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.065),
+        calc(var(--wobble-start-y, 0px) * 0.065)
+      );
   }
 
   72% {
-    transform: scale(1.01) rotate(-0.3deg) translate(calc(var(--wobble-start-x, 0px) * -0.05), calc(var(--wobble-start-y, 0px) * -0.05));
+    transform: scale(1.01) rotate(-0.3deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.05),
+        calc(var(--wobble-start-y, 0px) * -0.05)
+      );
   }
 
   76% {
-    transform: scale(1.004) rotate(-0.22deg) translate(calc(var(--wobble-start-x, 0px) * -0.04), calc(var(--wobble-start-y, 0px) * -0.04));
+    transform: scale(1.004) rotate(-0.22deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.04),
+        calc(var(--wobble-start-y, 0px) * -0.04)
+      );
   }
 
   80% {
-    transform: scale(0.995) rotate(0.2deg) translate(calc(var(--wobble-start-x, 0px) * 0.03), calc(var(--wobble-start-y, 0px) * 0.03));
+    transform: scale(0.995) rotate(0.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.03),
+        calc(var(--wobble-start-y, 0px) * 0.03)
+      );
   }
 
   84% {
-    transform: scale(0.998) rotate(0.15deg) translate(calc(var(--wobble-start-x, 0px) * 0.025), calc(var(--wobble-start-y, 0px) * 0.025));
+    transform: scale(0.998) rotate(0.15deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.025),
+        calc(var(--wobble-start-y, 0px) * 0.025)
+      );
   }
 
   88% {
-    transform: scale(1.005) rotate(-0.1deg) translate(calc(var(--wobble-start-x, 0px) * -0.02), calc(var(--wobble-start-y, 0px) * -0.02));
+    transform: scale(1.005) rotate(-0.1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.02),
+        calc(var(--wobble-start-y, 0px) * -0.02)
+      );
   }
 
   92% {
-    transform: scale(1.002) rotate(-0.07deg) translate(calc(var(--wobble-start-x, 0px) * -0.015), calc(var(--wobble-start-y, 0px) * -0.015));
+    transform: scale(1.002) rotate(-0.07deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.015),
+        calc(var(--wobble-start-y, 0px) * -0.015)
+      );
   }
 
   96% {
-    transform: scale(0.998) rotate(0.05deg) translate(calc(var(--wobble-start-x, 0px) * 0.01), calc(var(--wobble-start-y, 0px) * 0.01));
+    transform: scale(0.998) rotate(0.05deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.01),
+        calc(var(--wobble-start-y, 0px) * 0.01)
+      );
   }
 
   98% {
-    transform: scale(0.999) rotate(0.02deg) translate(calc(var(--wobble-start-x, 0px) * 0.005), calc(var(--wobble-start-y, 0px) * 0.005));
+    transform: scale(0.999) rotate(0.02deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.005),
+        calc(var(--wobble-start-y, 0px) * 0.005)
+      );
   }
 
   100% {
@@ -810,11 +951,13 @@ body {
   background: var(--liquid-glass-bg);
   backdrop-filter: blur(5px);
   border: 1px solid var(--liquid-glass-border);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
-  transition: all var(--liquid-flow-duration) cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(255, 255, 255, 0.1);
+  transition: all var(--liquid-flow-duration)
+    cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   transform-origin: center center;
 }
@@ -827,10 +970,12 @@ body {
   right: 0;
   bottom: 0;
   border-radius: inherit;
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   pointer-events: none;
   z-index: 1;
 }
@@ -843,10 +988,12 @@ body {
   right: 2px;
   bottom: 2px;
   border-radius: inherit;
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.02) 50%,
-      rgba(0, 0, 0, 0.05) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -908,7 +1055,6 @@ body {
 }
 
 @keyframes liquidJiggle {
-
   0%,
   100% {
     transform: rotate(0deg) scale(1) skewX(0deg);
@@ -952,7 +1098,6 @@ body {
 }
 
 @keyframes liquidWave {
-
   0%,
   100% {
     transform: translateY(0px) scaleY(1);
@@ -972,7 +1117,6 @@ body {
 }
 
 @keyframes liquidGlow {
-
   0%,
   100% {
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
@@ -984,7 +1128,8 @@ body {
 }
 
 .liquid-flow {
-  animation: liquidFlow var(--liquid-flow-duration) cubic-bezier(0.23, 1, 0.32, 1);
+  animation: liquidFlow var(--liquid-flow-duration)
+    cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .liquid-jiggle {
@@ -1021,10 +1166,11 @@ body {
 .liquid-glass:hover {
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    inset 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .liquid-glass:active {
@@ -1047,7 +1193,6 @@ body {
 }
 
 @keyframes liquidFloat {
-
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -1067,7 +1212,6 @@ body {
 }
 
 @keyframes liquidPulse {
-
   0%,
   100% {
     transform: scale(1);
@@ -1085,7 +1229,6 @@ body {
 }
 
 @keyframes liquidBreathe {
-
   0%,
   100% {
     transform: scale(1) rotate(0deg);
@@ -1102,55 +1245,68 @@ body {
   }
 
   8% {
-    transform: translateX(-6px) translateY(-4px) scale(1.02) rotate(-1deg);
+    transform: translateX(-6px) translateY(-4px) scale(1.02)
+      rotate(-1deg);
   }
 
   16% {
-    transform: translateX(-12px) translateY(-8px) scale(1.05) rotate(-2deg);
+    transform: translateX(-12px) translateY(-8px) scale(1.05)
+      rotate(-2deg);
   }
 
   22% {
-    transform: translateX(-8px) translateY(-2px) scale(1.03) rotate(-1.2deg);
+    transform: translateX(-8px) translateY(-2px) scale(1.03)
+      rotate(-1.2deg);
   }
 
   30% {
-    transform: translateX(8px) translateY(5px) scale(0.95) rotate(1.5deg);
+    transform: translateX(8px) translateY(5px) scale(0.95)
+      rotate(1.5deg);
   }
 
   36% {
-    transform: translateX(6px) translateY(3px) scale(0.97) rotate(1deg);
+    transform: translateX(6px) translateY(3px) scale(0.97)
+      rotate(1deg);
   }
 
   45% {
-    transform: translateX(-5px) translateY(-3px) scale(1.02) rotate(-1deg);
+    transform: translateX(-5px) translateY(-3px) scale(1.02)
+      rotate(-1deg);
   }
 
   52% {
-    transform: translateX(-3px) translateY(-1px) scale(1.01) rotate(-0.6deg);
+    transform: translateX(-3px) translateY(-1px) scale(1.01)
+      rotate(-0.6deg);
   }
 
   60% {
-    transform: translateX(3px) translateY(2px) scale(0.98) rotate(0.5deg);
+    transform: translateX(3px) translateY(2px) scale(0.98)
+      rotate(0.5deg);
   }
 
   67% {
-    transform: translateX(2px) translateY(1px) scale(0.99) rotate(0.3deg);
+    transform: translateX(2px) translateY(1px) scale(0.99)
+      rotate(0.3deg);
   }
 
   75% {
-    transform: translateX(-1px) translateY(-1px) scale(1.01) rotate(-0.2deg);
+    transform: translateX(-1px) translateY(-1px) scale(1.01)
+      rotate(-0.2deg);
   }
 
   82% {
-    transform: translateX(-0.5px) translateY(-0.5px) scale(1.005) rotate(-0.1deg);
+    transform: translateX(-0.5px) translateY(-0.5px) scale(1.005)
+      rotate(-0.1deg);
   }
 
   90% {
-    transform: translateX(0.5px) translateY(0.5px) scale(0.995) rotate(0.05deg);
+    transform: translateX(0.5px) translateY(0.5px) scale(0.995)
+      rotate(0.05deg);
   }
 
   95% {
-    transform: translateX(0.2px) translateY(0.2px) scale(0.998) rotate(0.02deg);
+    transform: translateX(0.2px) translateY(0.2px) scale(0.998)
+      rotate(0.02deg);
   }
 
   100% {
@@ -1172,69 +1328,85 @@ body {
   }
 
   30% {
-    transform: scale(0.92) rotate(1.5deg) translateY(2px) translateX(1px);
+    transform: scale(0.92) rotate(1.5deg) translateY(2px)
+      translateX(1px);
   }
 
   60% {
-    transform: scale(0.94) rotate(-0.8deg) translateY(1.5px) translateX(-0.5px);
+    transform: scale(0.94) rotate(-0.8deg) translateY(1.5px)
+      translateX(-0.5px);
   }
 
   100% {
-    transform: scale(0.96) rotate(0.5deg) translateY(1px) translateX(0);
+    transform: scale(0.96) rotate(0.5deg) translateY(1px)
+      translateX(0);
   }
 }
 
 @keyframes liquidRelease {
   0% {
-    transform: scale(0.96) rotate(0.5deg) translateY(1px) translateX(0);
+    transform: scale(0.96) rotate(0.5deg) translateY(1px)
+      translateX(0);
   }
 
   8% {
-    transform: scale(1.12) rotate(-2deg) translateY(-4px) translateX(-3px);
+    transform: scale(1.12) rotate(-2deg) translateY(-4px)
+      translateX(-3px);
   }
 
   16% {
-    transform: scale(0.92) rotate(2.5deg) translateY(2px) translateX(4px);
+    transform: scale(0.92) rotate(2.5deg) translateY(2px)
+      translateX(4px);
   }
 
   24% {
-    transform: scale(1.06) rotate(-1.8deg) translateY(-2px) translateX(-3px);
+    transform: scale(1.06) rotate(-1.8deg) translateY(-2px)
+      translateX(-3px);
   }
 
   32% {
-    transform: scale(0.95) rotate(1.5deg) translateY(1px) translateX(2px);
+    transform: scale(0.95) rotate(1.5deg) translateY(1px)
+      translateX(2px);
   }
 
   40% {
-    transform: scale(1.04) rotate(-1deg) translateY(-1px) translateX(-2px);
+    transform: scale(1.04) rotate(-1deg) translateY(-1px)
+      translateX(-2px);
   }
 
   48% {
-    transform: scale(0.97) rotate(0.8deg) translateY(0.5px) translateX(1.5px);
+    transform: scale(0.97) rotate(0.8deg) translateY(0.5px)
+      translateX(1.5px);
   }
 
   56% {
-    transform: scale(1.02) rotate(-0.6deg) translateY(-0.5px) translateX(-1px);
+    transform: scale(1.02) rotate(-0.6deg) translateY(-0.5px)
+      translateX(-1px);
   }
 
   64% {
-    transform: scale(0.99) rotate(0.4deg) translateY(0.3px) translateX(0.8px);
+    transform: scale(0.99) rotate(0.4deg) translateY(0.3px)
+      translateX(0.8px);
   }
 
   72% {
-    transform: scale(1.01) rotate(-0.3deg) translateY(-0.2px) translateX(-0.6px);
+    transform: scale(1.01) rotate(-0.3deg) translateY(-0.2px)
+      translateX(-0.6px);
   }
 
   80% {
-    transform: scale(0.995) rotate(0.2deg) translateY(0.1px) translateX(0.4px);
+    transform: scale(0.995) rotate(0.2deg) translateY(0.1px)
+      translateX(0.4px);
   }
 
   88% {
-    transform: scale(1.005) rotate(-0.1deg) translateY(-0.1px) translateX(-0.2px);
+    transform: scale(1.005) rotate(-0.1deg) translateY(-0.1px)
+      translateX(-0.2px);
   }
 
   96% {
-    transform: scale(0.998) rotate(0.05deg) translateY(0.05px) translateX(0.1px);
+    transform: scale(0.998) rotate(0.05deg) translateY(0.05px)
+      translateX(0.1px);
   }
 
   100% {
@@ -1265,11 +1437,13 @@ body {
 }
 
 .liquid-press {
-  animation: liquidPress 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: liquidPress 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
 }
 
 .liquid-release {
-  animation: liquidRelease 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: liquidRelease 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)
+    forwards;
 }
 
 .liquid-squish {
@@ -1277,11 +1451,13 @@ body {
 }
 
 .liquid-button:active {
-  animation: liquidWobbleClick 1.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: liquidWobbleClick 1.8s
+    cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .liquid-glass.liquid-wobble-active {
-  animation: liquidWobbleClick 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: liquidWobbleClick 1.8s
+    cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform-origin: 50% 50% !important;
 }
 
@@ -1290,115 +1466,221 @@ body {
 }
 
 .liquid-pressed::before {
-  background: linear-gradient(145deg,
-      rgba(255, 255, 255, 0.25) 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      rgba(0, 0, 0, 0.05) 100%) !important;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  ) !important;
 }
 
 @keyframes liquidWobbleClick {
   0% {
-    transform: scale(1) rotate(0deg) translate(var(--wobble-start-x, 0px), var(--wobble-start-y, 0px));
+    transform: scale(1) rotate(0deg)
+      translate(
+        var(--wobble-start-x, 0px),
+        var(--wobble-start-y, 0px)
+      );
   }
 
   4% {
-    transform: scale(1.06) rotate(-1deg) translate(calc(var(--wobble-start-x, 0px) * -0.6), calc(var(--wobble-start-y, 0px) * -0.6));
+    transform: scale(1.06) rotate(-1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.6),
+        calc(var(--wobble-start-y, 0px) * -0.6)
+      );
   }
 
   8% {
-    transform: scale(1.12) rotate(-2deg) translate(calc(var(--wobble-start-x, 0px) * -1.2), calc(var(--wobble-start-y, 0px) * -1.2));
+    transform: scale(1.12) rotate(-2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -1.2),
+        calc(var(--wobble-start-y, 0px) * -1.2)
+      );
   }
 
   12% {
-    transform: scale(1.04) rotate(-1.2deg) translate(calc(var(--wobble-start-x, 0px) * -0.9), calc(var(--wobble-start-y, 0px) * -0.9));
+    transform: scale(1.04) rotate(-1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.9),
+        calc(var(--wobble-start-y, 0px) * -0.9)
+      );
   }
 
   16% {
-    transform: scale(0.92) rotate(2.5deg) translate(calc(var(--wobble-start-x, 0px) * 0.8), calc(var(--wobble-start-y, 0px) * 0.8));
+    transform: scale(0.92) rotate(2.5deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.8),
+        calc(var(--wobble-start-y, 0px) * 0.8)
+      );
   }
 
   20% {
-    transform: scale(0.98) rotate(2deg) translate(calc(var(--wobble-start-x, 0px) * 0.65), calc(var(--wobble-start-y, 0px) * 0.65));
+    transform: scale(0.98) rotate(2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.65),
+        calc(var(--wobble-start-y, 0px) * 0.65)
+      );
   }
 
   24% {
-    transform: scale(1.06) rotate(-1.8deg) translate(calc(var(--wobble-start-x, 0px) * -0.5), calc(var(--wobble-start-y, 0px) * -0.5));
+    transform: scale(1.06) rotate(-1.8deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.5),
+        calc(var(--wobble-start-y, 0px) * -0.5)
+      );
   }
 
   28% {
-    transform: scale(1.02) rotate(-1.2deg) translate(calc(var(--wobble-start-x, 0px) * -0.4), calc(var(--wobble-start-y, 0px) * -0.4));
+    transform: scale(1.02) rotate(-1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.4),
+        calc(var(--wobble-start-y, 0px) * -0.4)
+      );
   }
 
   32% {
-    transform: scale(0.95) rotate(1.5deg) translate(calc(var(--wobble-start-x, 0px) * 0.3), calc(var(--wobble-start-y, 0px) * 0.3));
+    transform: scale(0.95) rotate(1.5deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.3),
+        calc(var(--wobble-start-y, 0px) * 0.3)
+      );
   }
 
   36% {
-    transform: scale(0.99) rotate(1.2deg) translate(calc(var(--wobble-start-x, 0px) * 0.25), calc(var(--wobble-start-y, 0px) * 0.25));
+    transform: scale(0.99) rotate(1.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.25),
+        calc(var(--wobble-start-y, 0px) * 0.25)
+      );
   }
 
   40% {
-    transform: scale(1.04) rotate(-1deg) translate(calc(var(--wobble-start-x, 0px) * -0.2), calc(var(--wobble-start-y, 0px) * -0.2));
+    transform: scale(1.04) rotate(-1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.2),
+        calc(var(--wobble-start-y, 0px) * -0.2)
+      );
   }
 
   44% {
-    transform: scale(1.01) rotate(-0.7deg) translate(calc(var(--wobble-start-x, 0px) * -0.175), calc(var(--wobble-start-y, 0px) * -0.175));
+    transform: scale(1.01) rotate(-0.7deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.175),
+        calc(var(--wobble-start-y, 0px) * -0.175)
+      );
   }
 
   48% {
-    transform: scale(0.97) rotate(0.8deg) translate(calc(var(--wobble-start-x, 0px) * 0.15), calc(var(--wobble-start-y, 0px) * 0.15));
+    transform: scale(0.97) rotate(0.8deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.15),
+        calc(var(--wobble-start-y, 0px) * 0.15)
+      );
   }
 
   52% {
-    transform: scale(0.995) rotate(0.65deg) translate(calc(var(--wobble-start-x, 0px) * 0.125), calc(var(--wobble-start-y, 0px) * 0.125));
+    transform: scale(0.995) rotate(0.65deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.125),
+        calc(var(--wobble-start-y, 0px) * 0.125)
+      );
   }
 
   56% {
-    transform: scale(1.02) rotate(-0.6deg) translate(calc(var(--wobble-start-x, 0px) * -0.1), calc(var(--wobble-start-y, 0px) * -0.1));
+    transform: scale(1.02) rotate(-0.6deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.1),
+        calc(var(--wobble-start-y, 0px) * -0.1)
+      );
   }
 
   60% {
-    transform: scale(1.008) rotate(-0.45deg) translate(calc(var(--wobble-start-x, 0px) * -0.09), calc(var(--wobble-start-y, 0px) * -0.09));
+    transform: scale(1.008) rotate(-0.45deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.09),
+        calc(var(--wobble-start-y, 0px) * -0.09)
+      );
   }
 
   64% {
-    transform: scale(0.99) rotate(0.4deg) translate(calc(var(--wobble-start-x, 0px) * 0.08), calc(var(--wobble-start-y, 0px) * 0.08));
+    transform: scale(0.99) rotate(0.4deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.08),
+        calc(var(--wobble-start-y, 0px) * 0.08)
+      );
   }
 
   68% {
-    transform: scale(0.996) rotate(0.35deg) translate(calc(var(--wobble-start-x, 0px) * 0.065), calc(var(--wobble-start-y, 0px) * 0.065));
+    transform: scale(0.996) rotate(0.35deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.065),
+        calc(var(--wobble-start-y, 0px) * 0.065)
+      );
   }
 
   72% {
-    transform: scale(1.01) rotate(-0.3deg) translate(calc(var(--wobble-start-x, 0px) * -0.05), calc(var(--wobble-start-y, 0px) * -0.05));
+    transform: scale(1.01) rotate(-0.3deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.05),
+        calc(var(--wobble-start-y, 0px) * -0.05)
+      );
   }
 
   76% {
-    transform: scale(1.004) rotate(-0.22deg) translate(calc(var(--wobble-start-x, 0px) * -0.04), calc(var(--wobble-start-y, 0px) * -0.04));
+    transform: scale(1.004) rotate(-0.22deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.04),
+        calc(var(--wobble-start-y, 0px) * -0.04)
+      );
   }
 
   80% {
-    transform: scale(0.995) rotate(0.2deg) translate(calc(var(--wobble-start-x, 0px) * 0.03), calc(var(--wobble-start-y, 0px) * 0.03));
+    transform: scale(0.995) rotate(0.2deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.03),
+        calc(var(--wobble-start-y, 0px) * 0.03)
+      );
   }
 
   84% {
-    transform: scale(0.998) rotate(0.15deg) translate(calc(var(--wobble-start-x, 0px) * 0.025), calc(var(--wobble-start-y, 0px) * 0.025));
+    transform: scale(0.998) rotate(0.15deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.025),
+        calc(var(--wobble-start-y, 0px) * 0.025)
+      );
   }
 
   88% {
-    transform: scale(1.005) rotate(-0.1deg) translate(calc(var(--wobble-start-x, 0px) * -0.02), calc(var(--wobble-start-y, 0px) * -0.02));
+    transform: scale(1.005) rotate(-0.1deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.02),
+        calc(var(--wobble-start-y, 0px) * -0.02)
+      );
   }
 
   92% {
-    transform: scale(1.002) rotate(-0.07deg) translate(calc(var(--wobble-start-x, 0px) * -0.015), calc(var(--wobble-start-y, 0px) * -0.015));
+    transform: scale(1.002) rotate(-0.07deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * -0.015),
+        calc(var(--wobble-start-y, 0px) * -0.015)
+      );
   }
 
   96% {
-    transform: scale(0.998) rotate(0.05deg) translate(calc(var(--wobble-start-x, 0px) * 0.01), calc(var(--wobble-start-y, 0px) * 0.01));
+    transform: scale(0.998) rotate(0.05deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.01),
+        calc(var(--wobble-start-y, 0px) * 0.01)
+      );
   }
 
   98% {
-    transform: scale(0.999) rotate(0.02deg) translate(calc(var(--wobble-start-x, 0px) * 0.005), calc(var(--wobble-start-y, 0px) * 0.005));
+    transform: scale(0.999) rotate(0.02deg)
+      translate(
+        calc(var(--wobble-start-x, 0px) * 0.005),
+        calc(var(--wobble-start-y, 0px) * 0.005)
+      );
   }
 
   100% {

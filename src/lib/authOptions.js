@@ -13,23 +13,34 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                const usersCollection = await dbConnect(collectionNameObj.usersCollection);
-                const user = await usersCollection.findOne({
-                    email: credentials.email,
-                });
+                try {
+                    const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+                    const user = await usersCollection.findOne({
+                        email: credentials.email,
+                    });
 
-                if (!user) return null;
+                    if (!user) {
+                        console.log("User not found:", credentials.email);
+                        return null;
+                    }
 
-                const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+                    const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
-                if (!isPasswordValid) return null;
+                    if (!isPasswordValid) {
+                        console.log("Invalid password for user:", credentials.email);
+                        return null;
+                    }
 
-                return {
-                    id: user._id.toString(),
-                    name: user.name,
-                    email: user.email,
-                    role: user.role || "user",
-                };
+                    return {
+                        id: user._id.toString(),
+                        name: user.name,
+                        email: user.email,
+                        role: user.role || "user",
+                    };
+                } catch (error) {
+                    console.error("Database error during authentication:", error);
+                    return null;
+                }
             },
         }),
         GoogleProvider({
@@ -43,38 +54,53 @@ export const authOptions = {
     ],
     callbacks: {
         async signIn({ user, account }) {
-            // Connect to DB
-            const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+            try {
+                // Connect to DB
+                const usersCollection = await dbConnect(collectionNameObj.usersCollection);
 
-            // Check if user already exists
-            const existingUser = await usersCollection.findOne({ email: user.email });
+                // Check if user already exists
+                const existingUser = await usersCollection.findOne({ email: user.email });
 
-            if (!existingUser) {
-                // Insert new user
-                await usersCollection.insertOne({
-                    name: user.name,
-                    email: user.email,
-                    role: "user",
-                    image: user.image || null,
-                    provider: account.provider,
-                    createdAt: new Date(),
-                });
+                if (!existingUser) {
+                    // Insert new user
+                    await usersCollection.insertOne({
+                        name: user.name,
+                        email: user.email,
+                        role: "user",
+                        image: user.image || null,
+                        provider: account.provider,
+                        createdAt: new Date(),
+                    });
+                }
+
+                return true; // allow login
+            } catch (error) {
+                console.error("Database error during sign in:", error);
+                return false; // deny login
             }
-
-            return true; // allow login
         },
         async jwt({ token, user, trigger, session }) {
             if (user) {
                 token.id = user.id;
                 token.role = user.role || "user";
+                token.membershipType = user.membershipType || null;
+            } else if (token.email) {
+                // Always fetch latest user data from database to ensure updates are reflected
+                try {
+                    const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+                    const dbUser = await usersCollection.findOne({ email: token.email });
+                    if (dbUser) {
+                        token.id = dbUser._id.toString();
+                        token.role = dbUser.role || "user";
+                        token.membershipType = dbUser.membershipType || null;
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    // Keep existing values if database fetch fails
+                    token.role = token.role || "user";
+                    token.membershipType = token.membershipType || null;
+                }
             }
-            
-            // Handle session update trigger (when membership is purchased)
-            if (trigger === "update" && session) {
-                token.role = session.role;
-                token.membershipType = session.membershipType;
-            }
-            
             return token;
         },
         async session({ session, token }) {

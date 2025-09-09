@@ -1,17 +1,18 @@
 import dbConnect from "@/lib/dbConnect";
 
 export async function GET(req) {
-    try {
-        const usersCollection = await dbConnect("users");
-        const users = await usersCollection.find({}).toArray();
-        return new Response(JSON.stringify(users), { status: 200 });
-    } catch (err) {
-        console.error(err);
-        return new Response(
-            JSON.stringify({ success: false, message: "Server error" }),
-            { status: 500 }
-        );
-    }
+  try {
+    const { collection: usersCollection } = await dbConnect("users");
+
+    const users = await usersCollection.find({}).toArray();
+    return new Response(JSON.stringify(users), { status: 200 });
+  } catch (err) {
+    console.error(err);
+    return new Response(
+      JSON.stringify({ success: false, message: "Server error" }),
+      { status: 500 }
+    );
+  }
 }
 export async function PATCH(req) {
   try {

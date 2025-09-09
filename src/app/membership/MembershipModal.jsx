@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { SessionProvider, useSession } from "next-auth/react";
-import { update } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   Dialog,
   DialogContent,
@@ -23,14 +23,6 @@ import {
 } from "@/components/ui/select";
 
 export default function MembershipModal({ open, setOpen, selectedPlan }) {
-  return (
-    <SessionProvider>
-      <ModalContent open={open} setOpen={setOpen} selectedPlan={selectedPlan} />
-    </SessionProvider>
-  );
-}
-
-function ModalContent({ open, setOpen, selectedPlan }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -52,23 +44,26 @@ function ModalContent({ open, setOpen, selectedPlan }) {
       console.log(result);
 
       if (result.success) {
-        // Update the session with new role and membership type
-        await update({
-          role: result.user.role,
-          membershipType: result.user.membershipType
+        const membershipMessage = getMembershipSuccessMessage(selectedPlan.name);
+        toast.success(membershipMessage, {
+          duration: 4000,
+          icon: '🎉',
         });
-        
-        alert("Membership updated successfully! You have been assigned the role: " + result.user.role);
         
         // Redirect to appropriate dashboard based on role
         const dashboardRoute = getDashboardRoute(result.user.role);
         router.push(dashboardRoute);
+        
+        // Force a page reload to refresh the session
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
       } else {
-        alert("Error updating membership: " + result.message);
+        toast.error("❌ Unable to activate membership: " + (result.message || "Please try again or contact support."));
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      toast.error("⚠️ Something went wrong while processing your membership. Please try again or contact support.");
     }
     setLoading(false);
     setOpen(false);
@@ -86,6 +81,19 @@ function ModalContent({ open, setOpen, selectedPlan }) {
       case 'basic-member':
       default:
         return '/dashboard/member';
+    }
+  };
+
+  const getMembershipSuccessMessage = (planName) => {
+    switch (planName) {
+      case 'Pro Active':
+        return 'Welcome to Pro Active! Your membership is now active. Ready to achieve your fitness goals!';
+      case 'Elite Performance':
+        return 'Welcome to Elite Performance! Enjoy personalized training and exclusive benefits!';
+      case 'Wellness Plus':
+        return 'Welcome to Wellness Plus! Your specialized membership is now active.';
+      default:
+        return 'Membership activated successfully! Welcome to FitSphere!';
     }
   };
 
