@@ -1,8 +1,10 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 export const collectionNameObj = {
+  reviewCollection: "reviews",
+  products: "products",
+  carts: "carts",
     usersCollection: "users",
-    reviewCollection: "reviews",
     specializedMembersCollection: "specializedMembers",
     equipmentsCollection: "equipments",
     trainerApplicationsCollection: "trainerapplications",
