@@ -85,7 +85,6 @@ export default function MembershipCards() {
         setOpen(true);
     };
 
-
     return (
         <section id="pricing" className="py-20 relative">
             <div className="main-container mx-auto px-4 sm:px-6 lg:px-8">
