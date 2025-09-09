@@ -1,87 +1,91 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { FaCheckCircle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
 import MembershipModal from "./MembershipModal";
 
-const data = [
-  {
-    id: 2,
-    name: "Pro Active",
-    price: 60,
-    duration: "per month",
-    features: [
-      "Full access to all gym equipment",
-      "Locker room and shower access",
-      "Fitness orientation session",
-      "Access during regular gym hours",
-      "24/7 AI trainer support",
-      "Specialized trainer support",
-      "Customized diet plans",
-      "Personalized exercise program",
-      "Progress tracking via member dashboard",
-    ],
-    purchaseButton: "Join Pro Active",
-    badge: "Most Popular",
-  },
-  {
-    id: 3,
-    name: "Elite Performance",
-    price: 120,
-    duration: "per month",
-    features: [
-      "Full access to all gym equipment",
-      "Locker room and shower access",
-      "Fitness orientation session",
-      "Access during regular gym hours",
-      "24/7 AI trainer support",
-      "Specialized trainer support",
-      "Customized diet plans",
-      "Personalized exercise program",
-      "Progress tracking via member dashboard",
-      "One-on-one personalized training sessions",
-      "Private or small group training slots",
-      "Priority trainer booking system",
-      "Direct messaging with trainer",
-      "Exclusive discounts in gym shop",
-    ],
-    purchaseButton: "Join Elite Performance",
-    badge: "Best Value",
-  },
-  {
-    id: 4,
-    name: "Wellness Plus",
-    price: 80,
-    duration: "per month",
-    features: [
-      "Full access to all gym equipment",
-      "Locker room and shower access",
-      "Fitness orientation session",
-      "Access during regular gym hours",
-      "24/7 AI trainer support",
-      "Personalized low-intensity training programs",
-      "Special diet plan for health conditions",
-      "Support for pregnant/disabled/medical needs",
-      "Dedicated trainer guidance",
-      "Regular health and wellness check-ins",
-    ],
-    purchaseButton: "Join Wellness Plus",
-    badge: "Special Care",
-  },
+const pricingPlans = [
+    {
+        name: "Pro Active",
+        price: "$60",
+        period: "/month",
+        description: "Perfect for general fitness enthusiasts",
+        features: [
+            "Full access to all gym equipment",
+            "Locker room and shower access",
+            "Fitness orientation session",
+            "Access during regular gym hours",
+            "24/7 AI trainer support",
+            "Specialized trainer support",
+            "Customized diet plans",
+            "Personalized exercise program",
+            "Progress tracking via member dashboard",
+        ],
+        popular: false,
+        colorScheme: "basic",
+        purchaseButton: "Join Pro Active",
+    },
+    {
+        name: "Elite Performance",
+        price: "$120",
+        period: "/month",
+        description: "Complete fitness experience with advanced features",
+        features: [
+            "Full access to all gym equipment",
+            "Locker room and shower access",
+            "Fitness orientation session",
+            "Access during regular gym hours",
+            "24/7 AI trainer support",
+            "Specialized trainer support",
+            "Customized diet plans",
+            "Personalized exercise program",
+            "Progress tracking via member dashboard",
+            "One-on-one personalized training sessions",
+            "Private or small group training slots",
+            "Priority trainer booking system",
+            "Direct messaging with trainer",
+            "Exclusive discounts in gym shop",
+        ],
+        popular: true,
+        colorScheme: "premium",
+        purchaseButton: "Join Elite Performance",
+    },
+    {
+        name: "Wellness Plus",
+        price: "$80",
+        period: "/month",
+        description: "Tailored for special needs & pregnancy fitness",
+        features: [
+            "Full access to all gym equipment",
+            "Locker room and shower access",
+            "Fitness orientation session",
+            "Access during regular gym hours",
+            "24/7 AI trainer support",
+            "Personalized low-intensity training programs",
+            "Special diet plan for health conditions",
+            "Support for pregnant/disabled/medical needs",
+            "Dedicated trainer guidance",
+            "Regular health and wellness check-ins",
+        ],
+        popular: false,
+        colorScheme: "specialized",
+        purchaseButton: "Join Wellness Plus",
+    },
 ];
 
 export default function MembershipCards() {
-  const [open, setOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+    const [open, setOpen] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
 
-  const handleOpen = (plan) => {
-    setSelectedPlan(plan);
-    setOpen(true);
-  };
+    const handleOpen = (plan) => {
+        setSelectedPlan(plan);
+        setOpen(true);
+    };
 
-  return (
+    return (
         <section id="pricing" className="py-20 relative">
             <div className="main-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center space-y-4 mb-16">
@@ -156,5 +160,5 @@ export default function MembershipCards() {
             {/* Modal */}
             {selectedPlan && <MembershipModal open={open} setOpen={setOpen} selectedPlan={selectedPlan} />}
         </section>
-  );
+    );
 }
