@@ -3,6 +3,8 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 export const collectionNameObj = {
     usersCollection: "users",
     reviewCollection: "reviews",
+    specializedMembersCollection: "specializedMembers",
+    equipmentsCollection: "equipments",
 };
 
 const uri = process.env.MONGODB_URI || process.env.DB_URI;
@@ -21,7 +23,11 @@ export default async function dbConnect(collectionName) {
     }
 
     if (cachedClient && cachedDb) {
-        return cachedDb.collection(collectionName);
+        return {
+            client: cachedClient,
+            db: cachedDb,
+            collection: cachedDb.collection(collectionName),
+        };
     }
 
     const client = new MongoClient(uri, {
@@ -29,7 +35,7 @@ export default async function dbConnect(collectionName) {
             version: ServerApiVersion.v1,
             strict: true,
             deprecationErrors: true,
-        }
+        },
     });
 
     try {
@@ -45,5 +51,9 @@ export default async function dbConnect(collectionName) {
     cachedClient = client;
     cachedDb = db;
 
-    return db.collection(collectionName);
+    return {
+        client,
+        db,
+        collection: db.collection(collectionName),
+    };
 }

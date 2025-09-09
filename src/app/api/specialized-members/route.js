@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 // GET - Fetch all specialized members
 export async function GET(request) {
   try {
-    const specializedMembersCollection = await dbConnect(collectionNameObj.specializedMembersCollection);
+    const {collection: specializedMembersCollection} = await dbConnect(collectionNameObj.specializedMembersCollection);
     
     const url = new URL(request.url);
     const category = url.searchParams.get('category');
@@ -62,7 +62,7 @@ export async function POST(request) {
       );
     }
 
-    const specializedMembersCollection = await dbConnect(collectionNameObj.specializedMembersCollection);
+    const {collection: specializedMembersCollection} = await dbConnect(collectionNameObj.specializedMembersCollection);
     
     // Check if member already exists
     const existingMember = await specializedMembersCollection.findOne({ email });

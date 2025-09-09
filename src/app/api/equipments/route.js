@@ -9,7 +9,7 @@ export async function GET(req) {
     const page = parseInt(searchParams.get("page")) || 1;
     const ITEMS_PER_PAGE = 12;
 
-    const equipmentsCollection = await dbConnect("equipments");
+    const {collection: equipmentsCollection} = await dbConnect("equipments");
 
     const query = {};
     if (search) {

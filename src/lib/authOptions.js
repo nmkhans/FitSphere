@@ -14,7 +14,7 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+                    const {collection: usersCollection} = await dbConnect(collectionNameObj.usersCollection);
                     const user = await usersCollection.findOne({
                         email: credentials.email,
                     });
@@ -56,7 +56,7 @@ export const authOptions = {
         async signIn({ user, account }) {
             try {
                 // Connect to DB
-                const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+                const {collection: usersCollection} = await dbConnect(collectionNameObj.usersCollection);
 
                 // Check if user already exists
                 const existingUser = await usersCollection.findOne({ email: user.email });
@@ -87,7 +87,7 @@ export const authOptions = {
             } else if (token.email) {
                 // Always fetch latest user data from database to ensure updates are reflected
                 try {
-                    const usersCollection = await dbConnect(collectionNameObj.usersCollection);
+                    const {collection: usersCollection} = await dbConnect(collectionNameObj.usersCollection);
                     const dbUser = await usersCollection.findOne({ email: token.email });
                     if (dbUser) {
                         token.id = dbUser._id.toString();

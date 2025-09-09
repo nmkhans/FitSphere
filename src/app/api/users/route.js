@@ -25,7 +25,7 @@ export async function PATCH(req) {
       'Wellness Plus': 'special-need'
     };
 
-    const usersCollection = await dbConnect("users");
+    const {collection: usersCollection} = await dbConnect("users");
     console.log(usersCollection);
     
     // Prepare update data
