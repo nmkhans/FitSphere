@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import { 
   Heart, 
   Users, 
@@ -58,24 +59,21 @@ const SpecializedMembersSection = () => {
     try {
       setLoading(true);
       const response = await fetch('/api/specialized-members');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.success) {
         setMembers(data.data);
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to fetch members'
-        });
+        toast.error('Failed to fetch members: ' + (data.message || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error fetching members:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to fetch members'
-      });
+      toast.error('Network error: Unable to fetch members');
     } finally {
       setLoading(false);
     }
@@ -84,11 +82,7 @@ const SpecializedMembersSection = () => {
   const handleAddMember = async (e) => {
     e.preventDefault();
     if (!newMember.name || !newMember.email || !newMember.category) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Information',
-        text: 'Please fill in all required fields'
-      });
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -101,6 +95,10 @@ const SpecializedMembersSection = () => {
         },
         body: JSON.stringify(newMember),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
 
@@ -118,27 +116,16 @@ const SpecializedMembersSection = () => {
         });
         setIsAddingMember(false);
         
-        Swal.fire({
-          icon: 'success',
-          title: 'Success!',
-          text: 'Member added successfully',
-          timer: 2000,
-          showConfirmButton: false
+        toast.success('Member added successfully!', {
+          icon: '✅',
+          duration: 3000,
         });
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: data.error || 'Failed to add member'
-        });
+        toast.error(data.error || 'Failed to add member');
       }
     } catch (error) {
       console.error('Error adding member:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to add member'
-      });
+      toast.error('Network error: Failed to add member');
     } finally {
       setSubmitting(false);
     }

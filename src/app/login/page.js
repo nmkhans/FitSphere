@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 import { EyeOff } from "lucide-react";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -28,36 +29,40 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    try {
-      const response = await signIn("credentials", {
-        email,
-        password,
-        callbackUrl: "/",
-        redirect: false,
-      });
-      if (response?.ok) {
-        router.push("/");
-        form.reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "You Successfully Logged In",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader>
-          <h2 className="text-2xl font-semibold text-center">
-            Login to FitSphere
-          </h2>
-        </CardHeader>
+        try {
+            const response = await signIn("credentials", {
+                email,
+                password,
+                callbackUrl: "/",
+                redirect: false,
+            });
+            
+            if (response?.ok) {
+                router.push("/");
+                form.reset();
+                toast.success("Successfully logged in! Welcome back!", {
+                    icon: '👋',
+                    duration: 3000,
+                });
+            } else if (response?.error) {
+                // Handle authentication errors
+                console.error("Login error:", response.error);
+                toast.error(response.error === "CredentialsSignin" 
+                    ? "Invalid email or password" 
+                    : "An error occurred during login. Please try again."
+                );
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+            toast.error("An unexpected error occurred. Please try again.");
+        }
+    };
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-background px-4">
+            <Card className="w-full max-w-md shadow-lg">
+                <CardHeader>
+                    <h2 className="text-2xl font-semibold text-center">Login to FitSphere</h2>
+                </CardHeader>
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">

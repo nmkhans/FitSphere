@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Brain } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
     return (
@@ -35,22 +36,28 @@ export default function HeroSection() {
                                 <span className="text-primary"> Fitness Journey</span>
                             </h1>
                             <p className="text-lg sm:text-xl text-sub-text text-pretty max-w-2xl">
-                                Join thousands of members who have achieved their fitness goals with our comprehensive
-                                gym management system, expert trainers, and cutting-edge facilities.
+                                Join thousands of members who have achieved their fitness goals with our AI-powered
+                                training, expert guidance, and cutting-edge facilities.
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <Button
-                                size="lg"
-                                className="text-lg px-8 bg-green-primary hover:bg-green-dark text-black-primary shadow-lg hover:shadow-accent/25 transition-all duration-300 cursor-pointer transform hover:scale-105">
-                                Start Your Journey
-                                <ArrowRight className="ml-2 h-5 w-5" />
-                            </Button>
-                            <Button
-                                size="lg"
-                                className="text-lg px-8 bg-black-primary hover:bg-black-primary text-white cursor-pointer transition-all duration-300 transform hover:scale-105">
-                                View Pricing
-                            </Button>
+                            <Link href="/membership">
+                                <Button
+                                    size="lg"
+                                    className="text-lg px-8 bg-green-primary hover:bg-green-dark text-black-primary shadow-lg hover:shadow-accent/25 transition-all duration-300 cursor-pointer transform hover:scale-105 w-full sm:w-auto">
+                                    Start Your Journey
+                                    <ArrowRight className="ml-2 h-5 w-5" />
+                                </Button>
+                            </Link>
+                            <Link href="/exercise-recommender">
+                                <Button
+                                    size="lg"
+                                    variant="outline"
+                                    className="text-lg px-8 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 transform hover:scale-105 w-full sm:w-auto">
+                                    <Brain className="mr-2 h-5 w-5" />
+                                    Try AI Trainer
+                                </Button>
+                            </Link>
                         </div>
                         <div className="grid grid-cols-3 gap-4 sm:gap-8 pt-4">
                             <LiquidGlass

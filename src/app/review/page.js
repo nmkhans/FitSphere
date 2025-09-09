@@ -10,13 +10,17 @@ import { Badge } from "@/components/ui/badge";
 
 export default async function ReviewsPage() {
   const reviewsResponse = await fetch(
-    `${process.env.NEXT_SERVER_API}/api/reviews`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews`,
     {
       next: {
         revalidate: 600,
       },
     }
   );
+
+  if (!reviewsResponse.ok) {
+    throw new Error(`Failed to fetch reviews: ${reviewsResponse.status}`);
+  }
 
   const { data: reviews } = await reviewsResponse.json();
 

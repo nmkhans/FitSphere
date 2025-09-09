@@ -4,6 +4,7 @@ import NextAuthProvider from "./provider/NextAuthProvider";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
 
 const outfitSans = Outfit({
     variable: "--font-outfit-sans",
