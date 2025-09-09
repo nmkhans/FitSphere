@@ -11,25 +11,44 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import registerUser from "../actions/auth/registerUser";
 import { Separator } from "@/components/ui/separator";
 import SocialLogin from "@/components/sections/SocialLogin";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     const form = e.target;
-    const name = form.name.value;
-    const email = form.email.value;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
     const password = form.password.value;
-    const role = "user";
+
+    // Basic validation
+    if (!name || !email || !password) {
+      toast.error("Please fill in all fields");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      setIsLoading(false);
+      return;
+    }
+
     const createdAt = new Date();
+
     try {
       const response = await registerUser({
         name,
@@ -40,18 +59,38 @@ export default function Register() {
       });
 
       if (response?.success) {
-        router.push("/login");
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: "You successfully registered",
-          showConfirmButton: false,
-          timer: 1500,
+        // Automatically sign in the user after successful registration
+        const signInResult = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
         });
+
+        if (signInResult?.ok) {
+          toast.success("Account created successfully! Welcome to FitSphere!", {
+            icon: "🎉",
+            duration: 3000,
+          });
+          router.push("/");
+        } else {
+          // Registration successful but auto-login failed, redirect to login
+          toast.success("Registration successful! Please login to continue.", {
+            icon: "🎉",
+            duration: 3000,
+          });
+          router.push("/login");
+        }
+      } else {
+        toast.error(
+          response?.message || "Registration failed. Please try again."
+        );
       }
     } catch (error) {
-      console.log(error);
+      console.error("Registration error:", error);
+      toast.error("Registration failed. Please try again.");
     }
+
+    setIsLoading(false);
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -71,6 +110,7 @@ export default function Register() {
                 name="name"
                 type="text"
                 placeholder="Enter Your Name"
+                required
               />
             </div>
 
@@ -81,6 +121,7 @@ export default function Register() {
                 name="email"
                 type="email"
                 placeholder="Enter Your Email"
+                required
               />
             </div>
 
@@ -91,7 +132,8 @@ export default function Register() {
                 name="password"
                 minLength={6}
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter Your Password"
+                placeholder="Enter Your Password (min 6 characters)"
+                required
               />
               <button
                 type="button"
@@ -102,7 +144,13 @@ export default function Register() {
               </button>
             </div>
 
-            <Button className="w-full mt-4 cursor-pointer">Register</Button>
+            <Button
+              className="w-full mt-4 cursor-pointer"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating Account..." : "Register"}
+            </Button>
             <Separator />
             <SocialLogin />
           </CardContent>

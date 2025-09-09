@@ -67,6 +67,7 @@ export default function EquipmentFilter({
           <SelectItem value="All">All</SelectItem>
           <SelectItem value="Cardio">Cardio</SelectItem>
           <SelectItem value="Strength">Strength</SelectItem>
+          <SelectItem value="Strength/Core">Strength/Core</SelectItem>
           <SelectItem value="Flexibility">Flexibility</SelectItem>
         </SelectContent>
       </Select>
@@ -82,6 +83,13 @@ export default function EquipmentFilter({
           <SelectItem value="Legs">Legs</SelectItem>
           <SelectItem value="Arms">Arms</SelectItem>
           <SelectItem value="Core">Core</SelectItem>
+          <SelectItem value="Glutes">Glutes</SelectItem>
+          <SelectItem value="Shoulders">Shoulders</SelectItem>
+          <SelectItem value="Cardio">Cardio</SelectItem>
+          <SelectItem value="Biceps">Biceps</SelectItem>
+          <SelectItem value="Full Body">Full Body</SelectItem>
+          <SelectItem value="Quadriceps">Quadriceps</SelectItem>
+          <SelectItem value="Hamstrings">Hamstrings</SelectItem>
         </SelectContent>
       </Select>
     </div>

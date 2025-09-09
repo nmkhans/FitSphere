@@ -8,6 +8,7 @@ import SpecializedMembersSection from "@/components/dashboard/admin/SpecializedM
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import AllUsers from "@/components/dashboard/admin/AllUsers";
 import Trainers from "@/components/dashboard/admin/Trainers";
+import TrainerApplications from "@/components/dashboard/admin/TrainerApplications";
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -23,11 +24,11 @@ const AdminDashboard = () => {
       return;
     }
     
-    // TODO: Add admin role check here in the future
-    // if (session.user.role !== 'admin') {
-    //   router.push("/dashboard");
-    //   return;
-    // }
+    // Check if user is admin
+    if (session.user.role !== 'admin') {
+      router.push("/dashboard");
+      return;
+    }
     
     setIsLoading(false);
   }, [session, status, router]);
@@ -51,6 +52,8 @@ const AdminDashboard = () => {
         return <AllUsers />;
       case "trainers":
         return <Trainers/>;
+      case "trainer-applications":
+        return <TrainerApplications />;
       default:
         return <SpecializedMembersSection />;
     }

@@ -14,7 +14,7 @@ export async function GET(request, { params }) {
       );
     }
 
-    const specializedMembersCollection = await dbConnect(collectionNameObj.specializedMembersCollection);
+    const {collection: specializedMembersCollection} = await dbConnect(collectionNameObj.specializedMembersCollection);
     const member = await specializedMembersCollection.findOne({ _id: new ObjectId(id) });
     
     if (!member) {
@@ -63,7 +63,7 @@ export async function PUT(request, { params }) {
       trainerAssigned
     } = body;
 
-    const specializedMembersCollection = await dbConnect(collectionNameObj.specializedMembersCollection);
+    const {collection: specializedMembersCollection} = await dbConnect(collectionNameObj.specializedMembersCollection);
     
     // Check if member exists
     const existingMember = await specializedMembersCollection.findOne({ _id: new ObjectId(id) });
@@ -130,7 +130,7 @@ export async function DELETE(request, { params }) {
       );
     }
 
-    const specializedMembersCollection = await dbConnect(collectionNameObj.specializedMembersCollection);
+    const {collection: specializedMembersCollection} = await dbConnect(collectionNameObj.specializedMembersCollection);
     
     const result = await specializedMembersCollection.deleteOne({ _id: new ObjectId(id) });
     
