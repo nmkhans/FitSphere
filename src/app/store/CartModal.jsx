@@ -14,7 +14,8 @@ import Swal from "sweetalert2";
 
 export default function CartModal({ open, onClose }) {
   const [cartItems, setCartItems] = useState([]);
-
+  const [removing, setRemoving] = useState(false);
+  const [removingId, setRemovingId] = useState(null);
   // ✅ Load cart from API
   useEffect(() => {
     if (open) {
@@ -25,8 +26,11 @@ export default function CartModal({ open, onClose }) {
   }, [open]);
 
   const removeFromCart = async (id) => {
+    setRemovingId(id);
+    setRemoving(true);
     await fetch(`/api/carts/${id}`, { method: "DELETE" });
     setCartItems((prev) => prev.filter((item) => item._id !== id));
+    setRemoving(false);
   };
 
   const total = cartItems.reduce(
@@ -58,7 +62,7 @@ export default function CartModal({ open, onClose }) {
             {cartItems.map((item) => (
               <div
                 key={item._id}
-                className="flex items-center justify-between gap-4 border-b pb-2"
+                className={`flex items-center justify-between gap-4 border-b pb-2 ${removing && removingId === item._id ? "opacity-50" : ""}`}
               >
                 <div className="flex items-center gap-3">
                   <div className="relative w-16 h-16">
@@ -77,6 +81,7 @@ export default function CartModal({ open, onClose }) {
                   </div>
                 </div>
                 <button
+                  disabled={removing}
                   onClick={() => removeFromCart(item._id)}
                   className="text-red-500 hover:text-red-700"
                 >

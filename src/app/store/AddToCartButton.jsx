@@ -37,6 +37,7 @@ export default function AddToCartButton({ product }) {
           showConfirmButton: false,
           timer: 1500,
         })
+        
       } else {
         Swal.fire({
           position: "top-end",

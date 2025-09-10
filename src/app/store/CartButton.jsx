@@ -12,7 +12,7 @@ export default function CartButton() {
 
   // Fetch cart count
   useEffect(() => {
-    fetch("/api/carts")
+    fetch(`/api/carts?userId=${session?.user?.id}&status=pending`)
       .then((res) => res.json())
       .then((data) => setCount(data.length));
   }, [open]);

@@ -4,15 +4,19 @@ import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import status from "daisyui/components/status";
 
 export async function GET(req) {
-  const session = await getServerSession(authOptions);
-  if (!session) return new Response(JSON.stringify([]), { status: 200 });
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("userId");
+  const status = searchParams.get("status");
 
   const { collection: cartCollection } = await dbConnect(
     collectionNameObj.carts
   );
-  const cartItems = await cartCollection
-    .find({ userId: session.user.id, status: "pending" })
-    .toArray();
+
+  const query = {};
+  if (userId) query.userId = userId;
+  if (status) query.status = status;
+
+  const cartItems = await cartCollection.find(query).toArray();
 
   return new Response(JSON.stringify(cartItems), { status: 200 });
 }
