@@ -11,6 +11,7 @@ import AllUsers from "@/components/dashboard/admin/AllUsers";
 import Trainers from "@/components/dashboard/admin/Trainers";
 import TrainerApplications from "@/components/dashboard/admin/TrainerApplications";
 import AddEquipments from "@/components/dashboard/admin/AddEquipments";
+import AddProducts from "@/components/dashboard/admin/AddProducts";
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -60,6 +61,8 @@ const AdminDashboard = () => {
         return <UpdateProfile user={session?.user} />;
       case "add-equipments":
         return <AddEquipments />;
+      case "add-products":
+        return <AddProducts />;
       default:
         return <SpecializedMembersSection />;
     }
