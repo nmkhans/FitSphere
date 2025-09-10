@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import UpdateProfile from "@/components/dashboard/UpdateProfile";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import MyClients from "@/components/dashboard/trainer/MyClients";
 
 const TrainerDashboard = () => {
   const { data: session, status } = useSession();
@@ -80,8 +81,7 @@ const TrainerDashboard = () => {
       case "clients":
         return (
           <div className="p-6 text-center">
-            <h2 className="text-2xl font-bold mb-4">My Clients</h2>
-            <p>Client management functionality will be implemented here.</p>
+            <MyClients></MyClients>
           </div>
         );
       default:
