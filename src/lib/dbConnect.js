@@ -9,6 +9,7 @@ export const collectionNameObj = {
     equipmentsCollection: "equipments",
     blogsCollection: "blogs",
     trainerApplicationsCollection: "trainerapplications",
+    blogsCollection: "blogs",
 };
 
 const uri = process.env.MONGODB_URI || process.env.DB_URI;

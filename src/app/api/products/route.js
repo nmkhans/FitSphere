@@ -41,3 +41,20 @@ export async function GET(req) {
     );
   }
 }
+
+export async function POST(req) {
+  try {
+    const data = await req.json();
+    const { collection: productsCollection } = await dbConnect("products");
+    const result = await productsCollection.insertOne(data);
+    return new Response(JSON.stringify({ success: true, result }), {
+      status: 200,
+    });
+  } catch (err) {
+    console.error(err);
+    return new Response(
+      JSON.stringify({ success: false, message: "Server error" }),
+      { status: 500 }
+    );
+  }
+}

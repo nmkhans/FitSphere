@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import UpdateProfile from "@/components/dashboard/UpdateProfile";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 
 const TrainerDashboard = () => {
@@ -72,6 +73,15 @@ const TrainerDashboard = () => {
               <h3 className="text-lg font-semibold mb-2">Progress Tracking</h3>
               <p className="text-muted-foreground">Monitor client progress</p>
             </div>
+          </div>
+        );
+      case "update-profile":
+        return <UpdateProfile user={session?.user} />;
+      case "clients":
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">My Clients</h2>
+            <p>Client management functionality will be implemented here.</p>
           </div>
         );
       default:

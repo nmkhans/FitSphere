@@ -15,12 +15,15 @@ import {
   Crown,
   Shield,
   Zap,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from "lucide-react";
 import Swal from "sweetalert2";
 
 const UpdateMembership = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showAllBilling, setShowAllBilling] = useState(false);
+  const [isLoadingBilling, setIsLoadingBilling] = useState(false);
   const router = useRouter();
 
   // Define membership packages
@@ -115,6 +118,70 @@ const UpdateMembership = ({ user }) => {
   const nextPlan = getNextPlan();
   const previousPlan = getPreviousPlan();
 
+  // Mock billing history data - replace with real data from API
+  const billingHistory = [
+    {
+      date: "December 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "November 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "October 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "September 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "August 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "July 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    },
+    {
+      date: "June 15, 2024",
+      plan: currentPackage.name,
+      amount: currentPackage.price,
+      status: "Paid"
+    }
+  ];
+
+  // Show only 3 recent transactions initially
+  const recentBilling = billingHistory.slice(0, 3);
+  const displayedBilling = showAllBilling ? billingHistory : recentBilling;
+
+  const handleSeeMore = async () => {
+    setIsLoadingBilling(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      setShowAllBilling(true);
+      setIsLoadingBilling(false);
+    }, 1000);
+  };
+
+  const handleSeeLess = () => {
+    setShowAllBilling(false);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -200,11 +267,32 @@ const UpdateMembership = ({ user }) => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-green-800">
               <ArrowUp className="h-5 w-5" />
-              🌟 Upgrade Your Experience!
+              {packages[nextPlan].name === "Special Care" 
+                ? "🤗 Do You Need Special Care?" 
+                : "🌟 Upgrade Your Experience!"
+              }
             </CardTitle>
           </CardHeader>
           <CardContent>
               <div className="bg-white p-4 rounded-lg border-2 border-green-300">
+                {packages[nextPlan].name === "Special Care" ? (
+                  <>
+                    <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <p className="text-blue-800 text-sm leading-relaxed">
+                        <strong>Special Care membership is designed for individuals with specific needs:</strong>
+                      </p>
+                      <ul className="text-blue-700 text-sm mt-2 space-y-1">
+                        <li>• Pregnant women requiring specialized fitness programs</li>
+                        <li>• Individuals with disabilities needing adaptive equipment</li>
+                        <li>• People with medical conditions requiring supervised care</li>
+                      </ul>
+                      <p className="text-blue-800 text-sm mt-2">
+                        If you have special health or fitness needs, this plan provides personalized care and specialized programs.
+                      </p>
+                    </div>
+                  </>
+                ) : null}
+                
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className={`p-3 rounded-full ${packages[nextPlan].color} text-white`}>
@@ -218,18 +306,29 @@ const UpdateMembership = ({ user }) => {
                       <p className="text-green-600 font-semibold">
                         ${packages[nextPlan].price}/month
                       </p>
-                      <p className="text-sm text-green-600">
-                        Only ${packages[nextPlan].price - currentPackage.price} more per month!
-                      </p>
+                      {packages[nextPlan].name === "Special Care" ? (
+                        <p className="text-sm text-green-600">
+                          Specialized care for your unique needs
+                        </p>
+                      ) : (
+                        <p className="text-sm text-green-600">
+                          Only ${packages[nextPlan].price - currentPackage.price} more per month!
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="text-right">
                     <Badge className="bg-green-100 text-green-800 mb-2">
-                      🎁 Best Value
+                      {packages[nextPlan].name === "Special Care" ? "🩺 Specialized Care" : "🎁 Best Value"}
                     </Badge>
                   </div>
                 </div>              <div className="space-y-2 mb-4">
-                <h4 className="font-semibold text-green-800">Additional Features You'll Get:</h4>
+                <h4 className="font-semibold text-green-800">
+                  {packages[nextPlan].name === "Special Care" 
+                    ? "Specialized Features & Support:" 
+                    : "Additional Features You'll Get:"
+                  }
+                </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {packages[nextPlan].features.slice(currentPackage.features.length).map((feature, index) => (
                     <div key={index} className="flex items-center gap-2">
@@ -246,7 +345,10 @@ const UpdateMembership = ({ user }) => {
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 text-lg shadow-lg transform transition hover:scale-105"
               >
                 <ArrowUp className="h-5 w-5 mr-2" />
-                Upgrade to {packages[nextPlan].name} Plan
+                {packages[nextPlan].name === "Special Care" 
+                  ? "Learn More About Special Care" 
+                  : `Upgrade to ${packages[nextPlan].name} Plan`
+                }
               </Button>
             </div>
           </CardContent>
@@ -305,34 +407,49 @@ const UpdateMembership = ({ user }) => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 border rounded-lg">
-              <div>
-                <p className="font-medium">December 15, 2024</p>
-                <p className="text-sm text-gray-500">{currentPackage.name} Plan</p>
+            {displayedBilling.map((transaction, index) => (
+              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <p className="font-medium">{transaction.date}</p>
+                  <p className="text-sm text-gray-500">{transaction.plan} Plan</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold">${transaction.amount}.00</p>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    {transaction.status}
+                  </Badge>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="font-semibold">${currentPackage.price}.00</p>
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  Paid
-                </Badge>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-3 border rounded-lg">
-              <div>
-                <p className="font-medium">November 15, 2024</p>
-                <p className="text-sm text-gray-500">{currentPackage.name} Plan</p>
-              </div>
-              <div className="text-right">
-                <p className="font-semibold">${currentPackage.price}.00</p>
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  Paid
-                </Badge>
-              </div>
-            </div>
+            ))}
           </div>
-          <Button variant="outline" className="w-full mt-4">
-            View Full Billing History
-          </Button>
+          
+          {!showAllBilling && billingHistory.length > 3 && (
+            <Button 
+              variant="outline" 
+              className="w-full mt-4" 
+              onClick={handleSeeMore}
+              disabled={isLoadingBilling}
+            >
+              {isLoadingBilling ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'See More'
+              )}
+            </Button>
+          )}
+          
+          {showAllBilling && (
+            <Button 
+              variant="outline" 
+              className="w-full mt-4" 
+              onClick={handleSeeLess}
+            >
+              See Less
+            </Button>
+          )}
         </CardContent>
       </Card>
     </div>

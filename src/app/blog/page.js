@@ -16,7 +16,6 @@ const BlogPage = () => {
       try {
         const response = await fetch("/api/blogs");
         const result = await response.json();
-
         if (result.success) {
           setBlogs(result.data);
         } else {
