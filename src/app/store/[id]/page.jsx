@@ -23,7 +23,6 @@ export default async function ProductPage({ params }) {
 
   return (
     <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
-
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row gap-12">
         {/* Product Image */}
@@ -91,7 +90,9 @@ export default async function ProductPage({ params }) {
 
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
-            <AddToCartButton product={product} />
+            <div className="w-fit">
+              <AddToCartButton product={product} />
+            </div>
             <ContinueBtn></ContinueBtn>
           </div>
         </div>
