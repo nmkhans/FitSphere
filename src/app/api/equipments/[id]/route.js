@@ -3,7 +3,8 @@ import { ObjectId } from "mongodb";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    const awaitedParams = await params;
+    const { id } = awaitedParams;
 
     const { collection } = await dbConnect("equipments");
     const equipment = await collection.findOne({
