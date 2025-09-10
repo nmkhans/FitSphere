@@ -10,6 +10,7 @@ import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import AllUsers from "@/components/dashboard/admin/AllUsers";
 import Trainers from "@/components/dashboard/admin/Trainers";
 import TrainerApplications from "@/components/dashboard/admin/TrainerApplications";
+import AddEquipments from "@/components/dashboard/admin/AddEquipments";
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -57,6 +58,8 @@ const AdminDashboard = () => {
         return <TrainerApplications />;
       case "update-profile":
         return <UpdateProfile user={session?.user} />;
+      case "add-equipments":
+        return <AddEquipments />;
       default:
         return <SpecializedMembersSection />;
     }

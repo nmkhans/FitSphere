@@ -3,14 +3,13 @@ import { Button } from "@/components/ui/button";
 import StoreFilter from "./StoreFilter";
 import AddToCartButton from "./AddToCartButton";
 import Image from "next/image";
-
+import CartButton from "./CartButton";
 export default async function StorePage({ searchParams }) {
   const params = await searchParams;
   const search = params?.search || "";
   const category = params?.category || "All";
   const sort = params?.sort || "asc";
   const page = parseInt(params?.page ?? "1", 10);
-
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?search=${search}&category=${category}&sort=${sort}&page=${page}`,
     { cache: "no-store" }
@@ -28,11 +27,23 @@ export default async function StorePage({ searchParams }) {
       </div>
 
       {/* Filters */}
-      <StoreFilter
+      {/* <StoreFilter
         initialSearch={search}
         initialCategory={category}
         initialSort={sort}
-      />
+      /> */}
+      <div className="flex justify-between flex-col-reverse md:flex-row gap-6 items-center">
+        <div className="w-full">
+          <StoreFilter
+            initialSearch={search}
+            initialCategory={category}
+            initialSort={sort}
+          />
+        </div>
+        <div className="-mt-6">
+          <CartButton />
+        </div>
+      </div>
 
       {/* Products Grid */}
       <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

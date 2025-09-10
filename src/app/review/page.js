@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default async function ReviewsPage() {
   const reviewsResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/reviews`,
+    `${process.env.NEXT_SERVER_API}/api/reviews`,
     {
       next: {
         revalidate: 600,
@@ -19,7 +19,9 @@ export default async function ReviewsPage() {
   );
 
   if (!reviewsResponse.ok) {
-    throw new Error(`Failed to fetch reviews: ${reviewsResponse.status}`);
+    throw new Error(
+      `Failed to fetch reviews: ${reviewsResponse.status}`
+    );
   }
 
   const { data: reviews } = await reviewsResponse.json();
@@ -149,7 +151,7 @@ export default async function ReviewsPage() {
                             className="text-muted-foreground hover:text-primary"
                           >
                             <ThumbsUp className="w-4 h-4 mr-1" />
-                            Helpful ({review.likes})
+                            Helpful ({review.likes || 0})
                           </Button>
                         </div>
                       </div>

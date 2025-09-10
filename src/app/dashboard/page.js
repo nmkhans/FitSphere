@@ -11,6 +11,7 @@ import UpdateProfile from "@/components/dashboard/UpdateProfile";
 import UpdateMembership from "@/components/dashboard/UpdateMembership";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import Swal from "sweetalert2";
+import MemberReview from "@/components/dashboard/member/MemberReview";
 
 const MemberDashboard = () => {
   const { data: session, status } = useSession();
@@ -21,7 +22,7 @@ const MemberDashboard = () => {
   useEffect(() => {
     const checkAccess = async () => {
       if (status === "loading") return;
-      
+
       if (!session) {
         router.push("/login");
         return;
@@ -30,23 +31,27 @@ const MemberDashboard = () => {
       // First check session data for immediate role-based redirects
       const sessionRole = session.user?.role;
       console.log("Session role:", sessionRole);
-      
+
       // Redirect based on session role first (faster)
-      if (sessionRole === 'admin') {
+      if (sessionRole === "admin") {
         console.log("Redirecting to admin dashboard (from session)");
-        router.push('/dashboard/admin');
+        router.push("/dashboard/admin");
         return;
       }
-      
-      if (sessionRole === 'trainer') {
-        console.log("Redirecting to trainer dashboard (from session)");
-        router.push('/dashboard/trainer');
+
+      if (sessionRole === "trainer") {
+        console.log(
+          "Redirecting to trainer dashboard (from session)"
+        );
+        router.push("/dashboard/trainer");
         return;
       }
-      
-      if (sessionRole === 'special-need') {
-        console.log("Redirecting to special-member dashboard (from session)");
-        router.push('/dashboard/special-member');
+
+      if (sessionRole === "special-need") {
+        console.log(
+          "Redirecting to special-member dashboard (from session)"
+        );
+        router.push("/dashboard/special-member");
         return;
       }
 
@@ -56,27 +61,35 @@ const MemberDashboard = () => {
         if (response.ok) {
           const userData = await response.json();
           console.log("Current user data from DB:", userData);
-          
+
           // Use fresh role data from database
           const currentRole = userData.role;
           console.log("Current role from DB:", currentRole);
-          
+
           // Check role-based redirect with fresh data (in case session is outdated)
-          if (currentRole === 'admin' && sessionRole !== 'admin') {
+          if (currentRole === "admin" && sessionRole !== "admin") {
             console.log("Redirecting to admin dashboard (from DB)");
-            router.push('/dashboard/admin');
+            router.push("/dashboard/admin");
             return;
           }
-          
-          if (currentRole === 'trainer' && sessionRole !== 'trainer') {
+
+          if (
+            currentRole === "trainer" &&
+            sessionRole !== "trainer"
+          ) {
             console.log("Redirecting to trainer dashboard (from DB)");
-            router.push('/dashboard/trainer');
+            router.push("/dashboard/trainer");
             return;
           }
-          
-          if (currentRole === 'special-need' && sessionRole !== 'special-need') {
-            console.log("Redirecting to special-member dashboard (from DB)");
-            router.push('/dashboard/special-member');
+
+          if (
+            currentRole === "special-need" &&
+            sessionRole !== "special-need"
+          ) {
+            console.log(
+              "Redirecting to special-member dashboard (from DB)"
+            );
+            router.push("/dashboard/special-member");
             return;
           }
         }
@@ -87,14 +100,18 @@ const MemberDashboard = () => {
 
       // Allow access if user has membership or is admin/trainer (this is only for regular member dashboard)
       if (session.user?.membershipType) {
-        console.log("User has membership, staying on member dashboard");
+        console.log(
+          "User has membership, staying on member dashboard"
+        );
         setIsLoading(false);
         return;
       }
 
       // For users without membership/admin/trainer role, check if they have a trainer application
       try {
-        const response = await fetch("/api/trainer-applications/status");
+        const response = await fetch(
+          "/api/trainer-applications/status"
+        );
         if (response.ok) {
           const data = await response.json();
           if (data.hasApplication) {
@@ -109,19 +126,19 @@ const MemberDashboard = () => {
 
       // No membership and no trainer application - show membership required
       Swal.fire({
-        title: 'Membership Required',
-        text: 'You need to purchase a membership to access the dashboard.',
-        icon: 'info',
+        title: "Membership Required",
+        text: "You need to purchase a membership to access the dashboard.",
+        icon: "info",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Go to Membership',
-        cancelButtonText: 'Go to Home'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Go to Membership",
+        cancelButtonText: "Go to Home",
       }).then((result) => {
         if (result.isConfirmed) {
-          router.push('/membership');
+          router.push("/membership");
         } else {
-          router.push('/');
+          router.push("/");
         }
       });
     };
@@ -131,16 +148,16 @@ const MemberDashboard = () => {
 
   // Hide navbar and footer for dashboard
   useEffect(() => {
-    const navbar = document.querySelector('nav');
-    const footer = document.querySelector('footer');
-    
-    if (navbar) navbar.style.display = 'none';
-    if (footer) footer.style.display = 'none';
-    
+    const navbar = document.querySelector("nav");
+    const footer = document.querySelector("footer");
+
+    if (navbar) navbar.style.display = "none";
+    if (footer) footer.style.display = "none";
+
     // Cleanup function to restore navbar and footer when leaving dashboard
     return () => {
-      if (navbar) navbar.style.display = '';
-      if (footer) footer.style.display = '';
+      if (navbar) navbar.style.display = "";
+      if (footer) footer.style.display = "";
     };
   }, []);
 
@@ -156,11 +173,13 @@ const MemberDashboard = () => {
   }
 
   const renderContent = () => {
-    const userRole = session?.user?.role || 'basic-member';
-    
+    const userRole = session?.user?.role || "basic-member";
+
     switch (activeSection) {
       case "overview":
-        return <MemberOverview user={session?.user} userType={userRole} />;
+        return (
+          <MemberOverview user={session?.user} userType={userRole} />
+        );
       case "update-profile":
         return <UpdateProfile user={session?.user} />;
       case "update-membership":
@@ -169,42 +188,72 @@ const MemberDashboard = () => {
         return <WorkoutPlansContent userType={userRole} />;
       case "nutrition-plans":
         return <NutritionPlansContent userType={userRole} />;
+      case "review":
+        return <MemberReview userType={userRole} />;
       case "ai-recommender":
-        return <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">AI Exercise Recommender</h2>
-          <p>AI-powered exercise recommendations based on your goals.</p>
-        </div>;
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              AI Exercise Recommender
+            </h2>
+            <p>
+              AI-powered exercise recommendations based on your goals.
+            </p>
+          </div>
+        );
       case "personal-training":
-        return <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">Personal Training</h2>
-          <p>Schedule and manage your personal training sessions.</p>
-        </div>;
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              Personal Training
+            </h2>
+            <p>
+              Schedule and manage your personal training sessions.
+            </p>
+          </div>
+        );
       case "special-programs":
-        return <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">Special Programs</h2>
-          <p>Specialized programs designed for your unique needs.</p>
-        </div>;
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              Special Programs
+            </h2>
+            <p>
+              Specialized programs designed for your unique needs.
+            </p>
+          </div>
+        );
       case "basic-workouts":
-        return <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">Basic Workouts</h2>
-          <p>Basic workout routines to get you started.</p>
-        </div>;
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              Basic Workouts
+            </h2>
+            <p>Basic workout routines to get you started.</p>
+          </div>
+        );
       case "equipment-guide":
-        return <div className="p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">Equipment Guide</h2>
-          <p>Learn how to use gym equipment properly.</p>
-        </div>;
+        return (
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold mb-4">
+              Equipment Guide
+            </h2>
+            <p>Learn how to use gym equipment properly.</p>
+          </div>
+        );
       default:
-        return <MemberOverview user={session?.user} userType={userRole} />;
+        return (
+          <MemberOverview user={session?.user} userType={userRole} />
+        );
     }
   };
 
   return (
-    <DashboardLayout 
-      activeSection={activeSection} 
+    <DashboardLayout
+      activeSection={activeSection}
       setActiveSection={setActiveSection}
       user={session?.user}
-      userRole={session?.user?.role || 'basic-member'} // Use actual user role
+      userRole={session?.user?.role || "basic-member"} // Use actual user role
     >
       <div className="p-4 md:p-6">
         <div className="mb-6">
@@ -212,10 +261,14 @@ const MemberDashboard = () => {
             Welcome back, {session?.user?.name}!
           </h1>
           <p className="text-muted-foreground">
-            {session?.user?.membershipType && `${session.user.membershipType} Member`} 
-            {session?.user?.role === 'premium-member' && ' - Premium Features Enabled'}
-            {session?.user?.role === 'basic-member' && ' - Basic Membership'}
-            {session?.user?.role === 'special-need' && ' - Special Care Program'}
+            {session?.user?.membershipType &&
+              `${session.user.membershipType} Member`}
+            {session?.user?.role === "premium-member" &&
+              " - Premium Features Enabled"}
+            {session?.user?.role === "basic-member" &&
+              " - Basic Membership"}
+            {session?.user?.role === "special-need" &&
+              " - Special Care Program"}
           </p>
         </div>
         {renderContent()}
