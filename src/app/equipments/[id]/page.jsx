@@ -20,15 +20,16 @@ async function getEquipment(id) {
 }
 
 export default async function EquipmentDetailsPage({ params, searchParams }) {
-  const { id } = params;
+  const awaitedParams = await params;
+  const { id } = awaitedParams;
   const equipment = await getEquipment(id);
 
   if (!equipment) return notFound();
 
-  const search = searchParams?.search || "";
-  const category = searchParams?.category || "All";
-  const muscle = searchParams?.muscle || "All";
-  const page = searchParams?.page || "1";
+  const search = awaitedParams?.search || "";
+  const category = awaitedParams?.category || "All";
+  const muscle = awaitedParams?.muscle || "All";
+  const page = awaitedParams?.page || "1";
   // Split usage instructions into list items
   const instructions = equipment.usageInstruction
     .split(".")

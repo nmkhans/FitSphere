@@ -19,6 +19,11 @@ import {
   Heart,
   User,
   CreditCard,
+<<<<<<< HEAD
+=======
+  Dumbbell,
+  PackagePlus,
+>>>>>>> 036b1a50511da0e5a574a18fe12c03c600e7bda2
 } from "lucide-react";
 import { Star } from "lucide-react";
 
@@ -63,8 +68,25 @@ const DashboardLayout = ({
             name: "Trainer Applications",
             id: "trainer-applications",
             icon: Users,
+<<<<<<< HEAD
             current: activeSection === "trainer-applications",
           },
+=======
+            current: activeSection === "trainer-applications"
+          },
+          {
+            name: "Add Equipments",
+            id: "add-equipments",
+            icon: Dumbbell,
+            current: activeSection === "add-equipments"
+          },
+          {
+            name: "Add Products",
+            id: "add-products",
+            icon: PackagePlus,
+            current: activeSection === "add-products"
+          }
+>>>>>>> 036b1a50511da0e5a574a18fe12c03c600e7bda2
         ];
 
       case "trainer":
