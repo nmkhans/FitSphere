@@ -1,0 +1,190 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+const BlogDetailPage = async ({ params }) => {
+  const { id } = await params;
+
+  console.log("Blog ID:", id);
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${id}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!res.ok) {
+      return notFound();
+    }
+
+    const result = await res.json();
+
+    if (!result.success || !result.data) {
+      return notFound();
+    }
+
+    const blog = result.data;
+
+    return (
+      <div className="max-w-4xl mx-auto p-4">
+        {/* Back button */}
+        <div className="mb-6">
+          <Link
+            href="/blog"
+            className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+          >
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 12H5m7-7l-7 7 7 7"
+              />
+            </svg>
+            Back to Blogs
+          </Link>
+        </div>
+
+        {/* Blog content */}
+        <article className="bg-white rounded-2xl shadow-md p-6 border border-gray-200">
+          {/* Author info */}
+          <div className="flex items-center mb-6">
+            <div className="bg-red-300 h-12 w-12 rounded-full mr-4" />
+            <div>
+              <h2 className="text-lg font-semibold">
+                {blog.username || blog.email}
+              </h2>
+              <p className="text-sm text-gray-500">
+                Published on{" "}
+                {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+              {blog.updatedAt && blog.updatedAt !== blog.createdAt && (
+                <p className="text-xs text-gray-400">
+                  Last updated:{" "}
+                  {new Date(blog.updatedAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Blog title */}
+          <h1 className="text-3xl font-bold mb-6 text-gray-900">
+            {blog.title}
+          </h1>
+
+          {/* First image */}
+          {blog.imageUrls && blog.imageUrls.length > 0 && (
+            <div className="mb-6">
+              <img
+                src={blog.imageUrls[0]}
+                alt="Blog"
+                className="w-full h-96 object-cover rounded-lg shadow-md"
+              />
+            </div>
+          )}
+
+          {/* Blog content */}
+          <div className="prose max-w-none">
+            <p className="text-gray-800 whitespace-pre-line leading-relaxed text-lg">
+              {blog.content}
+            </p>
+          </div>
+
+          {/* Second image */}
+          {blog.imageUrls && blog.imageUrls.length > 1 && (
+            <div className="mt-6">
+              <img
+                src={blog.imageUrls[1]}
+                alt="Blog"
+                className="w-full h-96 object-cover rounded-lg shadow-md"
+              />
+            </div>
+          )}
+
+          {/* Additional images */}
+          {blog.imageUrls && blog.imageUrls.length > 2 && (
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {blog.imageUrls.slice(2).map((imageUrl, index) => (
+                <img
+                  key={index}
+                  src={imageUrl}
+                  alt={`Blog image ${index + 3}`}
+                  className="w-full h-64 object-cover rounded-lg shadow-md"
+                />
+              ))}
+            </div>
+          )}
+          <div className="mt-12">
+            <h3>
+              Comments <span>(2)</span>
+            </h3>
+            <div className="flex items-start space-x-4 p-4">
+              {/* Avatar */}
+              <div className="bg-red-300 h-12 w-12 rounded-full mr-4" />
+              {/* Comment content */}
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">Merina</span>
+                  <span className="text-gray-500 text-sm">June 18, 2015</span>
+                </div>
+                <p className="text-gray-800 mt-1"></p>
+                <p className="text-gray-600 text-sm mt-1">
+                 Very Helpfull info
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4 p-4">
+              {/* Avatar */}
+              <div className="bg-red-300 h-12 w-12 rounded-full mr-4" />
+              {/* Comment content */}
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="font-medium">Mr Developer</span>
+                  <span className="text-gray-500 text-sm">June 18, 2015</span>
+                </div>
+                <p className="text-gray-800 mt-1">Hi, this is a comment.</p>
+                <p className="text-gray-600 text-sm mt-1">
+                  To delete a comment, just log in and view the post's comments.
+                  There you will have the option to edit or delete them.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        {/* Navigation */}
+        <div className="mt-8 text-center">
+          <Button
+            size="lg"
+            variant="secondary"
+            className="h-12 px-6 bg-green-primary hover:bg-green-dark text-lg text-black-primary shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105"
+          >
+            <Link href="/blog">Read More Blogs</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    return notFound();
+  }
+};
+
+export default BlogDetailPage;

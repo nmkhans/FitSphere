@@ -1,56 +1,125 @@
+"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const BlogPage = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs`, {
-    cache: "no-store",
-  });
-  const data = await res.json();
+
+const BlogPage = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("/api/blogs");
+        const result = await response.json();
+
+        if (result.success) {
+          setBlogs(result.data);
+        } else {
+          setError("Failed to fetch blogs");
+        }
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setError("Failed to fetch blogs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const truncateContent = (content, maxLength = 200) => {
+    if (!content) return "";
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength) + "...";
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto p-4">
+        <div className="text-center">
+          <p className="text-lg">Loading blogs...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto p-4">
+        <div className="text-center">
+          <p className="text-red-500">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const blogsToShow = blogs.length > 0 ? blogs : data;
 
   return (
     <div className="max-w-7xl mx-auto p-4 grid grid-cols-12 gap-6">
       <div className="col-span-8 space-y-6">
-        {data.data.map((story) => (
-          <Card key={story._id} className="border-none shadow-none">
-            <CardHeader className="flex flex-row items-center gap-3">
-              <Avatar>
-                <AvatarFallback>
-                  {(story.name || story.email)?.[0]?.toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <CardTitle className="text-base font-semibold">
-                  {story.name || story.email}
-                </CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  {new Date(story.createdAt).toLocaleString()}
-                </p>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <h2 className="text-xl font-semibold mb-4">{story.title}</h2>
-              {story.imageUrls && (
-                <img
-                  src={story.imageUrls[0]}
-                  alt="Story"
-                  className="mb-6 max-h-96 w-full object-cover"
-                />
-              )}
-              <p className="text-sm text-gray-700 whitespace-pre-line mb-6">
-                {story.content}
-              </p>
-              <Button asChild className="rounded-full">
-                <Link href={`/blog/${story._id}`}>Read More →</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+        <h1 className="text-3xl font-bold text-center mb-8">Fitness Blogs</h1>
 
-      {/* Sticky Sidebar */}
+        {blogsToShow.length === 0 ? (
+          <div className="text-center">
+            <p className="text-gray-500">No blogs found.</p>
+          </div>
+        ) : (
+          blogsToShow.map((blog) => (
+            <div
+              key={blog._id}
+              className="bg-white rounded-2xl shadow-md p-5 border border-gray-200"
+            >
+              <div className="flex items-center mb-3">
+                <div className="bg-red-300 h-10 w-10 rounded-full mr-3" />
+                <div>
+                  <h2 className="text-lg font-semibold">
+                    {blog.username || blog.email}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {new Date(blog.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+              <div className="mb-4">
+                <h2 className="text-xl font-semibold pb-4">{blog.title}</h2>
+                {blog.imageUrls && blog.imageUrls.length > 0 && (
+                  <img
+                    src={blog.imageUrls[0]}
+                    alt="Blog"
+                    className="mt-4 rounded-lg max-h-96 object-cover w-full"
+                  />
+                )}
+                <p className="text-gray-800 whitespace-pre-line py-6">
+                  {truncateContent(blog.content)}
+                </p>
+                <div className="flex justify-between items-center mt-4">
+            
+                     <Button
+                        size="lg"
+                        variant="secondary"
+                        className="h-12 px-6 bg-green-primary hover:bg-green-dark text-lg text-black-primary shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105">
+                              <Link
+                    href={`/blog/${blog._id}`}
+                   
+                  >
+                    Read More
+                  </Link>
+                    </Button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+
+      </div>
+            {/* Sticky Sidebar */}
       <div className="col-span-4">
         <div className="sticky top-8 space-y-6">
           {/* Search Box */}
@@ -61,7 +130,12 @@ const BlogPage = async () => {
             <CardContent>
               <div className="flex gap-2">
                 <Input placeholder="Search blog..." className="flex-1" />
-                <Button>Go</Button>
+                  <Button
+                        size="lg"
+                        variant="secondary"
+                        className="h-9 px-6 bg-green-primary hover:bg-green-dark text-lg text-black-primary shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105">
+                        go
+                    </Button>
               </div>
             </CardContent>
           </Card>
