@@ -5,16 +5,18 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { 
-  Menu, 
-  X, 
-  Users, 
+import {
+  Menu,
+  X,
+  Users,
   LogOut,
   Home,
   ChevronLeft,
   Heart,
   User,
-  CreditCard
+  CreditCard,
+  Dumbbell,
+  PackagePlus,
 } from "lucide-react";
 
 const DashboardLayout = ({ children, activeSection, setActiveSection, user, userRole = "member" }) => {
@@ -53,6 +55,18 @@ const DashboardLayout = ({ children, activeSection, setActiveSection, user, user
             id: "trainer-applications",
             icon: Users,
             current: activeSection === "trainer-applications"
+          },
+          {
+            name: "Add Equipments",
+            id: "add-equipments",
+            icon: Dumbbell,
+            current: activeSection === "add-equipments"
+          },
+          {
+            name: "Add Products",
+            id: "add-products",
+            icon: PackagePlus,
+            current: activeSection === "add-products"
           }
         ];
       
