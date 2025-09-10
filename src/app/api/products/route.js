@@ -7,7 +7,7 @@ export async function GET(req) {
     const category = searchParams.get("category") || "All";
     const sort = searchParams.get("sort") || "asc"; // asc or desc
     const page = parseInt(searchParams.get("page")) || 1;
-    const ITEMS_PER_PAGE = 12;
+    const ITEMS_PER_PAGE = parseInt(searchParams.get("limit")) || 12;
 
     const { collection: productsCollection } = await dbConnect("products");
 
