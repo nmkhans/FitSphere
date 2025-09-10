@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/dbConnect";
+import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
 
@@ -28,24 +28,56 @@ import { ObjectId } from "mongodb";
 
 
 // GET blogs (all or filter by email)
+// export async function GET(req) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const email = searchParams.get("email");
+
+//     const blogsCollection = await dbConnect("blogs");
+
+//     let query = {};
+//     if (email) {
+//       query = {email: email }; 
+//     }
+
+//     const blogs = await blogsCollection
+//       .find(query)
+//       .sort({ createdAt: -1 })
+//       .toArray();
+
+//     return NextResponse.json({ success: true, blogs }, { status: 200 });
+//   } catch (err) {
+//     console.error("GET /api/blogs error:", err);
+//     return NextResponse.json(
+//       { success: false, message: "Server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+
+
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get("email");
 
-    const blogsCollection = await dbConnect("blogs");
+    const { collection: blogsCollection } = await dbConnect(
+      collectionNameObj.blogsCollection
+    );
 
     let query = {};
     if (email) {
-      query = {email: email }; 
+      query.email = email;
     }
 
-    const blogs = await blogsCollection
-      .find(query)
-      .sort({ createdAt: -1 })
-      .toArray();
+    const blogs = await blogsCollection.find(query).sort({ createdAt: -1 }).toArray();
 
-    return NextResponse.json({ success: true, blogs }, { status: 200 });
+    return NextResponse.json(
+      { success: true, data: blogs },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("GET /api/blogs error:", err);
     return NextResponse.json(
@@ -54,7 +86,6 @@ export async function GET(req) {
     );
   }
 }
-
 
 export async function POST(req) {
   try {

@@ -5,6 +5,7 @@ export const collectionNameObj = {
     reviewCollection: "reviews",
     specializedMembersCollection: "specializedMembers",
     equipmentsCollection: "equipments",
+    blogsCollection: "blogs",
     trainerApplicationsCollection: "trainerapplications",
 };
 
