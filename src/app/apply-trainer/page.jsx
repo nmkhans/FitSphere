@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,7 @@ import { toast } from "react-hot-toast";
 import { Loader2, FileText, AlertCircle, Users, Heart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
-const ApplyTrainerPage = () => {
+const ApplyTrainerContent = () => {
     const { data: session, status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -427,6 +427,14 @@ const ApplyTrainerPage = () => {
                 </Card>
             </div>
         </div>
+    );
+};
+
+const ApplyTrainerPage = () => {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+            <ApplyTrainerContent />
+        </Suspense>
     );
 };
 

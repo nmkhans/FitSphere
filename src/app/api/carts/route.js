@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
-import status from "daisyui/components/status";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);

@@ -143,7 +143,7 @@ const NutritionPlansContent = ({ userType }) => {
                 <p className="text-sm text-gray-600 mb-4">Track your daily intake</p>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Today's Progress:</span>
+                    <span>Today&apos;s Progress:</span>
                     <span className="font-semibold">1,850 / 2,200 kcal</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">

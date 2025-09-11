@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -87,9 +88,11 @@ const BlogPage = () => {
                 {blog.title}
               </h2>
               {blog.imageUrls && blog.imageUrls.length > 0 && (
-                <img
+                <Image
                   src={blog.imageUrls[0]}
                   alt="Blog"
+                  width={800}
+                  height={400}
                   className="mt-4 rounded-lg max-h-96 object-cover w-full"
                 />
               )}
