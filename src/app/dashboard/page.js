@@ -107,15 +107,30 @@ const MemberDashboard = () => {
         return;
       }
 
-      // For users without membership/admin/trainer role, check if they have a trainer application
+      // For users without membership/admin/trainer role, check if they have an approved trainer application
       try {
         const response = await fetch(
           "/api/trainer-applications/status"
         );
         if (response.ok) {
           const data = await response.json();
-          if (data.hasApplication) {
-            // User has trainer application, allow access
+          if (data.hasApplication && data.application?.status === "approved") {
+            // User has approved trainer application, redirect to appropriate dashboard
+            const trainerType = data.application.trainerType;
+            if (trainerType === 'special-need') {
+              router.push("/dashboard/trainer"); // Special need trainers go to trainer dashboard
+            } else {
+              router.push("/dashboard/trainer"); // Regular trainers go to trainer dashboard  
+            }
+            return;
+          }
+          if (data.hasApplication && data.application?.status === "pending") {
+            // User has pending application, redirect to status page
+            router.push("/trainer-status");
+            return;
+          }
+          if (data.hasApplication && data.application?.status === "rejected") {
+            // User has rejected application, allow dashboard access so they can reapply
             setIsLoading(false);
             return;
           }

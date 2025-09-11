@@ -22,7 +22,7 @@ const TrainerDashboard = () => {
     }
     
     // Check if user has trainer role
-    if (session.user.role !== 'trainer') {
+    if (session.user.role !== 'trainer' && session.user.role !== 'special-need-trainer') {
       router.push("/dashboard");
       return;
     }

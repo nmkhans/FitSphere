@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,13 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "react-hot-toast";
-import { Loader2, Upload, FileText, AlertCircle, Clock, CheckCircle, XCircle, RefreshCw } from "lucide-react";
+import { Loader2, FileText, AlertCircle, Users, Heart, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 const ApplyTrainerPage = () => {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const trainerType = searchParams.get('type') || 'gym'; // 'gym' or 'special-need'
+    
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [applicationStatus, setApplicationStatus] = useState(null);
@@ -38,7 +42,9 @@ const ApplyTrainerPage = () => {
         }
 
         // Check if user is already a trainer or admin
-        if (session.user.role === "trainer" || session.user.role === "admin") {
+        if (session.user.role === "trainer" || 
+            session.user.role === "special-need-trainer" || 
+            session.user.role === "admin") {
             toast.error("You are already a trainer or admin");
             router.push("/dashboard");
             return;
@@ -53,12 +59,13 @@ const ApplyTrainerPage = () => {
         // Pre-fill form with user data
         setValue("name", session.user.name || "");
         setValue("email", session.user.email || "");
+        setValue("trainerType", trainerType);
         
         // Check if user already has an application
         fetchApplicationStatus();
         
         setIsLoading(false);
-    }, [session, status, router, setValue]);
+    }, [session, status, router, setValue, trainerType]);
 
     const fetchApplicationStatus = async () => {
         try {
@@ -85,6 +92,7 @@ const ApplyTrainerPage = () => {
                     ...data,
                     userId: session.user.id,
                     userEmail: session.user.email,
+                    trainerType: trainerType
                 }),
             });
 
@@ -92,8 +100,8 @@ const ApplyTrainerPage = () => {
 
             if (response.ok) {
                 toast.success("Trainer application submitted successfully!");
-                await fetchApplicationStatus(); // Refresh status
-                // Don't redirect - let them see the status
+                // Redirect to status page after successful submission
+                router.push("/trainer-status");
             } else {
                 toast.error(result.error || "Failed to submit application");
             }
@@ -149,134 +157,113 @@ const ApplyTrainerPage = () => {
         );
     }
 
-    // Show application status if user already has an application
+    // Redirect to status page if user already has an application
     if (applicationStatus?.hasApplication) {
-        const { application } = applicationStatus;
-        const formatDate = (dateString) => {
-            return new Date(dateString).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        };
-
-        let statusIcon, statusColor, statusTitle, statusMessage;
-
-        switch (application.status) {
-            case "pending":
-                statusIcon = Clock;
-                statusColor = "text-yellow-600";
-                statusTitle = "Application Under Review";
-                statusMessage = "Your trainer application is currently being reviewed by our admin team. We'll notify you once a decision has been made.";
-                break;
-            case "approved":
-                statusIcon = CheckCircle;
-                statusColor = "text-green-600";
-                statusTitle = "Application Approved!";
-                statusMessage = "Congratulations! Your trainer application has been approved. You can now access your trainer dashboard.";
-                break;
-            case "rejected":
-                statusIcon = XCircle;
-                statusColor = "text-red-600";
-                statusTitle = "Application Not Approved";
-                statusMessage = "Unfortunately, your trainer application was not approved at this time. You may reapply in the future.";
-                break;
-            default:
-                return null;
-        }
-
-        const StatusIcon = statusIcon;
-
+        router.push("/trainer-status");
         return (
-            <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 py-8">
-                <div className="container mx-auto px-4 max-w-2xl">
-                    <Card>
-                        <CardHeader className="text-center">
-                            <div className={`mx-auto mb-4 p-3 rounded-full bg-gray-100 w-fit`}>
-                                <StatusIcon className={`h-8 w-8 ${statusColor}`} />
-                            </div>
-                            <CardTitle className="text-2xl">{statusTitle}</CardTitle>
-                            <CardDescription className="text-base">
-                                {statusMessage}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="bg-muted rounded-lg p-4 space-y-3">
-                                <h3 className="font-semibold">Application Details</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                                    <div>
-                                        <span className="font-medium">Submitted:</span>
-                                        <p className="text-muted-foreground">{formatDate(application.appliedAt)}</p>
-                                    </div>
-                                    {application.reviewedAt && (
-                                        <div>
-                                            <span className="font-medium">Reviewed:</span>
-                                            <p className="text-muted-foreground">{formatDate(application.reviewedAt)}</p>
-                                        </div>
-                                    )}
-                                    <div className="md:col-span-2">
-                                        <span className="font-medium">Status:</span>
-                                        <p className={`${statusColor} capitalize font-medium`}>{application.status}</p>
-                                    </div>
-                                    {application.adminNotes && (
-                                        <div className="md:col-span-2">
-                                            <span className="font-medium">Admin Notes:</span>
-                                            <p className="text-muted-foreground">{application.adminNotes}</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                                {application.status === "approved" && (
-                                    <Link href="/dashboard/trainer">
-                                        <Button className="w-full sm:w-auto">
-                                            Go to Trainer Dashboard
-                                        </Button>
-                                    </Link>
-                                )}
-                                {application.status === "rejected" && (
-                                    <Button 
-                                        onClick={() => {
-                                            // Allow reapplication by clearing the status
-                                            setApplicationStatus(null);
-                                        }}
-                                        className="w-full sm:w-auto"
-                                    >
-                                        <RefreshCw className="h-4 w-4 mr-2" />
-                                        Apply Again
-                                    </Button>
-                                )}
-                                <Link href="/dashboard">
-                                    <Button variant="outline" className="w-full sm:w-auto">
-                                        Back to Dashboard
-                                    </Button>
-                                </Link>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
             </div>
         );
     }
+
+    const trainerTypeConfig = {
+        gym: {
+            title: "Gym Trainer",
+            description: "Help members with general fitness, workout routines, and equipment usage",
+            icon: Users,
+            color: "green",
+            specializations: [
+                "Weight Training",
+                "Cardio Training", 
+                "Functional Training",
+                "Group Fitness",
+                "CrossFit",
+                "Bodybuilding",
+                "Powerlifting",
+                "Athletic Performance",
+                "General Fitness",
+                "Other"
+            ]
+        },
+        'special-need': {
+            title: "Special Need Trainer",
+            description: "Provide specialized training and support for members with special needs",
+            icon: Heart,
+            color: "blue",
+            specializations: [
+                "Pregnant Women Training",
+                "Disability Support Training"
+            ]
+        }
+    };
+
+    const currentConfig = trainerTypeConfig[trainerType];
+    const IconComponent = currentConfig.icon;
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 py-8">
             <div className="container mx-auto px-4 max-w-4xl">
                 <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-foreground mb-2">Apply as a Trainer</h1>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                        <Link href="/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+                            <ArrowLeft className="h-4 w-4" />
+                            Back
+                        </Link>
+                        <span className="text-muted-foreground">|</span>
+                        <Badge variant="outline" className={`${currentConfig.color === 'green' ? 'border-green-600 text-green-700' : 'border-blue-600 text-blue-700'}`}>
+                            <IconComponent className="h-3 w-3 mr-1" />
+                            {currentConfig.title}
+                        </Badge>
+                    </div>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">Apply as a {currentConfig.title}</h1>
                     <p className="text-muted-foreground mb-4">
-                        Join our team of professional trainers and help members achieve their fitness goals
+                        {currentConfig.description}
                     </p>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm text-blue-700 dark:text-blue-300">
+                    <div className={`${trainerType === 'gym' ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800'} rounded-lg p-4 text-sm ${trainerType === 'gym' ? 'text-green-700 dark:text-green-300' : 'text-blue-700 dark:text-blue-300'}`}>
                         <div className="flex items-start gap-2">
                             <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
                             <div>
-                                <strong>Note:</strong> Trainers and members have different roles in our system. 
-                                If you have an active membership, you cannot apply to be a trainer. 
-                                You can either be a member who uses our services or a trainer who provides services to members.
+                                <strong>Important Requirements:</strong>
+                                {trainerType === 'gym' ? (
+                                    <div className="mt-2 space-y-2">
+                                        <p>
+                                            <strong>Gym Trainers</strong> are responsible for helping members achieve their general fitness goals through personalized workout routines, proper equipment usage, and motivational support.
+                                        </p>
+                                        <p>
+                                            <strong>Before applying, ensure you have:</strong>
+                                        </p>
+                                        <ul className="list-disc list-inside ml-2 space-y-1">
+                                            <li>Proven expertise in fitness training and exercise science</li>
+                                            <li>Experience with gym equipment and various training methods</li>
+                                            <li>Ability to create safe and effective workout programs</li>
+                                            <li>Strong communication and motivational skills</li>
+                                            <li>Relevant certifications (preferred but not mandatory)</li>
+                                        </ul>
+                                        <p className="text-sm italic">
+                                            Note: If you have an active membership, you must cancel it before applying as trainers and members have different roles in our system.
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="mt-2 space-y-2">
+                                        <p>
+                                            <strong>Special Need Trainers</strong> provide specialized fitness training for members with unique requirements including pregnant women and individuals with disabilities.
+                                        </p>
+                                        <p>
+                                            <strong>Before applying, ensure you have:</strong>
+                                        </p>
+                                        <ul className="list-disc list-inside ml-2 space-y-1">
+                                            <li>Specialized knowledge in adaptive fitness or prenatal exercise</li>
+                                            <li>Experience working with special populations</li>
+                                            <li>Understanding of medical considerations and safety protocols</li>
+                                            <li>Patience, empathy, and excellent communication skills</li>
+                                            <li>Relevant specialized certifications (highly recommended)</li>
+                                        </ul>
+                                        <p className="text-sm italic">
+                                            Note: This role requires higher expertise and sensitivity. If you have an active membership, you must cancel it before applying.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -286,10 +273,10 @@ const ApplyTrainerPage = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <FileText className="h-5 w-5" />
-                            Trainer Application Form
+                            {currentConfig.title} Application Form
                         </CardTitle>
                         <CardDescription>
-                            Please fill out all the required information to apply as a trainer
+                            Please fill out all the required information to apply as a {currentConfig.title.toLowerCase()}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -358,6 +345,51 @@ const ApplyTrainerPage = () => {
                                     </div>
                                 </div>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="gender">Gender *</Label>
+                                        <Select 
+                                            onValueChange={(value) => setValue("gender", value, { shouldValidate: true })}
+                                            {...register("gender", { required: "Gender is required" })}
+                                        >
+                                            <SelectTrigger className="mt-1">
+                                                <SelectValue placeholder="Select your gender" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="male">Male</SelectItem>
+                                                <SelectItem value="female">Female</SelectItem>
+                                                <SelectItem value="other">Other</SelectItem>
+                                                <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.gender && (
+                                            <p className="text-destructive text-sm mt-1">{errors.gender.message}</p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="specialization">Specialization *</Label>
+                                        <Select 
+                                            onValueChange={(value) => setValue("specialization", value, { shouldValidate: true })}
+                                            {...register("specialization", { required: "Specialization is required" })}
+                                        >
+                                            <SelectTrigger className="mt-1">
+                                                <SelectValue placeholder="Select your specialization" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {currentConfig.specializations.map((spec) => (
+                                                    <SelectItem key={spec} value={spec.toLowerCase().replace(/\s+/g, '-')}>
+                                                        {spec}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.specialization && (
+                                            <p className="text-destructive text-sm mt-1">{errors.specialization.message}</p>
+                                        )}
+                                    </div>
+                                </div>
+
                                 <div>
                                     <Label htmlFor="address">Address *</Label>
                                     <Textarea
@@ -370,128 +402,6 @@ const ApplyTrainerPage = () => {
                                     {errors.address && (
                                         <p className="text-destructive text-sm mt-1">{errors.address.message}</p>
                                     )}
-                                </div>
-                            </div>
-
-                            {/* Professional Information */}
-                            <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-foreground">Professional Information</h3>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <Label htmlFor="experience">Years of Experience *</Label>
-                                        <Select onValueChange={(value) => setValue("experience", value)}>
-                                            <SelectTrigger className="mt-1">
-                                                <SelectValue placeholder="Select experience level" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="0-1">0-1 years</SelectItem>
-                                                <SelectItem value="1-3">1-3 years</SelectItem>
-                                                <SelectItem value="3-5">3-5 years</SelectItem>
-                                                <SelectItem value="5-10">5-10 years</SelectItem>
-                                                <SelectItem value="10+">10+ years</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        {errors.experience && (
-                                            <p className="text-destructive text-sm mt-1">{errors.experience.message}</p>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        <Label htmlFor="specialization">Specialization *</Label>
-                                        <Select onValueChange={(value) => setValue("specialization", value)}>
-                                            <SelectTrigger className="mt-1">
-                                                <SelectValue placeholder="Select your specialization" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="weight-training">Weight Training</SelectItem>
-                                                <SelectItem value="cardio">Cardio Training</SelectItem>
-                                                <SelectItem value="yoga">Yoga</SelectItem>
-                                                <SelectItem value="pilates">Pilates</SelectItem>
-                                                <SelectItem value="crossfit">CrossFit</SelectItem>
-                                                <SelectItem value="sports-specific">Sports Specific Training</SelectItem>
-                                                <SelectItem value="rehabilitation">Rehabilitation</SelectItem>
-                                                <SelectItem value="nutrition">Nutrition Coaching</SelectItem>
-                                                <SelectItem value="group-fitness">Group Fitness</SelectItem>
-                                                <SelectItem value="other">Other</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        {errors.specialization && (
-                                            <p className="text-destructive text-sm mt-1">{errors.specialization.message}</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="certifications">Certifications & Qualifications *</Label>
-                                    <Textarea
-                                        id="certifications"
-                                        {...register("certifications", { required: "Certifications are required" })}
-                                        className="mt-1"
-                                        placeholder="List your certifications, degrees, and relevant qualifications (e.g., NASM CPT, ACE, ACSM, etc.)"
-                                        rows={4}
-                                    />
-                                    {errors.certifications && (
-                                        <p className="text-destructive text-sm mt-1">{errors.certifications.message}</p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="workExperience">Previous Work Experience *</Label>
-                                    <Textarea
-                                        id="workExperience"
-                                        {...register("workExperience", { required: "Work experience is required" })}
-                                        className="mt-1"
-                                        placeholder="Describe your previous work experience in fitness/training industry"
-                                        rows={4}
-                                    />
-                                    {errors.workExperience && (
-                                        <p className="text-destructive text-sm mt-1">{errors.workExperience.message}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Additional Information */}
-                            <div className="space-y-4">
-                                <h3 className="text-lg font-semibold text-foreground">Additional Information</h3>
-                                
-                                <div>
-                                    <Label htmlFor="availability">Availability *</Label>
-                                    <Textarea
-                                        id="availability"
-                                        {...register("availability", { required: "Availability is required" })}
-                                        className="mt-1"
-                                        placeholder="Describe your availability (days, hours, preferred schedule)"
-                                        rows={3}
-                                    />
-                                    {errors.availability && (
-                                        <p className="text-destructive text-sm mt-1">{errors.availability.message}</p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="motivation">Why do you want to be a trainer at FitSphere? *</Label>
-                                    <Textarea
-                                        id="motivation"
-                                        {...register("motivation", { required: "This field is required" })}
-                                        className="mt-1"
-                                        placeholder="Tell us about your motivation and what you can bring to our team"
-                                        rows={4}
-                                    />
-                                    {errors.motivation && (
-                                        <p className="text-destructive text-sm mt-1">{errors.motivation.message}</p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <Label htmlFor="references">References (Optional)</Label>
-                                    <Textarea
-                                        id="references"
-                                        {...register("references")}
-                                        className="mt-1"
-                                        placeholder="Provide contact information for professional references"
-                                        rows={3}
-                                    />
                                 </div>
                             </div>
 

@@ -61,16 +61,22 @@ export async function PATCH(req, { params }) {
 
         // If approved, update user role to trainer
         if (status === "approved") {
+            const trainerType = application.trainerType || 'gym';
+            const userRole = trainerType === 'special-need' ? 'special-need-trainer' : 'trainer';
+            
             const userUpdateResult = await usersCollection.updateOne(
                 { _id: new ObjectId(application.userId) },
                 {
                     $set: {
-                        role: "trainer",
+                        role: userRole,
                         trainerProfile: {
+                            trainerType: trainerType,
                             specialization: application.specialization,
                             experience: application.experience,
                             certifications: application.certifications,
                             availability: application.availability,
+                            medicalKnowledge: trainerType === 'special-need' ? application.medicalKnowledge : undefined,
+                            trainingPhilosophy: trainerType === 'gym' ? application.trainingPhilosophy : undefined,
                             approved: true,
                             approvedAt: new Date(),
                             approvedBy: session.user.id

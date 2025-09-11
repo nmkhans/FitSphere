@@ -50,6 +50,12 @@ const DashboardLayout = ({
             current: activeSection === "specialized-members",
           },
           {
+            name: "Special Need Assignments",
+            id: "special-need-assignments",
+            icon: Users,
+            current: activeSection === "special-need-assignments",
+          },
+          {
             name: "Users",
             id: "all-users",
             icon: Heart,
@@ -82,6 +88,7 @@ const DashboardLayout = ({
         ];
 
       case "trainer":
+      case "special-need-trainer":
         return [
           {
             name: "Overview",
@@ -235,6 +242,8 @@ const DashboardLayout = ({
                 ? "Admin Panel"
                 : user?.role === "trainer"
                 ? "Trainer Dashboard"
+                : user?.role === "special-need-trainer"
+                ? "Special Need Trainer Dashboard"
                 : user?.role === "special-need"
                 ? "Special Care Dashboard"
                 : user?.role === "premium-member"
@@ -305,6 +314,11 @@ const DashboardLayout = ({
               {user?.role === "trainer" && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
                   Trainer
+                </span>
+              )}
+              {user?.role === "special-need-trainer" && (
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mt-1">
+                  Special Need Trainer
                 </span>
               )}
               {user?.role === "special-need" && (
