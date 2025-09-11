@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import { ObjectId } from "mongodb";
 
 export async function GET(req) {
   try {
@@ -56,6 +57,46 @@ export async function POST(req) {
     console.error("POST /api/blogs error:", err);
     return NextResponse.json(
       { success: false, message: "Failed to create blog" },
+      { status: 500 }
+    );
+  }
+}
+
+
+// DELETE a blog by id
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Blog ID is required" }),
+        { status: 400 }
+      );
+    }
+
+    const { collection: blogsCollection } = await dbConnect(
+      collectionNameObj.blogsCollection
+    );
+
+    const result = await blogsCollection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return new Response(
+        JSON.stringify({ success: false, message: "Blog not found" }),
+        { status: 404 }
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ success: true, message: "Blog deleted successfully" }),
+      { status: 200 }
+    );
+  } catch (err) {
+    console.error("DELETE error:", err);
+    return new Response(
+      JSON.stringify({ success: false, message: "Server error" }),
       { status: 500 }
     );
   }

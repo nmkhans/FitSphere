@@ -7,6 +7,7 @@ export const collectionNameObj = {
     usersCollection: "users",
     specializedMembersCollection: "specializedMembers",
     equipmentsCollection: "equipments",
+    blogsCollection: "blogs",
     trainerApplicationsCollection: "trainerapplications",
     trainerAssignmentsCollection: "trainerassignments",
     blogsCollection: "blogs",
@@ -62,3 +63,5 @@ export default async function dbConnect(collectionName) {
         collection: db.collection(collectionName),
     };
 }
+
+
