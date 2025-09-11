@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -5,30 +8,58 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { Star, ThumbsUp, Filter, Search } from "lucide-react";
+import { Star, ThumbsUp, Filter, Search, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export default async function ReviewsPage() {
-  const reviewsResponse = await fetch(
-    `${process.env.NEXT_SERVER_API}/api/reviews`,
-    {
-      next: {
-        revalidate: 600,
-      },
-    }
-  );
+export default function ReviewsPage() {
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!reviewsResponse.ok) {
-    throw new Error(
-      `Failed to fetch reviews: ${reviewsResponse.status}`
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reviewsResponse = await fetch('/api/reviews');
+        
+        if (!reviewsResponse.ok) {
+          throw new Error(`Failed to fetch reviews: ${reviewsResponse.status}`);
+        }
+        
+        const { data } = await reviewsResponse.json();
+        setReviews(data || []);
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
     );
   }
 
-  const { data: reviews } = await reviewsResponse.json();
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">Error loading reviews: {error}</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
 
-  const averageRating =
-    reviews.reduce((sum, review) => sum + review.rating, 0) /
-    reviews.length;
+  const averageRating = reviews.length > 0 
+    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    : 0;
 
   return (
     <div className="min-h-screen bg-background">

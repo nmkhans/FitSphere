@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import { Loader2, ArrowLeft, Clock, CheckCircle, XCircle, RefreshCw, ExternalLink, Users, Heart, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
-const TrainerApplicationStatusPage = () => {
+const TrainerApplicationStatusContent = () => {
     const { data: session, status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -262,6 +262,14 @@ const TrainerApplicationStatusPage = () => {
                 </Card>
             </div>
         </div>
+    );
+};
+
+const TrainerApplicationStatusPage = () => {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+            <TrainerApplicationStatusContent />
+        </Suspense>
     );
 };
 

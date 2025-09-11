@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -133,10 +134,12 @@ export default function MyClients() {
           <Card key={client._id}>
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
-                <img
-                  src={client.image}
+                <Image
+                  src={client.image || "/Images/happy-smiling-man-is-doing-exercises-with-training-apparatus-dark-gym-club.jpg"}
                   alt={client.name}
-                  className="w-12 h-12 rounded-full"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
                   <p className="text-left">{client.name}</p>
