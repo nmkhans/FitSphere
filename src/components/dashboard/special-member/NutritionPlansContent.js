@@ -150,7 +150,7 @@ const NutritionPlansContent = () => {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Utensils className="h-5 w-5 mr-2" />
-            Today's Adaptive Meal Plan
+            Today&apos;s Adaptive Meal Plan
           </CardTitle>
           <CardDescription>Tuesday, September 9, 2025</CardDescription>
         </CardHeader>

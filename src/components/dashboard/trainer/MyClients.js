@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Swal from "sweetalert2";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 export default function MyClients() {
   const { data: session } = useSession();
@@ -40,7 +41,7 @@ export default function MyClients() {
     if (session?.user?.email) {
       setLoading(true);
       fetch(
-        `${BASE_URL}/api/users?assignedTrainer=${encodeURIComponent(
+        `/api/users?assignedTrainer=${encodeURIComponent(
           session.user.email
         )}`
       )
@@ -79,7 +80,7 @@ export default function MyClients() {
         };
       }
 
-      await fetch(`${BASE_URL}/api/users/${clientId}`, {
+      await fetch(`/api/users/${clientId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -94,7 +95,7 @@ export default function MyClients() {
 
     //   Refresh list
       const updated = await fetch(
-        `${BASE_URL}/api/users?assignedTrainer=${encodeURIComponent(
+        `/api/users?assignedTrainer=${encodeURIComponent(
           session?.user?.email
         )}`
       ).then((res) => res.json());
@@ -133,10 +134,12 @@ export default function MyClients() {
           <Card key={client._id}>
             <CardHeader>
               <CardTitle className="flex items-center gap-3">
-                <img
-                  src={client.image}
+                <Image
+                  src={client.image || "/Images/happy-smiling-man-is-doing-exercises-with-training-apparatus-dark-gym-club.jpg"}
                   alt={client.name}
-                  className="w-12 h-12 rounded-full"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
                   <p className="text-left">{client.name}</p>

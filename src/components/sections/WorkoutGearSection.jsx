@@ -64,10 +64,11 @@ export default function WorkoutGearSection() {
 
   useEffect(() => {
     fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?limit=4&category=${activeCategory}`
+      `/api/products?limit=4&category=${activeCategory}`
     )
       .then((res) => res.json())
-      .then((data) => setProducts(data.products));
+      .then((data) => setProducts(data.products))
+      .catch((err) => console.error('Error fetching products:', err));
   }, [activeCategory]);
 
   // const filteredProducts = products.filter((product) => product.category === activeCategory);

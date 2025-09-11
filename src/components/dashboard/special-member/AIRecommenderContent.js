@@ -113,7 +113,7 @@ const AIRecommenderContent = () => {
         <CardHeader>
           <CardTitle className="text-lg text-purple-800">
             <Target className="h-5 w-5 inline mr-2" />
-            Today's Health Assessment
+            Today&apos;s Health Assessment
           </CardTitle>
           <CardDescription>Help our AI understand your current condition for better recommendations</CardDescription>
         </CardHeader>

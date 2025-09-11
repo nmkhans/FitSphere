@@ -180,7 +180,7 @@ const WorkoutPlansContent = () => {
       {/* Quick Tips */}
       <Card className="bg-yellow-50 border-yellow-200">
         <CardHeader>
-          <CardTitle className="text-lg text-yellow-800">💡 Today's Adaptive Fitness Tip</CardTitle>
+          <CardTitle className="text-lg text-yellow-800">💡 Today&apos;s Adaptive Fitness Tip</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-yellow-700">

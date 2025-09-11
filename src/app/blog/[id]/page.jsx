@@ -3,29 +3,28 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const BlogDetailPage = async ({ params }) => {
-  const { id } = await params;
+    const { id } = await params;
 
-  console.log("Blog ID:", id);
+    console.log("Blog ID:", id);
 
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${id}`,
-      {
-        cache: "no-store",
-      }
-    );
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/api/blogs/${id}`, {
+            cache: "no-store",
+        });
 
-    if (!res.ok) {
-      return notFound();
-    }
+        if (!res.ok) {
+            return notFound();
+        }
 
-    const result = await res.json();
+        const result = await res.json();
 
-    if (!result.success || !result.data) {
-      return notFound();
-    }
+        if (!result.success || !result.data) {
+            return notFound();
+        }
 
-    const blog = result.data;
+        const blog = result.data;
+
 
     return (
       <div className="max-w-4xl mx-auto p-4">

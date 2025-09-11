@@ -1,6 +1,7 @@
 "use client";
 
 import { Dumbbell } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
     return (
@@ -41,14 +42,14 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="/blog" className="hover:text-primary transition-colors">
+                                <Link href="/blog" className="hover:text-primary transition-colors">
                                     Blog
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="/review" className="hover:text-primary transition-colors">
+                                <Link href="/review" className="hover:text-primary transition-colors">
                                     Reviews
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -93,7 +94,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="border-t border-black-primary mt-8 pt-8 text-center text-sub-text text-sm sm:text-base">
-                    <p>&copy; 2024 FitSphere. All rights reserved.</p>
+                    <p>© 2024 FitSphere. All rights reserved.</p>
                 </div>
             </div>
         </footer>

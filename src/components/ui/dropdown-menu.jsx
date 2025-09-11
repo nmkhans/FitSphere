@@ -94,6 +94,8 @@ const SimpleDropdown = ({ trigger, children, className }) => {
     }
   }, [])
 
+  const closeDropdown = () => setIsOpen(false)
+
   return (
     <div ref={dropdownRef} className={cn("relative inline-block", className)}>
       <div onClick={() => setIsOpen(!isOpen)}>
@@ -107,7 +109,7 @@ const SimpleDropdown = ({ trigger, children, className }) => {
       </div>
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-48 rounded-md border bg-popover shadow-lg animate-in fade-in-0 zoom-in-95 z-50">
-          <div className="p-1">
+          <div className="p-1" onClick={closeDropdown}>
             {children}
           </div>
         </div>
@@ -119,7 +121,7 @@ const SimpleDropdown = ({ trigger, children, className }) => {
 const DropdownItem = ({ children, onClick, className }) => (
   <div
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+      "relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-3 py-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
       className
     )}
     onClick={onClick}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Crown } from "lucide-react";
+import { Check, Crown, Loader2 } from "lucide-react";
 import MembershipModal from "./MembershipModal";
 
 const pricingPlans = [
@@ -82,7 +82,7 @@ const pricingPlans = [
   },
 ];
 
-export default function MembershipCards() {
+function MembershipCardsContent() {
   const [open, setOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const { data: session } = useSession();
@@ -265,5 +265,13 @@ export default function MembershipCards() {
         />
       )}
     </section>
+  );
+}
+
+export default function MembershipCards() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+      <MembershipCardsContent />
+    </Suspense>
   );
 }

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import Image from "next/image";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -135,7 +136,8 @@ const BlogPage = () => {
                         className="h-9 px-6 bg-green-primary hover:bg-green-dark text-lg text-black-primary shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:scale-105">
                         go
                     </Button>
-              </div>
+            </div>
+       
             </CardContent>
           </Card>
 
@@ -158,3 +160,4 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
+

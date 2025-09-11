@@ -1,11 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dumbbell, Menu, X, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Dumbbell, Menu, X, Clock, CheckCircle, XCircle, ChevronDown, Users, Heart } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import {
+  SimpleDropdown,
+  DropdownItem
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
     const { data: session, status } = useSession();
@@ -18,6 +22,7 @@ export default function Navbar() {
         const fetchApplicationStatus = async () => {
             if (session && 
                 session.user.role !== "trainer" && 
+                session.user.role !== "special-need-trainer" &&
                 session.user.role !== "admin" && 
                 !session.user.membershipType) {
                 try {
@@ -45,6 +50,8 @@ export default function Navbar() {
                 return "/dashboard/admin";
             case "trainer":
                 return "/dashboard/trainer";
+            case "special-need-trainer":
+                return "/dashboard/trainer";
             case "special-need":
                 return "/dashboard/special-member";
             case "premium-member":
@@ -67,7 +74,7 @@ export default function Navbar() {
             return;
         }
         
-        if (userRole === "trainer") {
+        if (userRole === "trainer" || userRole === "special-need-trainer") {
             console.log("Trainer - navigating directly to trainer dashboard");
             router.push("/dashboard/trainer");
             return;
@@ -156,6 +163,7 @@ export default function Navbar() {
     const renderTrainerButton = (isMobile = false) => {
         // Don't show anything for trainers, admins, or users with memberships
         if (session?.user?.role === "trainer" || 
+            session?.user?.role === "special-need-trainer" ||
             session?.user?.role === "admin" || 
             session?.user?.membershipType) {
             return null;
@@ -163,80 +171,82 @@ export default function Navbar() {
 
         const baseClasses = isMobile 
             ? "block text-lg font-medium transition-colors duration-200 py-2"
-            : "hidden md:flex";
+            : "hidden xl:flex";
 
         if (!applicationStatus?.hasApplication) {
-            // No application - show Apply as Trainer button
+            // No application - show Apply as Trainer dropdown
             if (isMobile) {
                 return (
-                    <Link
-                        href="/apply-trainer"
-                        onClick={closeMobileMenu}
-                        className={`${baseClasses} text-green-600 hover:text-green-700`}>
-                        Apply as Trainer
-                    </Link>
+                    <div className="flex flex-col space-y-2 py-2">
+                        <Link
+                            href="/apply-trainer?type=gym"
+                            onClick={closeMobileMenu}
+                            className={`${baseClasses} text-green-600 hover:text-green-700 flex items-center gap-2`}>
+                            <Users className="h-4 w-4" />
+                            Apply as Gym Trainer
+                        </Link>
+                        <Link
+                            href="/apply-trainer?type=special-need"
+                            onClick={closeMobileMenu}
+                            className={`${baseClasses} text-blue-600 hover:text-blue-700 flex items-center gap-2`}>
+                            <Heart className="h-4 w-4" />
+                            Apply as Special Need Trainer
+                        </Link>
+                    </div>
                 );
             }
             return (
-                <Link href="/apply-trainer">
-                    <Button 
-                        variant="outline" 
-                        className={`${baseClasses} bg-green-600 hover:bg-green-700 text-white border-green-600`}
-                    >
-                        Apply as Trainer
-                    </Button>
-                </Link>
+                <SimpleDropdown
+                    trigger={
+                        <Button 
+                            variant="outline" 
+                            className={`${baseClasses} bg-green-600 hover:bg-green-700 text-white border-green-600`}
+                        >
+                            Apply as Trainer
+                        </Button>
+                    }
+                >
+                    <Link href="/apply-trainer?type=gym">
+                        <DropdownItem>
+                            <Users className="h-4 w-4" />
+                            Gym Trainer
+                        </DropdownItem>
+                    </Link>
+                    <Link href="/apply-trainer?type=special-need">
+                        <DropdownItem>
+                            <Heart className="h-4 w-4" />
+                            Special Need Trainer
+                        </DropdownItem>
+                    </Link>
+                </SimpleDropdown>
             );
         }
 
-        // Has application - show status
-        const { applicationStatus: status } = applicationStatus;
-        let statusText, statusColor, statusIcon;
-
-        switch (status) {
-            case "pending":
-                statusText = "Application Pending";
-                statusColor = isMobile ? "text-yellow-600 hover:text-yellow-700" : "bg-yellow-100 text-yellow-800 border-yellow-600";
-                statusIcon = Clock;
-                break;
-            case "approved":
-                statusText = "Application Approved";
-                statusColor = isMobile ? "text-green-600 hover:text-green-700" : "bg-green-100 text-green-800 border-green-600";
-                statusIcon = CheckCircle;
-                break;
-            case "rejected":
-                statusText = "Application Rejected";
-                statusColor = isMobile ? "text-red-600 hover:text-red-700" : "bg-red-100 text-red-800 border-red-600";
-                statusIcon = XCircle;
-                break;
-            default:
-                return null;
-        }
-
-        const IconComponent = statusIcon;
-
+        // Has application - show Track Status button
+        const { applicationStatus: status, trainerType } = applicationStatus;
+        
         if (isMobile) {
             return (
                 <Link
-                    href="/apply-trainer"
+                    href="/trainer-status"
                     onClick={closeMobileMenu}
-                    className={`${baseClasses} ${statusColor}`}>
+                    className={`${baseClasses} text-blue-600 hover:text-blue-700`}>
                     <div className="flex items-center gap-2">
-                        <IconComponent className="h-4 w-4" />
-                        {statusText}
+                        <Clock className="h-4 w-4" />
+                        Track Application Status
                     </div>
                 </Link>
             );
         }
 
         return (
-            <Link href="/apply-trainer">
+            <Link href="/trainer-status">
                 <Button 
                     variant="outline" 
-                    className={`${baseClasses} ${statusColor} cursor-pointer`}
+                    className={`${baseClasses} bg-blue-600 hover:bg-blue-700 text-white border-blue-600 cursor-pointer`}
                 >
-                    <IconComponent className="h-4 w-4 mr-2" />
-                    {statusText}
+                    <Clock className="h-4 w-4 mr-2" />
+                    Track Status
                 </Button>
             </Link>
         );
@@ -254,7 +264,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden md:flex items-center space-x-8 **:font-lato">
+                        <div className="hidden xl:flex items-center space-x-8 **:font-lato">
                             <Link
                                 href="/"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
@@ -298,24 +308,24 @@ export default function Navbar() {
                                 <>
                                     <Button 
                                         variant="outline" 
-                                        className="hidden md:flex"
+                                        className="hidden xl:flex"
                                         onClick={navigateToDashboard}
                                     >
                                         Dashboard
                                     </Button>
                                     {renderTrainerButton()}
-                                    <Button onClick={() => signOut()}>Logout</Button>
+                                    <Button className="hidden xl:flex" onClick={() => signOut()}>Logout</Button>
                                 </>
                             ) : (
                                 <Link href={"/login"}>
-                                    <Button>Login</Button>
+                                    <Button className="hidden xl:flex">Login</Button>
                                 </Link>
                             )}
 
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={toggleMobileMenu}
-                                className="md:hidden p-2 rounded-md text-foreground hover:text-primary hover:bg-accent/10 transition-colors duration-200 cursor-pointer"
+                                className="xl:hidden p-2 rounded-md text-foreground hover:text-primary hover:bg-accent/10 transition-colors duration-200 cursor-pointer"
                                 aria-label="Toggle mobile menu">
                                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </button>
@@ -325,11 +335,11 @@ export default function Navbar() {
             </nav>
 
             {/* Mobile Sidebar Overlay */}
-            {isMobileMenuOpen && <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={closeMobileMenu} />}
+            {isMobileMenuOpen && <div className="fixed inset-0 bg-black/50 z-40 xl:hidden" onClick={closeMobileMenu} />}
 
             {/* Mobile Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-full w-80 max-w-sm bg-card border-l border-border z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+                className={`fixed top-0 right-0 h-full w-80 max-w-sm bg-card border-l border-border z-50 transform transition-transform duration-300 ease-in-out xl:hidden ${
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
                 <div className="flex flex-col h-full">
@@ -404,6 +414,29 @@ export default function Navbar() {
                                 className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                 Reviews
                             </Link>
+                            
+                            {/* Authentication Actions */}
+                            {status === "authenticated" ? (
+                                <div className="pt-4 border-t border-border">
+                                    <button
+                                        onClick={() => {
+                                            signOut();
+                                            closeMobileMenu();
+                                        }}
+                                        className="block w-full text-left text-lg font-medium text-red-600 hover:text-red-700 transition-colors duration-200 py-2">
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="pt-4 border-t border-border">
+                                    <Link
+                                        href="/login"
+                                        onClick={closeMobileMenu}
+                                        className="block text-lg font-medium text-primary hover:text-primary/80 transition-colors duration-200 py-2">
+                                        Login
+                                    </Link>
+                                </div>
+                            )}
                         </nav>
                     </div>
                 </div>

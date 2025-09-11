@@ -10,16 +10,29 @@ export default async function EquipmentsPage({ searchParams }) {
    const page = parseInt(params?.page ?? "1", 10);
 
    // Fetch equipments from API (server-side)
-   const res = await fetch(
-     `${process.env.NEXT_PUBLIC_BASE_URL}/api/equipments?search=${search}&category=${category}&muscle=${muscle}&page=${page}`,
-     { cache: 'no-store' }
-   );
+   let equipments = [];
+   let totalPages = 1;
+   
+   try {
+     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+     const fetchUrl = baseUrl 
+       ? `${baseUrl}/api/equipments?search=${search}&category=${category}&muscle=${muscle}&page=${page}`
+       : `/api/equipments?search=${search}&category=${category}&muscle=${muscle}&page=${page}`;
+     
+     const res = await fetch(fetchUrl, { cache: 'no-store' });
 
-   if (!res.ok) {
-     throw new Error(`Failed to fetch equipments: ${res.status}`);
+     if (res.ok) {
+       const contentType = res.headers.get("content-type");
+       if (contentType && contentType.includes("application/json")) {
+         const data = await res.json();
+         equipments = data.equipments || [];
+         totalPages = data.totalPages || 1;
+       }
+     }
+   } catch (error) {
+     console.error("Error fetching equipments:", error);
+     // Continue with empty array as fallback
    }
-
-   const { equipments, totalPages } = await res.json();
 
   return (
     <section className="py-16 px-6 md:px-12 space-y-8">

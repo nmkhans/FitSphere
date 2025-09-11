@@ -9,6 +9,7 @@ export const collectionNameObj = {
     equipmentsCollection: "equipments",
     blogsCollection: "blogs",
     trainerApplicationsCollection: "trainerapplications",
+    trainerAssignmentsCollection: "trainerassignments",
     blogsCollection: "blogs",
 };
 

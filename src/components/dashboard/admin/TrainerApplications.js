@@ -33,8 +33,9 @@ import {
   Phone,
   MapPin,
   Star,
-  Award,
   User,
+  Users,
+  Heart,
 } from "lucide-react";
 
 const TrainerApplications = () => {
@@ -99,6 +100,27 @@ const TrainerApplications = () => {
       toast.error("Error updating application");
     } finally {
       setProcessing(false);
+    }
+  };
+
+  const getTrainerTypeBadge = (trainerType) => {
+    const type = trainerType || 'gym';
+    switch (type) {
+      case 'special-need':
+        return (
+          <Badge variant="outline" className="border-blue-600 text-blue-700">
+            <Heart className="w-3 h-3 mr-1" />
+            Special Need Trainer
+          </Badge>
+        );
+      case 'gym':
+      default:
+        return (
+          <Badge variant="outline" className="border-green-600 text-green-700">
+            <Users className="w-3 h-3 mr-1" />
+            Gym Trainer
+          </Badge>
+        );
     }
   };
 
@@ -203,6 +225,7 @@ const TrainerApplications = () => {
                     </CardDescription>
                   </div>
                   <div className="flex items-center gap-2">
+                    {getTrainerTypeBadge(application.trainerType)}
                     {getStatusBadge(application.status)}
                   </div>
                 </div>
@@ -217,9 +240,9 @@ const TrainerApplications = () => {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4 text-muted-foreground" />
+                    <User className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">
-                      <strong>Experience:</strong> {application.experience}
+                      <strong>Gender:</strong> {application.gender || 'Not specified'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -232,10 +255,10 @@ const TrainerApplications = () => {
 
                 <div className="mb-4">
                   <p className="text-sm text-muted-foreground mb-2">
-                    <strong>Motivation:</strong>
+                    <strong>Address:</strong>
                   </p>
                   <p className="text-sm line-clamp-2">
-                    {application.motivation}
+                    {application.address}
                   </p>
                 </div>
 
@@ -294,67 +317,39 @@ const TrainerApplications = () => {
                             <div>
                               <strong>Age:</strong> {application.age} years
                             </div>
+                            <div>
+                              <strong>Gender:</strong> {application.gender || 'Not specified'}
+                            </div>
+                            <div>
+                              <strong>Trainer Type:</strong> 
+                              <div className="mt-1">
+                                {getTrainerTypeBadge(application.trainerType)}
+                              </div>
+                            </div>
                             <div className="col-span-2">
                               <strong>Address:</strong> {application.address}
                             </div>
                           </div>
                         </div>
 
-                        {/* Professional Information */}
+                        {/* Application Information */}
                         <div>
                           <h4 className="font-semibold mb-3">
-                            Professional Information
+                            Application Information
                           </h4>
                           <div className="space-y-3 text-sm">
-                            <div>
-                              <strong>Experience:</strong>{" "}
-                              {application.experience}
-                            </div>
                             <div>
                               <strong>Specialization:</strong>{" "}
                               {application.specialization}
                             </div>
                             <div>
-                              <strong>Certifications:</strong>
-                              <p className="mt-1 text-muted-foreground">
-                                {application.certifications}
-                              </p>
+                              <strong>Applied:</strong>{" "}
+                              {formatDate(application.appliedAt)}
                             </div>
                             <div>
-                              <strong>Work Experience:</strong>
-                              <p className="mt-1 text-muted-foreground">
-                                {application.workExperience}
-                              </p>
+                              <strong>Application Type:</strong>{" "}
+                              {application.trainerType === 'special-need' ? 'Special Need Trainer' : 'Gym Trainer'}
                             </div>
-                            <div>
-                              <strong>Availability:</strong>
-                              <p className="mt-1 text-muted-foreground">
-                                {application.availability}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Additional Information */}
-                        <div>
-                          <h4 className="font-semibold mb-3">
-                            Additional Information
-                          </h4>
-                          <div className="space-y-3 text-sm">
-                            <div>
-                              <strong>Motivation:</strong>
-                              <p className="mt-1 text-muted-foreground">
-                                {application.motivation}
-                              </p>
-                            </div>
-                            {application.references && (
-                              <div>
-                                <strong>References:</strong>
-                                <p className="mt-1 text-muted-foreground">
-                                  {application.references}
-                                </p>
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>
