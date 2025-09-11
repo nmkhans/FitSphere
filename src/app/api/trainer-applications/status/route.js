@@ -23,9 +23,11 @@ export async function GET(req) {
         return NextResponse.json({ 
             hasApplication: !!application,
             applicationStatus: application?.status || null,
+            trainerType: application?.trainerType || 'gym',
             application: application ? {
                 _id: application._id,
                 status: application.status,
+                trainerType: application.trainerType || 'gym',
                 appliedAt: application.appliedAt,
                 reviewedAt: application.reviewedAt,
                 adminNotes: application.adminNotes

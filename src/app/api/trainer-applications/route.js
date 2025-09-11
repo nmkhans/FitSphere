@@ -13,7 +13,9 @@ export async function POST(req) {
         }
 
         // Prevent trainers and admins from applying
-        if (session.user.role === "trainer" || session.user.role === "admin") {
+        if (session.user.role === "trainer" || 
+            session.user.role === "special-need-trainer" || 
+            session.user.role === "admin") {
             return NextResponse.json({ error: "You are already a trainer or admin" }, { status: 400 });
         }
 
@@ -32,12 +34,19 @@ export async function POST(req) {
 
         const data = await req.json();
         
-        // Validate required fields
-        const requiredFields = [
-            'name', 'email', 'phone', 'age', 'address', 'experience', 
-            'specialization', 'certifications', 'workExperience', 
-            'availability', 'motivation'
+        // Validate trainerType
+        const trainerType = data.trainerType || 'gym'; // default to 'gym' for backward compatibility
+        if (!['gym', 'special-need'].includes(trainerType)) {
+            return NextResponse.json({ error: "Invalid trainer type" }, { status: 400 });
+        }
+        
+        // Validate required fields based on trainer type
+        const baseRequiredFields = [
+            'name', 'email', 'phone', 'age', 'gender', 'address', 'specialization'
         ];
+        
+        // Add specific fields based on trainer type - keeping it simple for special-need trainers
+        const requiredFields = [...baseRequiredFields];
         
         for (const field of requiredFields) {
             if (!data[field] || data[field].trim() === '') {
@@ -66,18 +75,14 @@ export async function POST(req) {
         const application = {
             userId: session.user.id,
             userEmail: session.user.email,
+            trainerType: trainerType,
             name: data.name,
             email: data.email,
             phone: data.phone,
             age: parseInt(data.age),
+            gender: data.gender,
             address: data.address,
-            experience: data.experience,
             specialization: data.specialization,
-            certifications: data.certifications,
-            workExperience: data.workExperience,
-            availability: data.availability,
-            motivation: data.motivation,
-            references: data.references || '',
             status: "pending",
             appliedAt: new Date(),
             reviewedAt: null,

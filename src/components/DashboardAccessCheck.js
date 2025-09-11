@@ -20,14 +20,24 @@ const DashboardAccessCheck = ({ session }) => {
       return true;
     }
 
-    // For users without membership or trainer/admin role, check if they have a trainer application
+    // For users without membership or trainer/admin role, check if they have an approved trainer application
     try {
       const response = await fetch("/api/trainer-applications/status");
       if (response.ok) {
         const data = await response.json();
-        if (data.hasApplication) {
-          console.log("Access granted - has trainer application");
-          return true; // Allow access if they have a trainer application
+        if (data.hasApplication && data.application?.status === "approved") {
+          console.log("Access granted - has approved trainer application");
+          return true; // Allow access if they have an approved trainer application
+        }
+        if (data.hasApplication && data.application?.status === "pending") {
+          console.log("Access denied - application is pending, redirecting to status");
+          // Redirect to status page for pending applications
+          router.push("/trainer-status");
+          return false;
+        }
+        if (data.hasApplication && data.application?.status === "rejected") {
+          console.log("Access granted - has rejected application, can reapply");
+          return true; // Allow access so they can reapply
         }
       }
     } catch (error) {

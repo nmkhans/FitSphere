@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import SpecializedMembersSection from "@/components/dashboard/admin/SpecializedMembersSection";
+import SpecialNeedTrainerAssignments from "@/components/dashboard/admin/SpecialNeedTrainerAssignments";
 import UpdateProfile from "@/components/dashboard/UpdateProfile";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import AllUsers from "@/components/dashboard/admin/AllUsers";
@@ -51,6 +52,8 @@ const AdminDashboard = () => {
     switch (activeSection) {
       case "specialized-members":
         return <SpecializedMembersSection />;
+      case "special-need-assignments":
+        return <SpecialNeedTrainerAssignments />;
       case "all-users":
         return <AllUsers />;
       case "trainers":
