@@ -7,7 +7,8 @@ const BlogDetailPage = async ({ params }) => {
     console.log("Blog ID:", id);
 
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogs/${id}`, {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const res = await fetch(`${baseUrl}/api/blogs/${id}`, {
             cache: "no-store",
         });
 

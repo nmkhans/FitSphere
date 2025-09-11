@@ -10,12 +10,33 @@ export default async function StorePage({ searchParams }) {
   const category = params?.category || "All";
   const sort = params?.sort || "asc";
   const page = parseInt(params?.page ?? "1", 10);
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?search=${search}&category=${category}&sort=${sort}&page=${page}`,
-    { cache: "no-store" }
-  );
+  
+  let products = [];
+  let totalPages = 1;
+  
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const res = await fetch(
+      `${baseUrl}/api/products?search=${search}&category=${category}&sort=${sort}&page=${page}`,
+      { cache: "no-store" }
+    );
 
-  const { products, totalPages } = await res.json();
+    if (!res.ok) {
+      console.error('Failed to fetch products:', res.status, res.statusText);
+      // Fall back to empty data
+      products = [];
+      totalPages = 1;
+    } else {
+      const data = await res.json();
+      products = data.products || [];
+      totalPages = data.totalPages || 1;
+    }
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    // Fall back to empty data
+    products = [];
+    totalPages = 1;
+  }
 
   return (
     <section className="py-16 px-6 md:px-12 space-y-8 relative">

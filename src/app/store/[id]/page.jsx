@@ -10,16 +10,25 @@ export default async function ProductPage({ params }) {
   const { id } = awaitedParams;
 
   // Fetch product by ID from API
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`,
-    {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const fetchUrl = baseUrl 
+      ? `${baseUrl}/api/products/${id}`
+      : `/api/products/${id}`;
+    
+    const res = await fetch(fetchUrl, {
       cache: "no-store", // always get fresh data
+    });
+
+    if (!res.ok) return notFound();
+
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("API returned non-JSON response for product:", id);
+      return notFound();
     }
-  );
 
-  if (!res.ok) return notFound();
-
-  const product = await res.json();
+    const product = await res.json();
 
   return (
     <section className="max-w-7xl mx-auto px-6 md:px-12 py-16">
@@ -120,4 +129,8 @@ export default async function ProductPage({ params }) {
       )}
     </section>
   );
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return notFound();
+  }
 }
