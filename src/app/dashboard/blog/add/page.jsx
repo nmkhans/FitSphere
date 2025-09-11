@@ -11,18 +11,20 @@ import Swal from "sweetalert2";
 
 export default function AddBlogForm() {
   const { data: session } = useSession();
-  // console.log(session);
-  
+
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
-
   const { register, handleSubmit, reset } = useForm();
+  // console.log(session);
+  if (!session) {
+    return <div>Loading...</div>;
+  }
 
- const onSubmit = async (data) => {
+
+  const onSubmit = async (data) => {
     const blogData = { ...data, imageUrls };
 
     console.log(blogData);
-    
 
     try {
       const res = await fetch("/api/blogs", {
@@ -35,51 +37,51 @@ export default function AddBlogForm() {
       console.log(result);
 
       if (result.success) {
-       Swal.fire("Created!", "Blog has been created.", "success");
-        reset();          // clear form
+        Swal.fire("Created!", "Blog has been created.", "success");
+        reset(); // clear form
         setImageUrls([]); // clear images
       } else {
-          Swal.fire("Error!", "error in blog creation!", "error");
+        Swal.fire("Error!", "error in blog creation!", "error");
       }
     } catch (err) {
       console.error(err);
-       Swal.fire("Error!", "Something went wrong!", "error");
+      Swal.fire("Error!", "Something went wrong!", "error");
     }
   };
 
-const handleImageUpload = async (e) => {
-  if (!e.target.files) return;
-  const files = Array.from(e.target.files);
+  const handleImageUpload = async (e) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files);
 
-  setUploading(true);
+    setUploading(true);
 
-  const uploadedUrls = [];
+    const uploadedUrls = [];
 
-  for (const file of files) {
-    const formData = new FormData();
-    formData.append("image", file);
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("image", file);
 
-    try {
-      const res = await fetch(
-        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_KEY}`,
-        {
-          method: "POST",
-          body: formData,
+      try {
+        const res = await fetch(
+          `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMAGE_UPLOAD_KEY}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await res.json();
+        if (data.success) {
+          uploadedUrls.push(data.data.url);
         }
-      );
-
-      const data = await res.json();
-      if (data.success) {
-        uploadedUrls.push(data.data.url);
+      } catch (err) {
+        console.error("Upload failed", err);
       }
-    } catch (err) {
-      console.error("Upload failed", err);
     }
-  }
 
-  setImageUrls((prev) => [...prev, ...uploadedUrls]);
-  setUploading(false);
-};
+    setImageUrls((prev) => [...prev, ...uploadedUrls]);
+    setUploading(false);
+  };
 
   const handleRemoveImage = (url) => {
     setImageUrls((prev) => prev.filter((u) => u !== url));
@@ -93,24 +95,25 @@ const handleImageUpload = async (e) => {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
-            <Label>name</Label>
+            <Label>Name</Label>
             <Input
-              {...register("name", { required: false })}
+              {...register("name", { required: true })}
               type="text"
               defaultValue={session?.user?.name || ""}
               readOnly
               className="bg-muted"
             />
           </div>
-      <div className="space-y-2">
-        <Label>Email</Label>
-        <Input
-          type="text"
-          defaultValue={session?.user?.email || ""} 
-          readOnly
-          {...register("email", { required: false })}
-        />
-      </div>
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <Input
+              {...register("email", { required: true })}
+              type="text"
+              defaultValue={session?.user?.email || ""}
+              readOnly
+              className="bg-muted"
+            />
+          </div>
 
           <div className="space-y-2">
             <Label>Blog Title</Label>

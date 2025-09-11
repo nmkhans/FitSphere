@@ -37,33 +37,31 @@ const ManageStory = () => {
 
   // Fetch
 
-  const fetchBlogs = async ({ queryKey }) => {
-    const [_key, email] = queryKey;
-
-    try {
-      const res = await fetch(`/api/blogs?email=${email}`);
-      const data = await res.json();
-      console.log(data);
-
-      if (data.success) {
-        return data.blogs;
-      } else {
-        throw new Error(data.message || "Failed to fetch blogs");
-      }
-    } catch (err) {
-      console.error("Fetch Blogs Error:", err);
-      throw err;
+const fetchBlogs = async ({ queryKey }) => {
+  const [_key, email] = queryKey;
+  try {
+    const res = await fetch(`/api/blogs?email=${email}`);
+    const data = await res.json();
+    // console.log("Fetched Blogs Data:", data);
+    
+    if (data.success) {
+      return data.data;
+    } else {
+      throw new Error(data.message || "Failed to fetch blogs");
     }
-  };
-
+  } catch (err) {
+    console.error("Fetch Blogs Error:", err);
+    throw err;
+  }
+};
   const {
     data: stories = [],
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["storiesByEmail", email], // email depend kore
+    queryKey: ["storiesByEmail", email],
     queryFn: fetchBlogs,
-    enabled: !!email, // only run when email thake
+    enabled: !!email, 
   });
 
   // Pagination calculation
@@ -94,8 +92,9 @@ const deleteBlog = async (id) => {
 
       if (data.success) {
         Swal.fire("Deleted!", "Story has been deleted.", "success");
+        queryClient.invalidateQueries(["storiesByEmail", email]); // Refetch stories
       } else {
-        Swal.fire("Error!", data.message || "Failed to delete.", "error");
+        Swal.fire("Error!", data.message || "Failed to delete story.", "error");
       }
     }
   } catch (err) {
@@ -103,7 +102,6 @@ const deleteBlog = async (id) => {
     Swal.fire("Error!", "Something went wrong!", "error");
   }
 };
-
 
   if (isLoading) {
     return (
@@ -150,7 +148,7 @@ const deleteBlog = async (id) => {
                 </CardHeader>
                 <CardFooter className="flex justify-end gap-2">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/dashboard/edit-story/${story._id}`}>
+                    <Link href={`/dashboard/blog/${story._id}`}>
                       Edit
                     </Link>
                   </Button>

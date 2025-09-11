@@ -4,42 +4,64 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
+import { useParams, useRouter} from "next/navigation";
+import Swal from "sweetalert2";
 
-export default function AddBlogForm() {
+export default function EditBlogForm() {
   const { data: session } = useSession();
-  // console.log(session);
+  const router = useRouter();
+ 
+  const params = useParams();
+  const blogId = params.id;
+  // console.log(blogId);
   
+
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const { register, handleSubmit, reset, setValue } = useForm();
 
-  const { register, handleSubmit, reset } = useForm();
+  useEffect(() => {
+    // Fetch blog data by ID
+    async function fetchBlog() {
+      if (!blogId) return;
+      const res = await fetch(`/api/blogs/${blogId}`);
+      const result = await res.json();
+      // console.log(result);
+      
+      if (result.success && result.data) {
+        const blog = result.data;
+          console.log(blog);
+        setValue("title", blog.title);
+        setValue("content", blog.content);
+        setValue("name", blog.name);
+        setValue("email", blog.email);
+        setImageUrls(blog.imageUrls || []);
+      }
+    }
+    fetchBlog();
+  }, [blogId, setValue]);
 
- const onSubmit = async (data) => {
-    const blogData = { ...data, imageUrls };
-
+  const onSubmit = async (data) => {
+    const blogData = { ...data, imageUrls, id: blogId };
     try {
-      const res = await fetch("/api/blogs", {
-        method: "POST",
+      const res = await fetch(`/api/blogs/${blogId}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blogData),
       });
-
       const result = await res.json();
-      console.log(result);
-
       if (result.success) {
-        alert("Blog created!");
-        reset();          // clear form
-        setImageUrls([]); // clear images
+         Swal.fire("Updated!", "Blog has been updated.", "success");
+        router.push("/dashboard/blog"); // redirect after update
       } else {
-        alert("Error creating blog");
+        Swal.fire("Error!", "Failed to update blog.", "error");
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong.");
+      Swal.fire("Error!", "Something went wrong.", "error");
     }
   };
 
@@ -47,7 +69,6 @@ export default function AddBlogForm() {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
     setUploading(true);
-    // mock upload
     setTimeout(() => {
       const urls = files.map((f) => URL.createObjectURL(f));
       setImageUrls((prev) => [...prev, ...urls]);
@@ -59,33 +80,37 @@ export default function AddBlogForm() {
     setImageUrls((prev) => prev.filter((u) => u !== url));
   };
 
+  if (!session) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Card className="max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl">Add a Blog</CardTitle>
+        <CardTitle className="text-2xl">Edit Blog</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
-            <Label>name</Label>
+            <Label>Name</Label>
             <Input
-              {...register("name", { required: false })}
+              {...register("name", { required: true })}
               type="text"
               defaultValue={session?.user?.name || ""}
               readOnly
               className="bg-muted"
             />
           </div>
-      <div className="space-y-2">
-        <Label>Email</Label>
-        <Input
-          type="text"
-          defaultValue={session?.user?.email || ""} 
-          readOnly
-          {...register("email", { required: false })}
-        />
-      </div>
-
+          <div className="space-y-2">
+            <Label>Email</Label>
+            <Input
+              {...register("email", { required: true })}
+              type="text"
+              defaultValue={session?.user?.email || ""}
+              readOnly
+              className="bg-muted"
+            />
+          </div>
           <div className="space-y-2">
             <Label>Blog Title</Label>
             <Input
@@ -94,7 +119,6 @@ export default function AddBlogForm() {
               placeholder="Enter Blog title"
             />
           </div>
-
           <div className="space-y-2">
             <Label>Blog Content</Label>
             <Textarea
@@ -103,7 +127,6 @@ export default function AddBlogForm() {
               className="h-40"
             />
           </div>
-
           {imageUrls.length > 0 && (
             <div>
               <p className="font-medium mb-2">Current Images:</p>
@@ -129,7 +152,6 @@ export default function AddBlogForm() {
               </div>
             </div>
           )}
-
           <div className="space-y-2">
             <Label>Upload Images</Label>
             <Input
@@ -142,9 +164,8 @@ export default function AddBlogForm() {
               <p className="text-sm text-blue-500">Uploading images...</p>
             )}
           </div>
-
           <Button type="submit" className="w-full" disabled={uploading}>
-            Submit Blog
+            Update Blog
           </Button>
         </form>
       </CardContent>
