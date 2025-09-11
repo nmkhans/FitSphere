@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Swal from "sweetalert2";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || '';
 
 export default function MyClients() {
   const { data: session } = useSession();
@@ -41,7 +41,7 @@ export default function MyClients() {
     if (session?.user?.email) {
       setLoading(true);
       fetch(
-        `${BASE_URL}/api/users?assignedTrainer=${encodeURIComponent(
+        `/api/users?assignedTrainer=${encodeURIComponent(
           session.user.email
         )}`
       )
@@ -80,7 +80,7 @@ export default function MyClients() {
         };
       }
 
-      await fetch(`${BASE_URL}/api/users/${clientId}`, {
+      await fetch(`/api/users/${clientId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -95,7 +95,7 @@ export default function MyClients() {
 
     //   Refresh list
       const updated = await fetch(
-        `${BASE_URL}/api/users?assignedTrainer=${encodeURIComponent(
+        `/api/users?assignedTrainer=${encodeURIComponent(
           session?.user?.email
         )}`
       ).then((res) => res.json());

@@ -8,15 +8,29 @@ import BackButton from "./BackButton";
 
 // ✅ Fetch one equipment with ISR (revalidate every 60s)
 async function getEquipment(id) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/equipments/${id}`,
-    {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const fetchUrl = baseUrl 
+      ? `${baseUrl}/api/equipments/${id}`
+      : `/api/equipments/${id}`;
+    
+    const res = await fetch(fetchUrl, {
       next: { revalidate: 60 },
-    }
-  );
+    });
 
-  if (!res.ok) return null;
-  return res.json();
+    if (!res.ok) return null;
+    
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("API returned non-JSON response for equipment:", id);
+      return null;
+    }
+    
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching equipment:", error);
+    return null;
+  }
 }
 
 export default async function EquipmentDetailsPage({ params, searchParams }) {
