@@ -171,7 +171,7 @@ export default function Navbar() {
 
         const baseClasses = isMobile 
             ? "block text-lg font-medium transition-colors duration-200 py-2"
-            : "hidden md:flex";
+            : "hidden xl:flex";
 
         if (!applicationStatus?.hasApplication) {
             // No application - show Apply as Trainer dropdown
@@ -264,7 +264,7 @@ export default function Navbar() {
                         </div>
 
                         {/* Desktop Navigation */}
-                        <div className="hidden md:flex items-center space-x-8 **:font-lato">
+                        <div className="hidden xl:flex items-center space-x-8 **:font-lato">
                             <Link
                                 href="/"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
@@ -308,24 +308,24 @@ export default function Navbar() {
                                 <>
                                     <Button 
                                         variant="outline" 
-                                        className="hidden md:flex"
+                                        className="hidden xl:flex"
                                         onClick={navigateToDashboard}
                                     >
                                         Dashboard
                                     </Button>
                                     {renderTrainerButton()}
-                                    <Button onClick={() => signOut()}>Logout</Button>
+                                    <Button className="hidden xl:flex" onClick={() => signOut()}>Logout</Button>
                                 </>
                             ) : (
                                 <Link href={"/login"}>
-                                    <Button>Login</Button>
+                                    <Button className="hidden xl:flex">Login</Button>
                                 </Link>
                             )}
 
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={toggleMobileMenu}
-                                className="md:hidden p-2 rounded-md text-foreground hover:text-primary hover:bg-accent/10 transition-colors duration-200 cursor-pointer"
+                                className="xl:hidden p-2 rounded-md text-foreground hover:text-primary hover:bg-accent/10 transition-colors duration-200 cursor-pointer"
                                 aria-label="Toggle mobile menu">
                                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </button>
@@ -335,11 +335,11 @@ export default function Navbar() {
             </nav>
 
             {/* Mobile Sidebar Overlay */}
-            {isMobileMenuOpen && <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={closeMobileMenu} />}
+            {isMobileMenuOpen && <div className="fixed inset-0 bg-black/50 z-40 xl:hidden" onClick={closeMobileMenu} />}
 
             {/* Mobile Sidebar */}
             <div
-                className={`fixed top-0 right-0 h-full w-80 max-w-sm bg-card border-l border-border z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+                className={`fixed top-0 right-0 h-full w-80 max-w-sm bg-card border-l border-border z-50 transform transition-transform duration-300 ease-in-out xl:hidden ${
                     isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 }`}>
                 <div className="flex flex-col h-full">
@@ -414,6 +414,29 @@ export default function Navbar() {
                                 className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                 Reviews
                             </Link>
+                            
+                            {/* Authentication Actions */}
+                            {status === "authenticated" ? (
+                                <div className="pt-4 border-t border-border">
+                                    <button
+                                        onClick={() => {
+                                            signOut();
+                                            closeMobileMenu();
+                                        }}
+                                        className="block w-full text-left text-lg font-medium text-red-600 hover:text-red-700 transition-colors duration-200 py-2">
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="pt-4 border-t border-border">
+                                    <Link
+                                        href="/login"
+                                        onClick={closeMobileMenu}
+                                        className="block text-lg font-medium text-primary hover:text-primary/80 transition-colors duration-200 py-2">
+                                        Login
+                                    </Link>
+                                </div>
+                            )}
                         </nav>
                     </div>
                 </div>
