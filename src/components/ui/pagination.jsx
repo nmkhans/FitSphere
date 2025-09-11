@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { ChevronLeft, ChevronRight } from "lucide-react"; 
 
 function Pagination({ className, ...props }) {
   return (
@@ -49,19 +50,25 @@ function PaginationLink({ className, isActive, ...props }) {
 function PaginationPrevious({ className, ...props }) {
   return (
     <PaginationLink
-      className={cn("px-2.5", className)}
+      className={cn("px-2.5 flex items-center", className)}
       {...props}
-    />
-  )
+    >
+      <ChevronLeft className="w-4 h-4" />
+      <span className="sr-only">Previous</span>
+    </PaginationLink>
+  );
 }
 
 function PaginationNext({ className, ...props }) {
   return (
     <PaginationLink
-      className={cn("px-2.5", className)}
+      className={cn("px-2.5 flex items-center", className)}
       {...props}
-    />
-  )
+    >
+      <ChevronRight className="w-4 h-4" />
+      <span className="sr-only">Next</span>
+    </PaginationLink>
+  );
 }
 
 export {

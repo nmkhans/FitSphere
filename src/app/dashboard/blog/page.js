@@ -104,35 +104,33 @@ const deleteBlog = async (id) => {
 };
 
   if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Card key={i} className="shadow-sm">
-            <Skeleton className="h-48 w-full rounded-t-lg" />
-            <CardContent className="p-4 space-y-2">
-              <Skeleton className="h-6 w-2/3" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-              <Skeleton className="h-8 w-20 mt-3" />
-            </CardContent>
-          </Card>
-        ))}
+  return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your blog...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="px-4 py-6 max-w-7xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Manage Your Stories</h2>
+<div className="flex justify-between items-center mb-6">
+      <h2 className="text-2xl font-bold mb-6">Manage Your Blog</h2>
+      <Button>
+        <Link href="/dashboard/blog/add">Create New Blog</Link>
+      </Button>
+</div>
 
       {stories.length === 0 ? (
-        <p className="text-gray-600">No Stories Found.</p>
+        <p className="text-gray-600">No Blogs Found.</p>
       ) : (
         <>
           {/* Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentData.map((story) => (
-              <Card key={story._id} className="shadow-sm">
+              <Card key={story._id} className="shadow-sm border-none">
                 {story.imageUrls?.[0] && (
                   <img
                     src={story.imageUrls[0]}

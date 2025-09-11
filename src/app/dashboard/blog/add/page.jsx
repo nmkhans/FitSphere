@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 export default function AddBlogForm() {
   const { data: session } = useSession();
@@ -19,7 +20,6 @@ export default function AddBlogForm() {
   if (!session) {
     return <div>Loading...</div>;
   }
-
 
   const onSubmit = async (data) => {
     const blogData = { ...data, imageUrls };
@@ -88,9 +88,14 @@ export default function AddBlogForm() {
   };
 
   return (
-    <Card className="max-w-3xl mx-auto my-4">
+    <Card className="max-w-3xl mx-auto my-4 border-none shadow-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Add a Blog</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl">Add a Blog</CardTitle>
+          <Button>
+            <Link href="/dashboard/blog">All Blogs</Link>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

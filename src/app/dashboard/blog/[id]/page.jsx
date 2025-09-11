@@ -7,17 +7,17 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { useParams, useRouter} from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 export default function EditBlogForm() {
   const { data: session } = useSession();
   const router = useRouter();
- 
+
   const params = useParams();
   const blogId = params.id;
   // console.log(blogId);
-  
 
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -30,10 +30,10 @@ export default function EditBlogForm() {
       const res = await fetch(`/api/blogs/${blogId}`);
       const result = await res.json();
       // console.log(result);
-      
+
       if (result.success && result.data) {
         const blog = result.data;
-          console.log(blog);
+        console.log(blog);
         setValue("title", blog.title);
         setValue("content", blog.content);
         setValue("name", blog.name);
@@ -54,7 +54,7 @@ export default function EditBlogForm() {
       });
       const result = await res.json();
       if (result.success) {
-         Swal.fire("Updated!", "Blog has been updated.", "success");
+        Swal.fire("Updated!", "Blog has been updated.", "success");
         router.push("/dashboard/blog"); // redirect after update
       } else {
         Swal.fire("Error!", "Failed to update blog.", "error");
@@ -85,9 +85,14 @@ export default function EditBlogForm() {
   }
 
   return (
-    <Card className="max-w-3xl mx-auto">
+    <Card className="max-w-3xl mx-auto border-none shadow-sm my-4">
       <CardHeader>
-        <CardTitle className="text-2xl">Edit Blog</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl">Edit Blog</CardTitle>
+          <Button>
+            <Link href="/dashboard/blog">All Blogs</Link>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
