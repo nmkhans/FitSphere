@@ -57,7 +57,7 @@ export default function AddToCartButton({ product }) {
   };
 
   return (
-    <Button onClick={addToCart} variant="secondary" className="cursor-pointer">
+    <Button onClick={addToCart} variant="secondary" className="cursor-pointer w-full">
       Add to Cart
     </Button>
   );

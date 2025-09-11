@@ -7,7 +7,7 @@ export async function GET(req) {
     const category = searchParams.get("category") || "All";
     const sort = searchParams.get("sort") || "asc"; // asc or desc
     const page = parseInt(searchParams.get("page")) || 1;
-    const ITEMS_PER_PAGE = 12;
+    const ITEMS_PER_PAGE = parseInt(searchParams.get("limit")) || 12;
 
     const { collection: productsCollection } = await dbConnect("products");
 
@@ -31,6 +31,23 @@ export async function GET(req) {
       .toArray();
 
     return new Response(JSON.stringify({ products, totalPages }), {
+      status: 200,
+    });
+  } catch (err) {
+    console.error(err);
+    return new Response(
+      JSON.stringify({ success: false, message: "Server error" }),
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req) {
+  try {
+    const data = await req.json();
+    const { collection: productsCollection } = await dbConnect("products");
+    const result = await productsCollection.insertOne(data);
+    return new Response(JSON.stringify({ success: true, result }), {
       status: 200,
     });
   } catch (err) {

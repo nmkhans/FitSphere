@@ -276,6 +276,11 @@ export default function Navbar() {
                                 Equipments
                             </Link>
                             <Link
+                                href="/store"
+                                className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
+                                Store
+                            </Link>
+                            <Link
                                 href="/exercise-recommender"
                                 className="text-foreground hover:text-primary transition-all duration-300 hover:scale-105">
                                 AI Trainer
@@ -378,6 +383,12 @@ export default function Navbar() {
                                 onClick={closeMobileMenu}
                                 className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
                                 Equipments
+                            </Link>
+                            <Link
+                                href="/store"
+                                onClick={closeMobileMenu}
+                                className="block text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2">
+                                Store
                             </Link>
                             <Link
                                 href="/exercise-recommender"

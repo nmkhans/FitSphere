@@ -3,8 +3,14 @@ import dbConnect from "@/lib/dbConnect";
 export async function GET(req) {
   try {
     const { collection: usersCollection } = await dbConnect("users");
+    const { searchParams } = new URL(req.url);
+    const assignedTrainer = searchParams.get("assignedTrainer");
 
-    const users = await usersCollection.find({}).toArray();
+    const query = {};
+    if (assignedTrainer) {
+      query.assignedTrainer = { $regex: `^${assignedTrainer}$`, $options: "i" };
+    }
+    const users = await usersCollection.find(query).toArray();
     return new Response(JSON.stringify(users), { status: 200 });
   } catch (err) {
     console.error(err);
@@ -20,27 +26,27 @@ export async function PATCH(req) {
 
     // Define role mapping based on membership plan
     const roleMapping = {
-      'Pro Active': 'basic-member',
-      'Elite Performance': 'premium-member', 
-      'Wellness Plus': 'special-need'
+      "Pro Active": "basic-member",
+      "Elite Performance": "premium-member",
+      "Wellness Plus": "special-need",
     };
 
-    const {collection: usersCollection} = await dbConnect("users");
+    const { collection: usersCollection } = await dbConnect("users");
     console.log(usersCollection);
-    
+
     // Prepare update data
     const updateData = { ...data };
-    
+
     // Assign role based on plan if plan is provided
     if (data.plan) {
-      updateData.role = roleMapping[data.plan] || 'basic-member';
+      updateData.role = roleMapping[data.plan] || "basic-member";
       updateData.membershipType = data.plan;
       updateData.membershipPurchaseDate = new Date();
     }
-    
+
     const result = await usersCollection.updateOne(
       { email: data.email },
-      { $set: updateData } 
+      { $set: updateData }
     );
 
     if (result.matchedCount === 0) {
@@ -54,13 +60,13 @@ export async function PATCH(req) {
     const updatedUser = await usersCollection.findOne({ email: data.email });
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: "Membership updated successfully!",
         user: {
           role: updatedUser.role,
-          membershipType: updatedUser.membershipType
-        }
+          membershipType: updatedUser.membershipType,
+        },
       }),
       { status: 200 }
     );
